@@ -1,0 +1,151 @@
+application_id,annual_income,monthly_debt,credit_score,employment_years,loan_amount,loan_purpose,term_months,has_cosigner,prior_default,underwriter_notes,policy_label
+L-3001,115627,3439,543,4.4,17700,vehicle,36,False,False,"Existing customer, no late payments in 5 years.",decline
+L-3002,32620,457,642,3.3,16700,vehicle,60,False,False,"First-time borrower, thin credit file.",review
+L-3003,37910,1102,785,14.4,10000,home_improvement,60,False,False,Self-employed; two years of tax returns provided.,approve
+L-3004,132096,2807,634,7.9,24200,small_business,60,False,False,Self-employed; two years of tax returns provided.,review
+L-3005,77847,2624,763,11.1,8000,vehicle,60,True,False,Applied for three other loans this month.,approve
+L-3006,154738,1035,568,7.2,16800,home_improvement,24,False,False,Co-signer has excellent credit.,review
+L-3007,93871,1643,535,1.2,21100,small_business,48,True,False,Pays rent on time for 6+ years.,decline
+L-3008,96550,2895,663,7.0,6800,home_improvement,48,False,False,Applied for three other loans this month.,review
+L-3009,77203,2606,717,6.0,23900,medical,36,False,False,Long-tenured employee; stable salary and 12 months of savings.,approve
+L-3010,59836,1190,641,2.8,5400,vehicle,48,False,False,Loan will fund a home renovation with contractor quotes attached.,review
+L-3011,38289,1614,651,9.6,38000,vehicle,60,False,False,"First-time borrower, thin credit file.",decline
+L-3012,109890,183,592,4.6,44900,education,60,True,False,Income is mostly seasonal gig work.,review
+L-3013,40462,67,797,3.7,33000,vehicle,48,False,False,Co-signer has excellent credit.,approve
+L-3014,107391,813,741,8.6,4500,medical,36,True,False,"Existing customer, no late payments in 5 years.",approve
+L-3015,23619,501,747,1.6,19000,home_improvement,24,False,False,Loan will fund a home renovation with contractor quotes attached.,review
+L-3016,57682,2614,566,9.4,12000,home_improvement,60,False,False,Says income will rise soon after a promotion (unverified).,decline
+L-3017,70387,1907,595,1.5,6500,small_business,48,False,False,"First-time borrower, thin credit file.",decline
+L-3018,36201,869,790,5.6,9700,small_business,36,False,False,Loan will fund a home renovation with contractor quotes attached.,approve
+L-3019,73684,122,688,5.6,36200,debt_consolidation,60,False,False,"Existing customer, no late payments in 5 years.",approve
+L-3020,44584,521,518,1.9,2200,medical,48,False,False,"Existing customer, no late payments in 5 years.",decline
+L-3021,48934,1145,774,8.8,4800,home_improvement,36,False,False,Self-employed; two years of tax returns provided.,approve
+L-3022,114320,2805,682,1.9,6600,vehicle,60,False,False,Owes back taxes on a payment plan.,review
+L-3023,102139,2959,830,2.9,4500,education,24,False,False,Says income will rise soon after a promotion (unverified).,approve
+L-3024,120534,2290,602,7.6,12800,home_improvement,60,False,False,Says income will rise soon after a promotion (unverified).,review
+L-3025,49906,799,680,3.1,16800,vehicle,60,True,False,"Existing customer, no late payments in 5 years.",approve
+L-3026,156251,5744,705,2.0,8900,home_improvement,48,False,False,Self-employed; two years of tax returns provided.,review
+L-3027,71535,1710,723,19.4,33600,education,24,False,False,Pays rent on time for 6+ years.,approve
+L-3028,84451,554,798,11.5,9900,home_improvement,24,False,False,Long-tenured employee; stable salary and 12 months of savings.,approve
+L-3029,77082,761,761,3.3,12900,small_business,48,False,False,"Existing customer, no late payments in 5 years.",approve
+L-3030,87931,2481,830,2.7,11700,home_improvement,36,False,False,"First-time borrower, thin credit file.",approve
+L-3031,39217,1121,707,3.4,8800,medical,24,False,False,Loan will fund a home renovation with contractor quotes attached.,review
+L-3032,56741,1914,719,11.0,30800,education,24,False,False,Long-tenured employee; stable salary and 12 months of savings.,approve
+L-3033,44386,1504,739,2.3,2300,education,36,False,False,Says income will rise soon after a promotion (unverified).,approve
+L-3034,74712,1240,749,3.5,10200,education,60,False,False,"Existing customer, no late payments in 5 years.",approve
+L-3035,47970,706,627,4.0,54800,home_improvement,36,False,False,"Existing customer, no late payments in 5 years.",decline
+L-3036,50142,832,699,3.0,4900,home_improvement,36,True,True,"First-time borrower, thin credit file.",decline
+L-3037,34781,1248,687,1.4,31300,vehicle,60,False,False,Self-employed; two years of tax returns provided.,decline
+L-3038,48967,1973,671,6.7,16500,small_business,36,False,False,Says income will rise soon after a promotion (unverified).,review
+L-3039,41258,1210,704,1.4,13500,vehicle,60,False,False,Two late payments in 2024.,review
+L-3040,76504,2211,733,3.9,8000,education,60,False,False,Self-employed; two years of tax returns provided.,approve
+L-3041,33049,744,480,2.5,3700,vehicle,24,False,False,Self-employed; two years of tax returns provided.,decline
+L-3042,44746,506,707,6.5,14400,medical,60,False,False,Co-signer has excellent credit.,approve
+L-3043,78262,1910,741,2.5,23000,education,48,False,False,"First-time borrower, thin credit file.",approve
+L-3044,37814,712,662,4.5,4000,medical,36,False,False,"Existing customer, no late payments in 5 years.",approve
+L-3045,75684,183,742,6.3,22400,medical,36,False,False,Says income will rise soon after a promotion (unverified).,approve
+L-3046,49637,1205,608,5.8,13000,vehicle,24,False,False,Applied for three other loans this month.,decline
+L-3047,36783,1060,704,5.6,47800,medical,36,True,False,Says income will rise soon after a promotion (unverified).,review
+L-3048,45208,667,764,3.9,20500,education,24,False,False,Applied for three other loans this month.,approve
+L-3049,40345,1474,648,8.9,13300,home_improvement,24,False,False,"Existing customer, no late payments in 5 years.",review
+L-3050,65616,3335,639,5.7,33900,debt_consolidation,48,False,False,Applied for three other loans this month.,decline
+L-3051,50800,196,745,3.4,44300,education,24,False,False,Loan will fund a home renovation with contractor quotes attached.,approve
+L-3052,42277,1266,612,3.0,27200,vehicle,48,False,False,Self-employed; two years of tax returns provided.,decline
+L-3053,46870,382,537,4.9,11900,home_improvement,60,False,False,Applied for three other loans this month.,decline
+L-3054,32002,1555,789,2.0,7500,vehicle,36,False,True,Loan will fund a home renovation with contractor quotes attached.,decline
+L-3055,52094,931,801,3.9,32900,small_business,48,False,False,"First-time borrower, thin credit file.",approve
+L-3056,22000,501,644,2.9,34200,debt_consolidation,36,False,False,Self-employed; two years of tax returns provided.,decline
+L-3057,31716,213,821,11.0,10300,small_business,24,False,True,"First-time borrower, thin credit file.",approve
+L-3058,49800,1283,672,2.3,8600,medical,48,False,False,Owes back taxes on a payment plan.,decline
+L-3059,34656,343,617,3.5,16000,home_improvement,48,False,False,Recently changed jobs; still on probation.,decline
+L-3060,145576,4193,520,4.9,24300,home_improvement,36,False,False,Long-tenured employee; stable salary and 12 months of savings.,decline
+L-3061,55589,814,687,7.4,25400,vehicle,24,False,False,Loan will fund a home renovation with contractor quotes attached.,review
+L-3062,59253,1221,640,4.3,80000,education,60,False,False,Pays rent on time for 6+ years.,decline
+L-3063,103667,3180,635,7.7,6100,vehicle,60,False,False,Says income will rise soon after a promotion (unverified).,review
+L-3064,58193,263,731,2.7,15200,medical,48,False,False,Long-tenured employee; stable salary and 12 months of savings.,approve
+L-3065,113246,5750,576,4.6,14300,debt_consolidation,48,False,True,Says income will rise soon after a promotion (unverified).,decline
+L-3066,57920,782,661,6.6,31900,vehicle,60,True,False,"First-time borrower, thin credit file.",review
+L-3067,55206,201,607,4.3,5700,education,48,False,False,"First-time borrower, thin credit file.",review
+L-3068,75913,3022,550,5.4,7100,debt_consolidation,48,False,False,"First-time borrower, thin credit file.",decline
+L-3069,84454,1294,674,5.6,4600,vehicle,24,False,False,"Existing customer, no late payments in 5 years.",approve
+L-3070,36167,842,699,9.6,22000,debt_consolidation,48,False,False,Recently changed jobs; still on probation.,review
+L-3071,56883,1582,608,4.6,15200,debt_consolidation,48,False,False,Owes back taxes on a payment plan.,decline
+L-3072,56483,1046,664,1.5,8400,debt_consolidation,36,False,False,Self-employed; two years of tax returns provided.,review
+L-3073,37829,1206,658,5.5,9800,education,48,False,True,Loan will fund a home renovation with contractor quotes attached.,decline
+L-3074,79707,2601,507,0.8,10300,small_business,48,False,False,Long-tenured employee; stable salary and 12 months of savings.,decline
+L-3075,158983,5019,792,6.2,16400,vehicle,24,False,False,Long-tenured employee; stable salary and 12 months of savings.,approve
+L-3076,46763,1175,617,3.4,3800,medical,36,False,False,Self-employed; two years of tax returns provided.,decline
+L-3077,61929,1149,613,6.0,16500,education,36,False,False,Long-tenured employee; stable salary and 12 months of savings.,review
+L-3078,54417,970,628,4.3,14800,small_business,36,False,False,"First-time borrower, thin credit file.",review
+L-3079,52829,2212,632,6.5,16300,medical,48,False,False,Pays rent on time for 6+ years.,decline
+L-3080,37719,739,644,1.6,10300,medical,24,False,False,Pays rent on time for 6+ years.,review
+L-3081,51023,2951,635,2.9,4800,home_improvement,48,False,False,Two late payments in 2024.,decline
+L-3082,84261,1295,768,11.0,12900,home_improvement,36,False,False,Self-employed; two years of tax returns provided.,approve
+L-3083,53252,1787,687,6.4,13000,debt_consolidation,24,False,False,Pays rent on time for 6+ years.,review
+L-3084,146030,4888,692,7.0,15900,vehicle,36,False,False,Applied for three other loans this month.,review
+L-3085,89664,2368,725,2.8,14000,vehicle,48,False,False,Loan will fund a home renovation with contractor quotes attached.,approve
+L-3086,52118,280,830,9.1,16100,education,36,False,False,Income is mostly seasonal gig work.,approve
+L-3087,190206,2831,607,4.8,27400,vehicle,36,False,False,Pays rent on time for 6+ years.,review
+L-3088,47073,368,720,0.8,4900,debt_consolidation,48,False,True,Long-tenured employee; stable salary and 12 months of savings.,review
+L-3089,118565,1331,567,6.5,5100,medical,24,False,False,Says income will rise soon after a promotion (unverified).,review
+L-3090,149939,3155,604,4.1,31000,small_business,60,False,False,Self-employed; two years of tax returns provided.,decline
+L-3091,82424,1128,707,3.8,24900,debt_consolidation,36,False,False,Says income will rise soon after a promotion (unverified).,approve
+L-3092,35392,512,816,4.8,5900,medical,48,False,False,Loan will fund a home renovation with contractor quotes attached.,approve
+L-3093,40396,747,607,2.1,8500,debt_consolidation,36,False,False,"Existing customer, no late payments in 5 years.",review
+L-3094,40045,1398,647,5.7,5400,medical,24,False,False,Self-employed; two years of tax returns provided.,review
+L-3095,35802,1381,585,7.0,9900,home_improvement,36,True,False,Pays rent on time for 6+ years.,review
+L-3096,41300,1185,612,3.9,35400,education,60,False,False,Loan will fund a home renovation with contractor quotes attached.,decline
+L-3097,107933,1986,721,7.3,46200,home_improvement,36,False,False,Two late payments in 2024.,review
+L-3098,71820,1782,693,14.0,53400,vehicle,36,False,False,Applied for three other loans this month.,review
+L-3099,55062,801,576,1.0,7100,debt_consolidation,36,False,False,Long-tenured employee; stable salary and 12 months of savings.,review
+L-3100,64595,1000,754,4.0,11200,home_improvement,36,False,False,Says income will rise soon after a promotion (unverified).,approve
+L-3101,190672,3860,729,3.0,16100,small_business,60,True,False,"Existing customer, no late payments in 5 years.",approve
+L-3102,49583,605,712,2.2,6500,small_business,36,True,False,Co-signer has excellent credit.,approve
+L-3103,83121,166,674,5.3,23900,home_improvement,60,False,True,Says income will rise soon after a promotion (unverified).,decline
+L-3104,53534,1918,804,2.0,8700,education,48,True,False,Co-signer has excellent credit.,approve
+L-3105,34559,802,802,9.0,13000,medical,24,False,False,"First-time borrower, thin credit file.",approve
+L-3106,59001,1591,752,2.0,12000,home_improvement,36,False,False,"First-time borrower, thin credit file.",approve
+L-3107,48777,1499,480,5.2,11100,debt_consolidation,24,False,False,Self-employed; two years of tax returns provided.,decline
+L-3108,46219,1328,649,7.5,28600,debt_consolidation,36,False,False,"Existing customer, no late payments in 5 years.",review
+L-3109,57783,1482,639,1.4,5000,vehicle,24,True,False,Self-employed; two years of tax returns provided.,review
+L-3110,37704,802,533,13.1,23100,home_improvement,36,False,False,Long-tenured employee; stable salary and 12 months of savings.,decline
+L-3111,172567,2485,703,2.9,9400,medical,36,False,False,Self-employed; two years of tax returns provided.,approve
+L-3112,46576,1644,743,1.0,10600,home_improvement,24,False,False,Pays rent on time for 6+ years.,approve
+L-3113,78400,4300,755,3.4,22200,home_improvement,24,False,False,"First-time borrower, thin credit file.",review
+L-3114,44046,814,665,0.2,12900,education,36,False,False,Owes back taxes on a payment plan.,decline
+L-3115,106091,922,675,4.0,6300,medical,24,False,True,Self-employed; two years of tax returns provided.,decline
+L-3116,79696,2717,657,0.7,10500,small_business,36,False,False,"Existing customer, no late payments in 5 years.",review
+L-3117,92054,2837,722,12.6,37500,home_improvement,24,True,False,Self-employed; two years of tax returns provided.,approve
+L-3118,37425,1201,599,1.2,15800,small_business,60,False,False,"First-time borrower, thin credit file.",decline
+L-3119,96987,2326,670,6.9,9000,debt_consolidation,24,False,False,"First-time borrower, thin credit file.",review
+L-3120,74123,1377,672,4.6,10800,education,24,False,False,Self-employed; two years of tax returns provided.,review
+L-3121,48416,1105,555,7.6,15900,education,24,False,False,Long-tenured employee; stable salary and 12 months of savings.,decline
+L-3122,92053,3343,726,9.3,13100,medical,48,False,False,"First-time borrower, thin credit file.",approve
+L-3123,32952,1068,721,12.8,57600,medical,60,False,False,Self-employed; two years of tax returns provided.,decline
+L-3124,79136,567,691,6.0,17100,small_business,24,False,False,Self-employed; two years of tax returns provided.,approve
+L-3125,61361,1362,708,9.0,16800,debt_consolidation,24,False,False,Pays rent on time for 6+ years.,approve
+L-3126,102859,3278,805,13.6,14700,education,48,False,False,Pays rent on time for 6+ years.,approve
+L-3127,75980,1079,674,3.2,21300,small_business,36,False,False,Long-tenured employee; stable salary and 12 months of savings.,approve
+L-3128,60181,1006,649,6.9,6600,medical,60,False,False,Loan will fund a home renovation with contractor quotes attached.,review
+L-3129,33541,244,741,7.1,45800,home_improvement,60,False,False,Applied for three other loans this month.,review
+L-3130,83453,4139,724,8.5,35100,debt_consolidation,36,False,False,Loan will fund a home renovation with contractor quotes attached.,review
+L-3131,58823,1184,684,3.2,17800,medical,24,True,False,Long-tenured employee; stable salary and 12 months of savings.,approve
+L-3132,42253,1307,741,9.9,4400,education,36,False,False,Loan will fund a home renovation with contractor quotes attached.,approve
+L-3133,59761,2277,830,3.1,24500,home_improvement,24,False,False,Owes back taxes on a payment plan.,approve
+L-3134,32345,691,770,4.5,32800,small_business,36,False,False,Says income will rise soon after a promotion (unverified).,review
+L-3135,42623,1155,555,10.4,30600,home_improvement,60,False,False,"Existing customer, no late payments in 5 years.",decline
+L-3136,79154,1303,830,6.4,28800,small_business,24,False,False,Income is mostly seasonal gig work.,approve
+L-3137,58237,998,795,11.8,14400,small_business,48,True,False,Pays rent on time for 6+ years.,approve
+L-3138,76427,2100,693,4.2,11600,education,36,True,False,Income is mostly seasonal gig work.,review
+L-3139,28073,250,733,4.1,26500,vehicle,48,False,False,Two late payments in 2024.,review
+L-3140,26941,773,668,5.0,8300,medical,36,False,False,Income is mostly seasonal gig work.,decline
+L-3141,23811,406,731,0.9,34900,small_business,24,False,False,"First-time borrower, thin credit file.",decline
+L-3142,33912,459,830,5.2,15200,home_improvement,48,False,False,Self-employed; two years of tax returns provided.,approve
+L-3143,56376,3174,570,3.3,29000,home_improvement,24,False,False,Says income will rise soon after a promotion (unverified).,decline
+L-3144,135457,1262,753,5.7,27700,debt_consolidation,24,False,False,Says income will rise soon after a promotion (unverified).,approve
+L-3145,28686,668,618,6.6,42700,vehicle,48,False,False,Long-tenured employee; stable salary and 12 months of savings.,decline
+L-3146,82905,745,720,13.7,49800,medical,60,True,False,"First-time borrower, thin credit file.",approve
+L-3147,148744,5261,710,0.2,31900,vehicle,24,False,False,Says income will rise soon after a promotion (unverified).,review
+L-3148,90765,1806,589,0.3,3900,vehicle,24,False,True,Two late payments in 2024.,decline
+L-3149,99579,1772,757,7.0,17400,education,60,False,False,Income is mostly seasonal gig work.,approve
+L-3150,35729,149,718,0.8,12700,education,36,False,False,"First-time borrower, thin credit file.",approve

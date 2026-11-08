@@ -1,0 +1,321 @@
+review_id,product,rating,title,text,date,verified_purchase,helpful_votes
+R-0224,Lumen Bulb 6-pack,3,"Good, not great",Great value for six bulbs. But one bulb flickered from day one.,2026-03-10,True,3
+R-0300,Lumen Bulb 6-pack,5,Does what it says,Colours are vibrant and dimming is smooth. Great value for six bulbs. Highly recommend.,2026-04-01,True,2
+R-0100,Lumen Cam Pro,5,Solid,"Clip history is easy to scrub through. Motion alerts are accurate, no more false alarms from trees. Highly recommend.",2026-03-29,False,3
+R-0090,Lumen Sensor Kit,4,Does what it says,"Caught a leak under the sink early, paid for itself.",2026-07-06,True,2
+R-0132,Lumen Plug 4-pack,2,Not reliable,App crashes when I rename a plug.,2026-05-22,True,3
+R-0155,Lumen Hub,4,Very happy,Rock solid. Automations just work.,2026-09-18,True,2
+R-0248,Lumen Hub,1,Wouldn't buy again,App is slow to show device status. Drops offline after firmware updates. Returning it.,2026-02-16,True,1
+R-0138,Lumen Plug 4-pack,3,Mixed feelings,Great for scheduling lamps and the coffee maker. But two of four lost connection within a month.,2026-03-03,True,3
+R-0109,Lumen Sensor Kit,3,"Good, not great",Easy to place and pair. But false tamper alerts.,2026-05-23,True,3
+R-0022,Lumen Lock,4,Great buy,Feels solid and the keypad is responsive.,2026-08-11,True,2
+R-0149,Lumen Hub,5,Great buy,"Setup took five minutes and it found all my devices. Responds instantly, even with 40 devices paired. Highly recommend.",2026-06-05,True,2
+R-0234,Lumen Plug 4-pack,5,Great buy,"Cheap, simple and reliable. Great for scheduling lamps and the coffee maker. Highly recommend.",2026-01-16,True,2
+R-0187,Lumen Bulb 6-pack,2,Disappointed,Warm white is too yellow.,2026-02-08,True,1
+R-0235,Lumen Plug 4-pack,1,Not reliable,"Too bulky, blocks the neighbouring socket. App crashes when I rename a plug. Returning it.",2026-07-15,True,3
+R-0179,Lumen Bulb 6-pack,3,Mixed feelings,Great value for six bulbs. But one bulb flickered from day one.,2026-10-09,True,1
+R-0012,Lumen Plug 4-pack,4,Solid,Great for scheduling lamps and the coffee maker.,2026-08-02,True,2
+R-0195,Lumen Hub,5,Solid,Rock solid. Automations just work. Setup took five minutes and it found all my devices. Highly recommend.,2026-08-07,True,3
+R-0139,Lumen Bell,5,Very happy,Package alerts are brilliant. Installed it myself in ten minutes. Highly recommend.,2026-01-09,True,4
+R-0275,Lumen Plug 4-pack,5,Great buy,"Energy monitoring is a nice touch for the price. Cheap, simple and reliable. Highly recommend.",2026-02-23,True,3
+R-0214,Lumen Sensor Kit,5,Does what it says,"Caught a leak under the sink early, paid for itself. Door sensors are tiny and the batteries last. Highly recommend.",2026-04-08,True,4
+R-0160,Lumen Sensor Kit,5,Very happy,Door sensors are tiny and the batteries last. Easy to place and pair. Highly recommend.,2026-07-10,True,2
+R-0057,Lumen Cam Pro,5,Does what it says,"Clip history is easy to scrub through. Motion alerts are accurate, no more false alarms from trees. Highly recommend.",2026-02-09,True,2
+R-0114,Lumen Hub,4,Solid,Setup took five minutes and it found all my devices.,2026-04-10,True,2
+R-0143,Lumen Bell,3,Mixed feelings,Two-way audio is crisp. But chime is too quiet.,2026-06-19,True,2
+R-0052,Lumen Cam Pro,4,Does what it says,"Motion alerts are accurate, no more false alarms from trees.",2026-07-09,True,3
+R-0131,Lumen Bulb 6-pack,5,Solid,Colours are vibrant and dimming is smooth. Great value for six bulbs. Highly recommend.,2026-05-08,True,6
+R-0043,Lumen Cam Pro,3,Okay overall,Picture quality at night is excellent. But subscription is required for clip history.,2026-02-17,True,3
+R-0015,Lumen Plug 4-pack,4,Does what it says,Great for scheduling lamps and the coffee maker.,2026-10-17,False,1
+R-0163,Lumen Cam Pro,4,Very happy,Picture quality at night is excellent.,2026-01-15,False,4
+R-0023,Lumen Lock,5,Very happy,Auto-lock gives me peace of mind. Guest codes are super convenient. Highly recommend.,2026-02-16,True,2
+R-0249,Lumen Therm,4,Solid,Looks great on the wall and the app is clear.,2026-10-07,True,2
+R-0153,Lumen Plug 4-pack,4,Great buy,"Cheap, simple and reliable.",2026-03-03,False,1
+R-0240,Lumen Bulb 6-pack,1,Disappointed,Warm white is too yellow. Disconnects from the Hub every few days. Returning it.,2026-10-18,True,3
+R-0172,Lumen Therm,3,"Good, not great",Looks great on the wall and the app is clear. But scheduling is confusing and it ignored my away mode.,2026-07-17,True,1
+R-0218,Lumen Hub,5,Very happy,Rock solid. Automations just work. Setup took five minutes and it found all my devices. Highly recommend.,2026-04-26,True,6
+R-0021,Lumen Bell,4,Solid,Two-way audio is crisp.,2026-03-29,True,1
+R-0216,Lumen Hub,2,Wouldn't buy again,Needed three resets to pair my sensors.,2026-07-27,True,2
+R-0211,Lumen Sensor Kit,5,Very happy,"Door sensors are tiny and the batteries last. Caught a leak under the sink early, paid for itself. Highly recommend.",2026-02-21,False,3
+R-0255,Lumen Plug 4-pack,4,Very happy,"Cheap, simple and reliable.",2026-01-23,False,1
+R-0161,Lumen Lock,4,Great buy,Auto-lock gives me peace of mind.,2026-04-03,True,2
+R-0238,Lumen Therm,5,Solid,Cut my heating bill noticeably this winter. The schedule learning actually learned our routine. Highly recommend.,2026-02-18,True,3
+R-0086,Lumen Bell,3,"Good, not great",Package alerts are brilliant. But battery drains in three weeks in the cold.,2026-02-26,True,1
+R-0185,Lumen Cam Pro,5,Great buy,Clip history is easy to scrub through. Picture quality at night is excellent. Highly recommend.,2026-10-04,False,2
+R-0206,Lumen Therm,4,Does what it says,The schedule learning actually learned our routine.,2026-08-22,True,2
+R-0024,Lumen Cam Pro,3,Mixed feelings,"Motion alerts are accurate, no more false alarms from trees. But live view buffers a lot on my wifi.",2026-09-22,True,4
+R-0192,Lumen Cam Pro,4,Does what it says,Clip history is easy to scrub through.,2026-09-24,True,2
+R-0027,Lumen Bell,4,Great buy,Package alerts are brilliant.,2026-07-03,True,1
+R-0184,Lumen Cam Pro,5,Very happy,Clip history is easy to scrub through. Picture quality at night is excellent. Highly recommend.,2026-03-23,True,3
+R-0181,Lumen Hub,5,Solid,"Responds instantly, even with 40 devices paired. Setup took five minutes and it found all my devices. Highly recommend.",2026-09-19,True,3
+R-0168,Lumen Plug 4-pack,5,Solid,"Cheap, simple and reliable. Energy monitoring is a nice touch for the price. Highly recommend.",2026-10-20,True,4
+R-0002,Lumen Plug 4-pack,3,Okay overall,"Cheap, simple and reliable. But too bulky, blocks the neighbouring socket.",2026-06-27,True,3
+R-0220,Lumen Lock,5,Solid,Auto-lock gives me peace of mind. Feels solid and the keypad is responsive. Highly recommend.,2026-04-21,True,2
+R-0010,Lumen Plug 4-pack,2,Not reliable,App crashes when I rename a plug.,2026-04-10,True,2
+R-0014,Lumen Hub,5,Great buy,"Responds instantly, even with 40 devices paired. Rock solid. Automations just work. Highly recommend.",2026-01-02,True,1
+R-0144,Lumen Plug 4-pack,4,Solid,Great for scheduling lamps and the coffee maker.,2026-01-11,True,2
+R-0020,Lumen Cam Pro,3,"Good, not great","Motion alerts are accurate, no more false alarms from trees. But subscription is required for clip history.",2026-08-14,True,1
+R-0137,Lumen Cam Pro,4,Solid,Picture quality at night is excellent.,2026-07-05,True,2
+R-0055,Lumen Hub,5,Does what it says,"Setup took five minutes and it found all my devices. Responds instantly, even with 40 devices paired. Highly recommend.",2026-10-01,True,4
+R-0053,Lumen Therm,4,Very happy,Cut my heating bill noticeably this winter.,2026-04-02,True,3
+R-0205,Lumen Plug 4-pack,5,Great buy,"Cheap, simple and reliable. Great for scheduling lamps and the coffee maker. Highly recommend.",2026-01-13,True,1
+R-0173,Lumen Sensor Kit,5,Does what it says,Door sensors are tiny and the batteries last. Easy to place and pair. Highly recommend.,2026-05-02,True,0
+R-0067,Lumen Bell,4,Very happy,Two-way audio is crisp.,2026-06-13,True,1
+R-0266,Lumen Bulb 6-pack,5,Does what it says,Great value for six bulbs. Colours are vibrant and dimming is smooth. Highly recommend.,2026-10-12,True,4
+R-0157,Lumen Therm,2,Not reliable,Wiring guide was unclear.,2026-04-28,False,2
+R-0167,Lumen Lock,1,Not reliable,Auto-lock fired while I was outside and I got locked out. Pricey for what it does. Returning it.,2026-03-07,True,3
+R-0065,Lumen Sensor Kit,5,Great buy,Door sensors are tiny and the batteries last. Easy to place and pair. Highly recommend.,2026-01-10,True,5
+R-0071,Lumen Sensor Kit,4,Does what it says,"Caught a leak under the sink early, paid for itself.",2026-03-21,True,3
+R-0089,Lumen Bulb 6-pack,4,Does what it says,Pairs with the Hub instantly.,2026-08-13,True,2
+R-0038,Lumen Bell,3,Okay overall,Two-way audio is crisp. But chime is too quiet.,2026-08-26,True,3
+R-0175,Lumen Lock,4,Great buy,Guest codes are super convenient.,2026-08-21,True,3
+R-0093,Lumen Therm,5,Very happy,The schedule learning actually learned our routine. Cut my heating bill noticeably this winter. Highly recommend.,2026-02-19,True,2
+R-0026,Lumen Plug 4-pack,3,Okay overall,"Cheap, simple and reliable. But app crashes when i rename a plug.",2026-01-05,True,2
+R-0069,Lumen Cam Pro,4,Does what it says,"Motion alerts are accurate, no more false alarms from trees.",2026-10-20,False,3
+R-0197,Lumen Plug 4-pack,4,Solid,Great for scheduling lamps and the coffee maker.,2026-08-10,True,1
+R-0257,Lumen Plug 4-pack,1,Wouldn't buy again,"Too bulky, blocks the neighbouring socket. Two of four lost connection within a month. Returning it.",2026-03-01,False,2
+R-0180,Lumen Cam Pro,4,Solid,"Motion alerts are accurate, no more false alarms from trees.",2026-10-11,False,7
+R-0245,Lumen Cam Pro,4,Solid,Picture quality at night is excellent.,2026-04-09,True,3
+R-0134,Lumen Sensor Kit,4,Great buy,Door sensors are tiny and the batteries last.,2026-06-03,True,4
+R-0290,Lumen Plug 4-pack,4,Great buy,Great for scheduling lamps and the coffee maker.,2026-03-19,True,2
+R-0062,Lumen Bell,5,Great buy,Two-way audio is crisp. Installed it myself in ten minutes. Highly recommend.,2026-05-22,True,0
+R-0297,Lumen Bulb 6-pack,5,Does what it says,Colours are vibrant and dimming is smooth. Great value for six bulbs. Highly recommend.,2026-01-21,True,4
+R-0262,Lumen Lock,3,"Good, not great",Guest codes are super convenient. But auto-lock fired while i was outside and i got locked out.,2026-01-06,True,4
+R-0264,Lumen Hub,5,Great buy,Rock solid. Automations just work. Setup took five minutes and it found all my devices. Highly recommend.,2026-10-02,True,1
+R-0001,Lumen Sensor Kit,5,Solid,"Easy to place and pair. Caught a leak under the sink early, paid for itself. Highly recommend.",2026-05-09,True,4
+R-0215,Lumen Bulb 6-pack,4,Great buy,Pairs with the Hub instantly.,2026-07-23,True,3
+R-0029,Lumen Sensor Kit,5,Very happy,"Caught a leak under the sink early, paid for itself. Door sensors are tiny and the batteries last. Highly recommend.",2026-07-11,True,3
+R-0225,Lumen Lock,5,Does what it says,Feels solid and the keypad is responsive. Auto-lock gives me peace of mind. Highly recommend.,2026-09-17,True,0
+R-0113,Lumen Bell,2,Disappointed,Chime is too quiet.,2026-09-07,True,2
+R-0008,Lumen Bell,5,Does what it says,Installed it myself in ten minutes. Package alerts are brilliant. Highly recommend.,2026-07-09,True,2
+R-0047,Lumen Plug 4-pack,4,Solid,Energy monitoring is a nice touch for the price.,2026-08-05,True,1
+R-0106,Lumen Bell,2,Wouldn't buy again,Battery drains in three weeks in the cold.,2026-02-04,True,0
+R-0230,Lumen Bulb 6-pack,5,Great buy,Great value for six bulbs. Pairs with the Hub instantly. Highly recommend.,2026-07-22,True,1
+R-0200,Lumen Lock,3,"Good, not great",Guest codes are super convenient. But keypad stops responding when it's cold.,2026-08-11,True,5
+R-0281,Lumen Bulb 6-pack,1,Disappointed,Warm white is too yellow. One bulb flickered from day one. Returning it.,2026-08-24,True,2
+R-0058,Lumen Hub,5,Solid,"Responds instantly, even with 40 devices paired. Setup took five minutes and it found all my devices. Highly recommend.",2026-09-20,False,6
+R-0009,Lumen Bulb 6-pack,5,Solid,Colours are vibrant and dimming is smooth. Pairs with the Hub instantly. Highly recommend.,2026-03-03,True,2
+R-0035,Lumen Cam Pro,5,Does what it says,"Motion alerts are accurate, no more false alarms from trees. Clip history is easy to scrub through. Highly recommend.",2026-04-05,True,4
+R-0210,Lumen Cam Pro,4,Very happy,Picture quality at night is excellent.,2026-06-30,True,4
+R-0188,Lumen Plug 4-pack,5,Does what it says,"Great for scheduling lamps and the coffee maker. Cheap, simple and reliable. Highly recommend.",2026-07-30,True,2
+R-0207,Lumen Cam Pro,5,Great buy,"Motion alerts are accurate, no more false alarms from trees. Clip history is easy to scrub through. Highly recommend.",2026-05-22,True,5
+R-0142,Lumen Lock,5,Great buy,Auto-lock gives me peace of mind. Guest codes are super convenient. Highly recommend.,2026-02-07,True,0
+R-0068,Lumen Bell,4,Solid,Installed it myself in ten minutes.,2026-04-18,True,3
+R-0239,Lumen Hub,5,Very happy,"Responds instantly, even with 40 devices paired. Setup took five minutes and it found all my devices. Highly recommend.",2026-02-18,True,4
+R-0042,Lumen Therm,4,Solid,Cut my heating bill noticeably this winter.,2026-02-09,True,1
+R-0169,Lumen Cam Pro,2,Disappointed,Live view buffers a lot on my wifi.,2026-02-12,True,3
+R-0019,Lumen Cam Pro,3,Okay overall,Clip history is easy to scrub through. But subscription is required for clip history.,2026-04-26,True,3
+R-0292,Lumen Bulb 6-pack,5,Does what it says,Colours are vibrant and dimming is smooth. Pairs with the Hub instantly. Highly recommend.,2026-01-28,True,2
+R-0130,Lumen Bell,3,Mixed feelings,Package alerts are brilliant. But notifications arrive 30 seconds late.,2026-06-16,True,4
+R-0013,Lumen Plug 4-pack,5,Very happy,"Great for scheduling lamps and the coffee maker. Cheap, simple and reliable. Highly recommend.",2026-02-12,True,3
+R-0066,Lumen Cam Pro,5,Solid,"Clip history is easy to scrub through. Motion alerts are accurate, no more false alarms from trees. Highly recommend.",2026-06-18,True,0
+R-0158,Lumen Hub,5,Does what it says,"Rock solid. Automations just work. Responds instantly, even with 40 devices paired. Highly recommend.",2026-05-21,True,2
+R-0003,Lumen Cam Pro,4,Solid,Picture quality at night is excellent.,2026-07-11,True,0
+R-0166,Lumen Hub,4,Solid,Rock solid. Automations just work.,2026-03-10,True,2
+R-0312,Lumen Plug 4-pack,1,Wouldn't buy again,Two of four lost connection within a month. App crashes when I rename a plug. Returning it.,2026-01-07,True,3
+R-0063,Lumen Hub,4,Very happy,Setup took five minutes and it found all my devices.,2026-05-20,True,4
+R-0154,Lumen Sensor Kit,4,Solid,"Caught a leak under the sink early, paid for itself.",2026-04-08,True,1
+R-0118,Lumen Sensor Kit,3,"Good, not great",Door sensors are tiny and the batteries last. But false tamper alerts.,2026-08-29,True,5
+R-0236,Lumen Cam Pro,4,Very happy,Picture quality at night is excellent.,2026-07-01,True,2
+R-0267,Lumen Cam Pro,4,Solid,Picture quality at night is excellent.,2026-09-03,True,2
+R-0159,Lumen Bulb 6-pack,5,Great buy,Colours are vibrant and dimming is smooth. Pairs with the Hub instantly. Highly recommend.,2026-09-23,True,2
+R-0076,Lumen Cam Pro,5,Very happy,"Motion alerts are accurate, no more false alarms from trees. Clip history is easy to scrub through. Highly recommend.",2026-02-24,True,3
+R-0174,Lumen Therm,4,Very happy,The schedule learning actually learned our routine.,2026-04-07,True,3
+R-0030,Lumen Bell,4,Great buy,Package alerts are brilliant.,2026-09-17,True,4
+R-0289,Lumen Hub,3,Mixed feelings,"Responds instantly, even with 40 devices paired. But needed three resets to pair my sensors.",2026-05-20,False,4
+R-0298,Lumen Therm,4,Does what it says,Cut my heating bill noticeably this winter.,2026-10-28,True,1
+R-0258,Lumen Hub,3,Okay overall,Rock solid. Automations just work. But drops offline after firmware updates.,2026-04-27,True,1
+R-0190,Lumen Cam Pro,5,Very happy,Picture quality at night is excellent. Clip history is easy to scrub through. Highly recommend.,2026-03-13,False,1
+R-0176,Lumen Plug 4-pack,3,Okay overall,"Great for scheduling lamps and the coffee maker. But too bulky, blocks the neighbouring socket.",2026-04-06,True,3
+R-0309,Lumen Sensor Kit,4,Very happy,"Caught a leak under the sink early, paid for itself.",2026-05-17,True,0
+R-0050,Lumen Plug 4-pack,5,Very happy,"Cheap, simple and reliable. Great for scheduling lamps and the coffee maker. Highly recommend.",2026-05-13,True,0
+R-0085,Lumen Hub,1,Not reliable,Needed three resets to pair my sensors. App is slow to show device status. Returning it.,2026-05-06,True,2
+R-0150,Lumen Bulb 6-pack,5,Great buy,Great value for six bulbs. Colours are vibrant and dimming is smooth. Highly recommend.,2026-08-14,True,4
+R-0284,Lumen Plug 4-pack,4,Great buy,"Cheap, simple and reliable.",2026-04-08,True,2
+R-0146,Lumen Cam Pro,5,Solid,"Clip history is easy to scrub through. Motion alerts are accurate, no more false alarms from trees. Highly recommend.",2026-04-13,True,3
+R-0246,Lumen Bulb 6-pack,5,Solid,Pairs with the Hub instantly. Great value for six bulbs. Highly recommend.,2026-03-01,True,3
+R-0060,Lumen Bulb 6-pack,4,Solid,Colours are vibrant and dimming is smooth.,2026-03-01,True,2
+R-0232,Lumen Lock,4,Great buy,Guest codes are super convenient.,2026-10-04,False,2
+R-0054,Lumen Bell,4,Does what it says,Two-way audio is crisp.,2026-02-27,True,2
+R-0294,Lumen Hub,5,Solid,"Rock solid. Automations just work. Responds instantly, even with 40 devices paired. Highly recommend.",2026-06-23,True,3
+R-0213,Lumen Cam Pro,5,Very happy,"Motion alerts are accurate, no more false alarms from trees. Clip history is easy to scrub through. Highly recommend.",2026-08-13,False,2
+R-0283,Lumen Bell,5,Solid,Two-way audio is crisp. Installed it myself in ten minutes. Highly recommend.,2026-07-06,True,3
+R-0115,Lumen Plug 4-pack,5,Very happy,Energy monitoring is a nice touch for the price. Great for scheduling lamps and the coffee maker. Highly recommend.,2026-09-10,True,3
+R-0319,Lumen Lock,1,Lock jammed with me inside,The Lock jammed and I couldn't get out until the fire brigade arrived. Dangerous product.,2026-10-09,True,22
+R-0017,Lumen Bulb 6-pack,5,Solid,Colours are vibrant and dimming is smooth. Great value for six bulbs. Highly recommend.,2026-02-11,True,3
+R-0122,Lumen Cam Pro,3,Mixed feelings,"Motion alerts are accurate, no more false alarms from trees. But live view buffers a lot on my wifi.",2026-03-22,True,4
+R-0274,Lumen Therm,2,Not reliable,Scheduling is confusing and it ignored my away mode.,2026-09-23,True,2
+R-0251,Lumen Therm,4,Does what it says,The schedule learning actually learned our routine.,2026-06-14,True,2
+R-0270,Lumen Hub,1,Not reliable,Drops offline after firmware updates. App is slow to show device status. Returning it.,2026-03-31,True,2
+R-0291,Lumen Bell,5,Very happy,Package alerts are brilliant. Two-way audio is crisp. Highly recommend.,2026-09-29,True,0
+R-0088,Lumen Hub,5,Solid,"Responds instantly, even with 40 devices paired. Rock solid. Automations just work. Highly recommend.",2026-02-06,True,2
+R-0073,Lumen Cam Pro,5,Great buy,"Picture quality at night is excellent. Motion alerts are accurate, no more false alarms from trees. Highly recommend.",2026-07-13,True,3
+R-0136,Lumen Therm,1,Not reliable,Scheduling is confusing and it ignored my away mode. Display ghosting after a month. Returning it.,2026-08-17,True,7
+R-0259,Lumen Lock,1,Wouldn't buy again,Keypad stops responding when it's cold. Pricey for what it does. Returning it.,2026-05-13,False,0
+R-0271,Lumen Cam Pro,5,Great buy,"Motion alerts are accurate, no more false alarms from trees. Clip history is easy to scrub through. Highly recommend.",2026-05-30,True,2
+R-0110,Lumen Cam Pro,5,Very happy,Picture quality at night is excellent. Clip history is easy to scrub through. Highly recommend.,2026-02-01,True,1
+R-0080,Lumen Bell,4,Does what it says,Package alerts are brilliant.,2026-04-25,True,6
+R-0194,Lumen Plug 4-pack,2,Not reliable,App crashes when I rename a plug.,2026-05-20,False,3
+R-0178,Lumen Therm,4,Very happy,Cut my heating bill noticeably this winter.,2026-08-07,True,4
+R-0079,Lumen Plug 4-pack,4,Does what it says,"Cheap, simple and reliable.",2026-07-16,True,4
+R-0209,Lumen Sensor Kit,4,Solid,"Caught a leak under the sink early, paid for itself.",2026-06-28,True,2
+R-0247,Lumen Hub,3,Okay overall,Setup took five minutes and it found all my devices. But drops offline after firmware updates.,2026-04-07,True,2
+R-0107,Lumen Bulb 6-pack,4,Does what it says,Colours are vibrant and dimming is smooth.,2026-08-17,True,4
+R-0201,Lumen Hub,5,Solid,"Responds instantly, even with 40 devices paired. Rock solid. Automations just work. Highly recommend.",2026-09-23,True,1
+R-0127,Lumen Cam Pro,4,Does what it says,"Motion alerts are accurate, no more false alarms from trees.",2026-04-14,True,2
+R-0133,Lumen Bell,4,Great buy,Two-way audio is crisp.,2026-02-07,True,2
+R-0061,Lumen Plug 4-pack,4,Great buy,Great for scheduling lamps and the coffee maker.,2026-01-26,True,1
+R-0306,Lumen Therm,1,Wouldn't buy again,Wiring guide was unclear. Scheduling is confusing and it ignored my away mode. Returning it.,2026-10-21,True,4
+R-0075,Lumen Cam Pro,3,"Good, not great",Clip history is easy to scrub through. But subscription is required for clip history.,2026-07-29,True,2
+R-0182,Lumen Lock,3,"Good, not great",Auto-lock gives me peace of mind. But keypad stops responding when it's cold.,2026-07-01,True,5
+R-0252,Lumen Plug 4-pack,5,Does what it says,"Energy monitoring is a nice touch for the price. Cheap, simple and reliable. Highly recommend.",2026-04-07,False,2
+R-0273,Lumen Cam Pro,4,Great buy,Clip history is easy to scrub through.,2026-03-15,True,5
+R-0018,Lumen Bulb 6-pack,5,Very happy,Colours are vibrant and dimming is smooth. Pairs with the Hub instantly. Highly recommend.,2026-01-28,True,3
+R-0028,Lumen Bell,3,"Good, not great",Package alerts are brilliant. But battery drains in three weeks in the cold.,2026-08-22,True,2
+R-0237,Lumen Bell,3,Okay overall,Package alerts are brilliant. But notifications arrive 30 seconds late.,2026-07-25,True,0
+R-0016,Lumen Hub,5,Great buy,"Setup took five minutes and it found all my devices. Responds instantly, even with 40 devices paired. Highly recommend.",2026-06-12,True,5
+R-0171,Lumen Cam Pro,5,Very happy,"Motion alerts are accurate, no more false alarms from trees. Clip history is easy to scrub through. Highly recommend.",2026-03-09,True,2
+R-0183,Lumen Sensor Kit,4,Does what it says,Easy to place and pair.,2026-09-30,True,4
+R-0222,Lumen Bulb 6-pack,2,Wouldn't buy again,Disconnects from the Hub every few days.,2026-07-24,True,3
+R-0269,Lumen Therm,5,Great buy,The schedule learning actually learned our routine. Cut my heating bill noticeably this winter. Highly recommend.,2026-04-18,True,4
+R-0111,Lumen Cam Pro,5,Does what it says,"Motion alerts are accurate, no more false alarms from trees. Clip history is easy to scrub through. Highly recommend.",2026-10-02,False,3
+R-0315,Lumen Plug 4-pack,1,Plug got hot and smelled like burning plastic,"One of the plugs became very hot and left a scorch mark on my socket. This is a fire hazard, I'm reporting it.",2026-10-26,True,13
+R-0156,Lumen Bell,1,Disappointed,Battery drains in three weeks in the cold. Chime is too quiet. Returning it.,2026-07-01,True,6
+R-0125,Lumen Therm,5,Solid,The schedule learning actually learned our routine. Looks great on the wall and the app is clear. Highly recommend.,2026-10-16,True,3
+R-0243,Lumen Bulb 6-pack,2,Disappointed,Warm white is too yellow.,2026-01-20,False,1
+R-0242,Lumen Bulb 6-pack,5,Great buy,Colours are vibrant and dimming is smooth. Great value for six bulbs. Highly recommend.,2026-08-14,True,1
+R-0072,Lumen Cam Pro,4,Solid,"Motion alerts are accurate, no more false alarms from trees.",2026-01-12,True,2
+R-0141,Lumen Hub,2,Wouldn't buy again,Drops offline after firmware updates.,2026-02-27,True,3
+R-0078,Lumen Plug 4-pack,5,Great buy,"Energy monitoring is a nice touch for the price. Cheap, simple and reliable. Highly recommend.",2026-07-24,True,3
+R-0265,Lumen Bulb 6-pack,5,Very happy,Pairs with the Hub instantly. Great value for six bulbs. Highly recommend.,2026-10-02,True,0
+R-0198,Lumen Plug 4-pack,3,Okay overall,Great for scheduling lamps and the coffee maker. But app crashes when i rename a plug.,2026-05-09,True,0
+R-0250,Lumen Cam Pro,2,Not reliable,Live view buffers a lot on my wifi.,2026-08-07,True,6
+R-0006,Lumen Plug 4-pack,3,Mixed feelings,"Energy monitoring is a nice touch for the price. But too bulky, blocks the neighbouring socket.",2026-05-10,True,4
+R-0051,Lumen Lock,5,Does what it says,Guest codes are super convenient. Feels solid and the keypad is responsive. Highly recommend.,2026-08-26,True,3
+R-0087,Lumen Lock,5,Solid,Auto-lock gives me peace of mind. Feels solid and the keypad is responsive. Highly recommend.,2026-02-05,True,4
+R-0070,Lumen Plug 4-pack,3,"Good, not great","Cheap, simple and reliable. But app crashes when i rename a plug.",2026-07-09,True,3
+R-0256,Lumen Hub,5,Does what it says,Setup took five minutes and it found all my devices. Rock solid. Automations just work. Highly recommend.,2026-04-15,True,1
+R-0121,Lumen Therm,5,Very happy,The schedule learning actually learned our routine. Cut my heating bill noticeably this winter. Highly recommend.,2026-04-18,True,2
+R-0101,Lumen Plug 4-pack,4,Very happy,Great for scheduling lamps and the coffee maker.,2026-07-13,True,2
+R-0005,Lumen Therm,2,Not reliable,Display ghosting after a month.,2026-09-15,False,3
+R-0025,Lumen Cam Pro,2,Not reliable,Night mode washes out faces.,2026-07-10,True,3
+R-0056,Lumen Sensor Kit,5,Very happy,"Caught a leak under the sink early, paid for itself. Easy to place and pair. Highly recommend.",2026-08-23,True,2
+R-0048,Lumen Therm,3,"Good, not great",Looks great on the wall and the app is clear. But scheduling is confusing and it ignored my away mode.,2026-08-19,True,4
+R-0286,Lumen Cam Pro,3,"Good, not great",Picture quality at night is excellent. But night mode washes out faces.,2026-08-20,True,1
+R-0285,Lumen Bulb 6-pack,5,Solid,Great value for six bulbs. Pairs with the Hub instantly. Highly recommend.,2026-07-11,True,2
+R-0045,Lumen Bulb 6-pack,4,Does what it says,Pairs with the Hub instantly.,2026-08-27,True,2
+R-0170,Lumen Sensor Kit,4,Does what it says,Easy to place and pair.,2026-05-08,True,4
+R-0287,Lumen Lock,5,Does what it says,Feels solid and the keypad is responsive. Guest codes are super convenient. Highly recommend.,2026-04-13,True,0
+R-0282,Lumen Bulb 6-pack,5,Great buy,Colours are vibrant and dimming is smooth. Great value for six bulbs. Highly recommend.,2026-07-27,True,3
+R-0276,Lumen Hub,1,Wouldn't buy again,Drops offline after firmware updates. App is slow to show device status. Returning it.,2026-03-03,True,2
+R-0094,Lumen Sensor Kit,4,Solid,Easy to place and pair.,2026-05-06,True,2
+R-0103,Lumen Hub,5,Very happy,Rock solid. Automations just work. Setup took five minutes and it found all my devices. Highly recommend.,2026-04-16,True,2
+R-0293,Lumen Hub,5,Great buy,Rock solid. Automations just work. Setup took five minutes and it found all my devices. Highly recommend.,2026-04-20,True,1
+R-0162,Lumen Bulb 6-pack,1,Not reliable,One bulb flickered from day one. Warm white is too yellow. Returning it.,2026-07-11,False,4
+R-0098,Lumen Bell,4,Great buy,Installed it myself in ten minutes.,2026-03-17,True,1
+R-0082,Lumen Cam Pro,4,Does what it says,"Motion alerts are accurate, no more false alarms from trees.",2026-07-09,True,4
+R-0202,Lumen Plug 4-pack,2,Disappointed,App crashes when I rename a plug.,2026-10-22,True,2
+R-0036,Lumen Cam Pro,2,Disappointed,Live view buffers a lot on my wifi.,2026-10-12,True,1
+R-0263,Lumen Bell,5,Great buy,Two-way audio is crisp. Package alerts are brilliant. Highly recommend.,2026-02-06,True,2
+R-0108,Lumen Cam Pro,3,"Good, not great",Clip history is easy to scrub through. But live view buffers a lot on my wifi.,2026-05-06,True,2
+R-0316,Lumen Therm,1,Overheats and trips the breaker,The Therm got hot to the touch and tripped our breaker twice. I'm talking to a lawyer about this.,2026-07-23,True,13
+R-0193,Lumen Hub,5,Solid,Rock solid. Automations just work. Setup took five minutes and it found all my devices. Highly recommend.,2026-06-02,True,2
+R-0189,Lumen Bell,3,Mixed feelings,Package alerts are brilliant. But battery drains in three weeks in the cold.,2026-08-03,True,0
+R-0037,Lumen Therm,4,Does what it says,The schedule learning actually learned our routine.,2026-08-30,True,6
+R-0040,Lumen Therm,4,Solid,Looks great on the wall and the app is clear.,2026-07-21,True,2
+R-0116,Lumen Therm,4,Very happy,The schedule learning actually learned our routine.,2026-05-16,True,3
+R-0228,Lumen Bulb 6-pack,4,Does what it says,Pairs with the Hub instantly.,2026-06-27,True,2
+R-0223,Lumen Bulb 6-pack,5,Very happy,Pairs with the Hub instantly. Great value for six bulbs. Highly recommend.,2026-08-09,True,0
+R-0233,Lumen Plug 4-pack,5,Does what it says,"Cheap, simple and reliable. Energy monitoring is a nice touch for the price. Highly recommend.",2026-02-06,True,2
+R-0104,Lumen Cam Pro,5,Very happy,Picture quality at night is excellent. Clip history is easy to scrub through. Highly recommend.,2026-09-13,True,3
+R-0217,Lumen Cam Pro,4,Solid,"Motion alerts are accurate, no more false alarms from trees.",2026-03-10,False,3
+R-0204,Lumen Hub,5,Does what it says,"Rock solid. Automations just work. Responds instantly, even with 40 devices paired. Highly recommend.",2026-07-24,True,3
+R-0288,Lumen Plug 4-pack,4,Solid,Great for scheduling lamps and the coffee maker.,2026-04-03,False,3
+R-0119,Lumen Cam Pro,5,Does what it says,"Clip history is easy to scrub through. Motion alerts are accurate, no more false alarms from trees. Highly recommend.",2026-08-15,True,3
+R-0226,Lumen Plug 4-pack,5,Great buy,"Cheap, simple and reliable. Energy monitoring is a nice touch for the price. Highly recommend.",2026-08-27,True,2
+R-0120,Lumen Sensor Kit,5,Great buy,Door sensors are tiny and the batteries last. Easy to place and pair. Highly recommend.,2026-04-20,True,1
+R-0105,Lumen Bulb 6-pack,5,Great buy,Pairs with the Hub instantly. Colours are vibrant and dimming is smooth. Highly recommend.,2026-07-06,True,1
+R-0301,Lumen Therm,4,Does what it says,Cut my heating bill noticeably this winter.,2026-04-11,False,3
+R-0268,Lumen Cam Pro,5,Does what it says,Picture quality at night is excellent. Clip history is easy to scrub through. Highly recommend.,2026-05-04,True,2
+R-0011,Lumen Sensor Kit,4,Very happy,Easy to place and pair.,2026-03-28,False,1
+R-0044,Lumen Plug 4-pack,3,Okay overall,Energy monitoring is a nice touch for the price. But app crashes when i rename a plug.,2026-01-18,True,3
+R-0151,Lumen Bulb 6-pack,5,Solid,Pairs with the Hub instantly. Colours are vibrant and dimming is smooth. Highly recommend.,2026-01-26,True,4
+R-0059,Lumen Hub,5,Solid,"Responds instantly, even with 40 devices paired. Rock solid. Automations just work. Highly recommend.",2026-07-25,True,6
+R-0049,Lumen Sensor Kit,5,Does what it says,"Easy to place and pair. Caught a leak under the sink early, paid for itself. Highly recommend.",2026-04-02,False,4
+R-0313,Lumen Therm,5,Solid,Cut my heating bill noticeably this winter. Looks great on the wall and the app is clear. Highly recommend.,2026-06-19,True,1
+R-0140,Lumen Bulb 6-pack,5,Very happy,Great value for six bulbs. Pairs with the Hub instantly. Highly recommend.,2026-10-22,True,3
+R-0081,Lumen Plug 4-pack,4,Solid,Great for scheduling lamps and the coffee maker.,2026-01-12,True,4
+R-0126,Lumen Bell,5,Solid,Two-way audio is crisp. Package alerts are brilliant. Highly recommend.,2026-07-01,True,1
+R-0196,Lumen Bulb 6-pack,5,Does what it says,Great value for six bulbs. Colours are vibrant and dimming is smooth. Highly recommend.,2026-02-15,False,3
+R-0077,Lumen Sensor Kit,5,Solid,"Easy to place and pair. Caught a leak under the sink early, paid for itself. Highly recommend.",2026-04-26,True,4
+R-0128,Lumen Sensor Kit,4,Does what it says,"Caught a leak under the sink early, paid for itself.",2026-06-14,True,4
+R-0305,Lumen Cam Pro,5,Very happy,"Motion alerts are accurate, no more false alarms from trees. Picture quality at night is excellent. Highly recommend.",2026-08-23,True,1
+R-0123,Lumen Plug 4-pack,4,Very happy,Energy monitoring is a nice touch for the price.,2026-04-28,False,1
+R-0208,Lumen Hub,4,Very happy,"Responds instantly, even with 40 devices paired.",2026-03-24,True,4
+R-0191,Lumen Cam Pro,5,Great buy,Clip history is easy to scrub through. Picture quality at night is excellent. Highly recommend.,2026-08-16,True,2
+R-0092,Lumen Sensor Kit,4,Great buy,Door sensors are tiny and the batteries last.,2026-07-07,True,1
+R-0231,Lumen Bell,4,Very happy,Installed it myself in ten minutes.,2026-06-19,True,4
+R-0261,Lumen Plug 4-pack,4,Solid,"Cheap, simple and reliable.",2026-07-31,True,5
+R-0299,Lumen Lock,5,Solid,Feels solid and the keypad is responsive. Auto-lock gives me peace of mind. Highly recommend.,2026-01-11,False,6
+R-0277,Lumen Sensor Kit,1,Disappointed,Hub range is poor through brick walls. Adhesive failed and one fell off. Returning it.,2026-09-01,False,2
+R-0186,Lumen Plug 4-pack,3,Okay overall,"Energy monitoring is a nice touch for the price. But too bulky, blocks the neighbouring socket.",2026-09-25,False,3
+R-0164,Lumen Hub,5,Solid,Rock solid. Automations just work. Setup took five minutes and it found all my devices. Highly recommend.,2026-09-26,True,3
+R-0046,Lumen Therm,5,Does what it says,Looks great on the wall and the app is clear. The schedule learning actually learned our routine. Highly recommend.,2026-03-24,True,1
+R-0007,Lumen Hub,4,Solid,Setup took five minutes and it found all my devices.,2026-08-21,True,2
+R-0229,Lumen Sensor Kit,2,Disappointed,False tamper alerts.,2026-05-22,True,1
+R-0302,Lumen Therm,5,Solid,Cut my heating bill noticeably this winter. The schedule learning actually learned our routine. Highly recommend.,2026-01-09,True,1
+R-0221,Lumen Therm,5,Solid,Looks great on the wall and the app is clear. The schedule learning actually learned our routine. Highly recommend.,2026-08-01,True,1
+R-0031,Lumen Bell,3,"Good, not great",Installed it myself in ten minutes. But battery drains in three weeks in the cold.,2026-01-15,True,4
+R-0279,Lumen Therm,5,Great buy,The schedule learning actually learned our routine. Looks great on the wall and the app is clear. Highly recommend.,2026-08-21,True,3
+R-0253,Lumen Therm,4,Great buy,Looks great on the wall and the app is clear.,2026-06-10,True,2
+R-0033,Lumen Cam Pro,4,Does what it says,Picture quality at night is excellent.,2026-06-08,True,2
+R-0307,Lumen Therm,5,Does what it says,The schedule learning actually learned our routine. Looks great on the wall and the app is clear. Highly recommend.,2026-05-19,True,0
+R-0034,Lumen Cam Pro,4,Great buy,"Motion alerts are accurate, no more false alarms from trees.",2026-08-24,True,4
+R-0083,Lumen Plug 4-pack,4,Great buy,Great for scheduling lamps and the coffee maker.,2026-03-24,True,2
+R-0145,Lumen Therm,5,Does what it says,The schedule learning actually learned our routine. Cut my heating bill noticeably this winter. Highly recommend.,2026-04-26,True,5
+R-0280,Lumen Therm,3,Mixed feelings,Looks great on the wall and the app is clear. But wiring guide was unclear.,2026-07-18,False,3
+R-0303,Lumen Plug 4-pack,4,Great buy,Energy monitoring is a nice touch for the price.,2026-09-20,True,2
+R-0317,Lumen Cam Pro,2,Camera exposes my feed,I could see another household's feed after the last update. Serious privacy issue and possibly illegal.,2026-09-29,True,13
+R-0124,Lumen Bell,5,Great buy,Two-way audio is crisp. Installed it myself in ten minutes. Highly recommend.,2026-06-06,True,1
+R-0177,Lumen Lock,4,Solid,Feels solid and the keypad is responsive.,2026-02-19,True,3
+R-0129,Lumen Therm,4,Great buy,Looks great on the wall and the app is clear.,2026-04-21,True,0
+R-0219,Lumen Hub,4,Very happy,"Responds instantly, even with 40 devices paired.",2026-01-14,True,2
+R-0112,Lumen Hub,5,Solid,"Setup took five minutes and it found all my devices. Responds instantly, even with 40 devices paired. Highly recommend.",2026-03-01,True,3
+R-0147,Lumen Plug 4-pack,5,Great buy,"Great for scheduling lamps and the coffee maker. Cheap, simple and reliable. Highly recommend.",2026-03-17,True,0
+R-0308,Lumen Therm,5,Very happy,The schedule learning actually learned our routine. Looks great on the wall and the app is clear. Highly recommend.,2026-03-09,False,1
+R-0212,Lumen Hub,4,Solid,"Responds instantly, even with 40 devices paired.",2026-04-06,True,3
+R-0152,Lumen Bell,3,Mixed feelings,Two-way audio is crisp. But chime is too quiet.,2026-02-17,False,1
+R-0203,Lumen Bulb 6-pack,4,Solid,Pairs with the Hub instantly.,2026-07-21,True,2
+R-0084,Lumen Sensor Kit,3,Mixed feelings,"Caught a leak under the sink early, paid for itself. But hub range is poor through brick walls.",2026-06-15,True,4
+R-0117,Lumen Cam Pro,3,Okay overall,Clip history is easy to scrub through. But night mode washes out faces.,2026-08-14,True,1
+R-0318,Lumen Bulb 6-pack,1,Bulb shattered,A bulb cracked and sparked when I switched it on. Could have injured my child.,2026-06-30,True,35
+R-0311,Lumen Lock,2,Disappointed,Keypad stops responding when it's cold.,2026-07-11,True,2
+R-0296,Lumen Hub,5,Solid,Rock solid. Automations just work. Setup took five minutes and it found all my devices. Highly recommend.,2026-05-24,True,1
+R-0039,Lumen Sensor Kit,2,Not reliable,Adhesive failed and one fell off.,2026-03-10,True,5
+R-0064,Lumen Cam Pro,5,Very happy,Clip history is easy to scrub through. Picture quality at night is excellent. Highly recommend.,2026-05-17,True,1
+R-0097,Lumen Plug 4-pack,3,"Good, not great",Great for scheduling lamps and the coffee maker. But two of four lost connection within a month.,2026-06-06,True,9
+R-0295,Lumen Therm,2,Disappointed,Wiring guide was unclear.,2026-03-19,True,5
+R-0278,Lumen Plug 4-pack,4,Great buy,Energy monitoring is a nice touch for the price.,2026-09-09,True,3
+R-0074,Lumen Lock,2,Disappointed,Keypad stops responding when it's cold.,2026-02-26,True,2
+R-0135,Lumen Plug 4-pack,3,Okay overall,Great for scheduling lamps and the coffee maker. But app crashes when i rename a plug.,2026-10-13,True,3
+R-0314,Lumen Hub,2,Disappointed,Needed three resets to pair my sensors.,2026-04-13,False,2
+R-0091,Lumen Bulb 6-pack,4,Does what it says,Colours are vibrant and dimming is smooth.,2026-03-16,True,6
+R-0320,Lumen Hub,2,Looks like a counterfeit,"The box and logo look off. I think this is a counterfeit listing on the marketplace, I'm filing a chargeback.",2026-07-26,True,11
+R-0004,Lumen Sensor Kit,1,Wouldn't buy again,False tamper alerts. Hub range is poor through brick walls. Returning it.,2026-04-10,True,0
+R-0260,Lumen Bell,4,Very happy,Installed it myself in ten minutes.,2026-04-15,False,4
+R-0095,Lumen Therm,5,Very happy,The schedule learning actually learned our routine. Looks great on the wall and the app is clear. Highly recommend.,2026-10-18,True,1
+R-0227,Lumen Lock,4,Solid,Guest codes are super convenient.,2026-08-12,True,4
+R-0032,Lumen Cam Pro,4,Great buy,Clip history is easy to scrub through.,2026-10-18,True,0
+R-0304,Lumen Plug 4-pack,4,Does what it says,"Cheap, simple and reliable.",2026-05-03,True,2
+R-0148,Lumen Cam Pro,1,Disappointed,Night mode washes out faces. Live view buffers a lot on my wifi. Returning it.,2026-10-04,True,5
+R-0241,Lumen Bulb 6-pack,2,Not reliable,Disconnects from the Hub every few days.,2026-04-04,True,4
+R-0096,Lumen Hub,3,Mixed feelings,"Responds instantly, even with 40 devices paired. But app is slow to show device status.",2026-04-24,False,2
+R-0310,Lumen Bell,5,Does what it says,Installed it myself in ten minutes. Two-way audio is crisp. Highly recommend.,2026-01-12,True,5
+R-0254,Lumen Plug 4-pack,3,"Good, not great","Cheap, simple and reliable. But too bulky, blocks the neighbouring socket.",2026-01-27,True,1
+R-0102,Lumen Bell,3,Mixed feelings,Installed it myself in ten minutes. But battery drains in three weeks in the cold.,2026-09-05,False,6
+R-0244,Lumen Bulb 6-pack,2,Not reliable,Warm white is too yellow.,2026-02-25,True,3
+R-0099,Lumen Bulb 6-pack,3,Okay overall,Colours are vibrant and dimming is smooth. But disconnects from the hub every few days.,2026-03-17,True,0
+R-0272,Lumen Cam Pro,5,Does what it says,"Motion alerts are accurate, no more false alarms from trees. Clip history is easy to scrub through. Highly recommend.",2026-08-14,True,3
+R-0165,Lumen Hub,4,Does what it says,Setup took five minutes and it found all my devices.,2026-08-03,False,2
+R-0199,Lumen Therm,5,Does what it says,The schedule learning actually learned our routine. Looks great on the wall and the app is clear. Highly recommend.,2026-01-07,True,2
+R-0041,Lumen Therm,5,Great buy,Looks great on the wall and the app is clear. Cut my heating bill noticeably this winter. Highly recommend.,2026-04-02,True,3

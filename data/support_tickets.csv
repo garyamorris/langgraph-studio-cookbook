@@ -1,0 +1,241 @@
+ticket_id,customer_id,channel,created_at,subject,body,category,priority,sentiment
+T-2168,25,email,2026-10-04,Lumen Therm keeps going offline,My Lumen Therm drops off wifi every few hours. I rebooted the router twice and the app shows error E-504.,technical,medium,neutral
+T-2019,54,web_form,2026-08-11,Change delivery address,I need to change the delivery address on order #1194 before it ships. I've moved house. I'm extremely frustrated.,shipping,high,angry
+T-2178,77,web_form,2026-10-20,Change email address on account,"Please change the email on my account from user48@example.com to a new address, I no longer have access to it.",account,medium,neutral
+T-2185,71,chat,2026-09-19,Subscription renewed unexpectedly,My Lumen Care plan renewed at $89 and I'm sure I cancelled it back in March. Can you reverse it?,billing,medium,negative
+T-2231,158,web_form,2026-09-12,Firmware update stuck,The update to firmware 2.4.1 has been stuck at 99% for hours on my Lumen Lock. Is it safe to unplug it?,technical,medium,negative
+T-2232,51,email,2026-10-08,Refund still not received,It has been 14 days since you approved the refund for order #1021. Where is my money?,billing,medium,negative
+T-2073,84,email,2026-10-08,Refund still not received,It has been 15 days since you approved the refund for order #1587. Where is my money?,billing,medium,negative
+T-2024,140,chat,2026-08-02,Need an invoice with VAT number,Could you send an invoice with our company VAT number for order #1040? Our accounting closes Friday.,billing,medium,neutral
+T-2226,163,email,2026-10-06,Change email address on account,"Please change the email on my account from user46@example.com to a new address, I no longer have access to it.",account,medium,neutral
+T-2035,65,email,2026-10-30,Subscription renewed unexpectedly,My Lumen Care plan renewed at $19 and I'm sure I cancelled it back in March. Can you reverse it?,billing,medium,negative
+T-2049,4,web_form,2026-09-17,Video is choppy,Live view on the Cam Pro buffers constantly in the evening although my internet is fast. Error E-317 sometimes. This is the third time I'm writing!,technical,high,angry
+T-2091,175,web_form,2026-08-17,Firmware update stuck,The update to firmware 2.4.1 has been stuck at 88% for hours on my Lumen Bell. Is it safe to unplug it?,technical,medium,neutral
+T-2012,88,chat,2026-09-17,Lumen Sensor Kit keeps going offline,My Lumen Sensor Kit drops off wifi every few hours. I rebooted the router twice and the app shows error AUTH-12.,technical,medium,negative
+T-2114,168,email,2026-09-19,Firmware update stuck,The update to firmware 3.0.2 has been stuck at 88% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it?,technical,medium,negative
+T-2217,7,web_form,2026-08-22,Change email address on account,"Please change the email on my account from user26@example.com to a new address, I no longer have access to it. I'm extremely frustrated.",account,high,angry
+T-2233,27,web_form,2026-09-20,Firmware update stuck,The update to firmware 3.0.2 has been stuck at 47% for hours on my Lumen Lock. Is it safe to unplug it? Fix this today or I'm disputing the charge.,technical,high,angry
+T-2225,161,email,2026-10-21,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond. Fix this today or I'm disputing the charge.,technical,high,angry
+T-2094,152,web_form,2026-10-21,Lumen Bell keeps going offline,My Lumen Bell drops off wifi every few hours. I rebooted the router twice and the app shows error E-102.,technical,medium,negative
+T-2161,53,web_form,2026-08-10,Cannot pair Lumen Plug 4-pack,I can't pair my new Lumen Plug 4-pack with the Hub. The light blinks amber and the app says E-102.,technical,medium,neutral
+T-2066,129,web_form,2026-08-16,Promo code SPRING5 not applied,The code SPRING5 did not take anything off my Lumen Bulb 6-pack. Please apply the discount to order #1324.,billing,medium,negative
+T-2163,103,email,2026-08-09,Wrong item in the box,I ordered a Lumen Therm but received a different product in order #1465.,shipping,medium,negative
+T-2129,3,email,2026-08-14,App redesign is confusing,The new app layout buries the automations tab. Please bring back the old navigation.,product_feedback,low,neutral
+T-2197,58,web_form,2026-09-14,Where is order #1355?,Order #1355 shipped 7 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,neutral
+T-2131,10,web_form,2026-08-20,Suggestion for the Lumen Sensor Kit,It would help if the Lumen Sensor Kit had a quieter chime option for night time.,product_feedback,low,positive
+T-2047,93,chat,2026-09-18,Marked delivered but not received,Tracking says order #1435 was delivered yesterday but nothing is here. Neighbours haven't seen it either.,shipping,medium,negative
+T-2111,158,chat,2026-08-16,Firmware update stuck,The update to firmware 2.4.1 has been stuck at 47% for hours on my Lumen Cam Pro. Is it safe to unplug it?,technical,medium,negative
+T-2071,45,web_form,2026-09-18,Add a family member to my home,How do I give my partner access to our Hub and cameras without sharing my password?,account,medium,negative
+T-2063,98,web_form,2026-10-22,Feature request,Would love to see geofencing for the thermostat. Otherwise I'm really happy with the Lumen Cam Pro.,product_feedback,low,positive
+T-2204,48,web_form,2026-09-25,Delete my account and data,I want my account and all camera recordings deleted under GDPR. How do I confirm this?,account,medium,neutral
+T-2191,126,chat,2026-10-26,Cannot pair Lumen Cam Pro,I can't pair my new Lumen Cam Pro with the Hub. The light blinks amber and the app says WIFI-7.,technical,medium,negative
+T-2085,89,email,2026-10-24,Suggestion for the Lumen Cam Pro,It would help if the Lumen Cam Pro had a quieter chime option for night time.,product_feedback,low,neutral
+T-2005,127,chat,2026-10-06,Delete my account and data,I want my account and all camera recordings deleted under GDPR. How do I confirm this?,account,medium,negative
+T-2179,108,chat,2026-09-29,Firmware update stuck,The update to firmware 3.0.2 has been stuck at 63% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it?,technical,medium,negative
+T-2056,8,web_form,2026-08-31,Subscription renewed unexpectedly,My Lumen Care plan renewed at $39 and I'm sure I cancelled it back in June. Can you reverse it?,billing,medium,negative
+T-2084,142,chat,2026-08-02,Lumen Cam Pro keeps going offline,My Lumen Cam Pro drops off wifi every few hours. I rebooted the router twice and the app shows error E-102.,technical,medium,neutral
+T-2046,120,chat,2026-08-22,Subscription renewed unexpectedly,My Lumen Care plan renewed at $129 and I'm sure I cancelled it back in March. Can you reverse it?,billing,medium,negative
+T-2156,104,email,2026-10-08,Subscription renewed unexpectedly,My Lumen Care plan renewed at $39 and I'm sure I cancelled it back in June. Can you reverse it?,billing,medium,negative
+T-2098,54,web_form,2026-09-19,Lumen Sensor Kit keeps going offline,My Lumen Sensor Kit drops off wifi every few hours. I rebooted the router twice and the app shows error AUTH-12.,technical,medium,neutral
+T-2006,58,web_form,2026-09-24,Marked delivered but not received,Tracking says order #1049 was delivered yesterday but nothing is here. Neighbours haven't seen it either. Fix this today or I'm disputing the charge.,shipping,high,angry
+T-2150,176,web_form,2026-09-05,Firmware update stuck,The update to firmware 3.0.2 has been stuck at 88% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it?,technical,medium,negative
+T-2015,8,web_form,2026-08-15,Box arrived damaged,The box for order #1639 was crushed and the Lumen Lock has a cracked case.,shipping,medium,negative
+T-2184,163,email,2026-08-24,Lumen Bell keeps going offline,My Lumen Bell drops off wifi every few hours. I rebooted the router twice and the app shows error E-504.,technical,medium,negative
+T-2011,159,chat,2026-08-24,Add a family member to my home,How do I give my partner access to our Hub and cameras without sharing my password?,account,medium,neutral
+T-2067,46,chat,2026-09-20,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,neutral
+T-2200,63,chat,2026-08-17,Cannot log in after password reset,I reset my password but the app still says invalid credentials. I'm using user54@example.com.,account,medium,negative
+T-2203,9,chat,2026-09-05,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,neutral
+T-2139,160,web_form,2026-08-13,Box arrived damaged,The box for order #1650 was crushed and the Lumen Cam Pro has a cracked case.,shipping,medium,neutral
+T-2118,121,chat,2026-09-13,Subscription renewed unexpectedly,My Lumen Care plan renewed at $29 and I'm sure I cancelled it back in March. Can you reverse it?,billing,medium,neutral
+T-2192,146,web_form,2026-08-10,Firmware update stuck,The update to firmware 2.4.1 has been stuck at 47% for hours on my Lumen Hub. Is it safe to unplug it?,technical,medium,neutral
+T-2057,125,chat,2026-09-13,Lumen Cam Pro keeps going offline,My Lumen Cam Pro drops off wifi every few hours. I rebooted the router twice and the app shows error AUTH-12. I'm extremely frustrated.,technical,high,angry
+T-2078,178,email,2026-10-08,Firmware update stuck,The update to firmware 2.5.0 has been stuck at 88% for hours on my Lumen Plug 4-pack. Is it safe to unplug it?,technical,medium,neutral
+T-2062,66,web_form,2026-09-30,Change email address on account,"Please change the email on my account from user45@example.com to a new address, I no longer have access to it.",account,medium,neutral
+T-2117,153,email,2026-08-04,Subscription renewed unexpectedly,My Lumen Care plan renewed at $129 and I'm sure I cancelled it back in March. Can you reverse it? I'm extremely frustrated.,billing,high,angry
+T-2136,43,web_form,2026-09-18,Cannot log in after password reset,I reset my password but the app still says invalid credentials. I'm using user99@example.com.,account,medium,negative
+T-2050,50,chat,2026-09-02,Video is choppy,Live view on the Cam Pro buffers constantly in the evening although my internet is fast. Error E-102 sometimes. This is the third time I'm writing!,technical,high,angry
+T-2160,148,chat,2026-10-24,Firmware update stuck,The update to firmware 2.5.0 has been stuck at 88% for hours on my Lumen Sensor Kit. Is it safe to unplug it?,technical,medium,neutral
+T-2038,52,email,2026-09-17,Love the Lumen Lock,"Just wanted to say the Lumen Lock setup took five minutes. Great job, the team should be proud.",product_feedback,low,neutral
+T-2034,84,chat,2026-09-27,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,neutral
+T-2074,47,web_form,2026-10-28,Charged twice for order #1404,"Hi, I was charged $89 twice for order #1404 on 2026-10-08. Please refund the duplicate charge.",billing,medium,neutral
+T-2100,135,web_form,2026-08-03,Where is order #1131?,Order #1131 shipped 14 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,neutral
+T-2230,103,chat,2026-08-07,Where is order #1298?,Order #1298 shipped 20 days ago and the tracking hasn't changed. When will it arrive? I'm extremely frustrated.,shipping,high,angry
+T-2079,64,email,2026-09-04,Need an invoice with VAT number,Could you send an invoice with our company VAT number for order #1649? Our accounting closes Friday.,billing,medium,neutral
+T-2017,96,web_form,2026-08-22,Charged twice for order #1181,"Hi, I was charged $149 twice for order #1181 on 2026-09-03. Please refund the duplicate charge.",billing,medium,negative
+T-2209,60,email,2026-10-23,Cannot log in after password reset,I reset my password but the app still says invalid credentials. I'm using user89@example.com.,account,medium,negative
+T-2176,144,email,2026-08-12,Need an invoice with VAT number,Could you send an invoice with our company VAT number for order #1006? Our accounting closes Friday.,billing,medium,neutral
+T-2222,171,chat,2026-08-19,Need an invoice with VAT number,Could you send an invoice with our company VAT number for order #1170? Our accounting closes Friday.,billing,medium,neutral
+T-2014,1,web_form,2026-08-29,App redesign is confusing,The new app layout buries the automations tab. Please bring back the old navigation.,product_feedback,low,positive
+T-2201,94,web_form,2026-09-07,Two-factor codes not arriving,"I'm not receiving the SMS codes for two-factor login, so I'm locked out of the app.",account,medium,negative
+T-2153,32,email,2026-09-10,Lumen Sensor Kit keeps going offline,My Lumen Sensor Kit drops off wifi every few hours. I rebooted the router twice and the app shows error E-102.,technical,medium,neutral
+T-2303,5,chat,2026-10-28,Cam Pro showing someone else's video,I opened the app and the Cam Pro feed showed a stranger's living room. This is a serious privacy breach and I'm contacting a regulator.,account,urgent,angry
+T-2138,98,chat,2026-10-24,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,neutral
+T-2219,22,email,2026-08-01,Cannot log in after password reset,I reset my password but the app still says invalid credentials. I'm using user85@example.com. Fix this today or I'm disputing the charge.,account,high,angry
+T-2216,38,web_form,2026-10-03,Marked delivered but not received,Tracking says order #1551 was delivered yesterday but nothing is here. Neighbours haven't seen it either.,shipping,medium,negative
+T-2052,165,web_form,2026-09-19,Change email address on account,"Please change the email on my account from user24@example.com to a new address, I no longer have access to it.",account,medium,negative
+T-2048,142,web_form,2026-08-23,Promo code SPRING5 not applied,The code SPRING5 did not take anything off my Lumen Therm. Please apply the discount to order #1433. This is the third time I'm writing!,billing,high,angry
+T-2205,15,email,2026-10-10,Delete my account and data,I want my account and all camera recordings deleted under GDPR. How do I confirm this? Fix this today or I'm disputing the charge.,account,high,angry
+T-2169,110,chat,2026-08-03,Suggestion for the Lumen Cam Pro,It would help if the Lumen Cam Pro had a quieter chime option for night time.,product_feedback,low,neutral
+T-2055,55,email,2026-08-26,Cannot pair Lumen Therm,I can't pair my new Lumen Therm with the Hub. The light blinks amber and the app says WIFI-7.,technical,medium,neutral
+T-2133,14,email,2026-09-24,Firmware update stuck,The update to firmware 2.5.0 has been stuck at 99% for hours on my Lumen Cam Pro. Is it safe to unplug it? This is the third time I'm writing!,technical,high,angry
+T-2147,81,web_form,2026-09-27,Cannot pair Lumen Lock,I can't pair my new Lumen Lock with the Hub. The light blinks amber and the app says WIFI-7.,technical,medium,negative
+T-2229,126,web_form,2026-09-22,App redesign is confusing,The new app layout buries the automations tab. Please bring back the old navigation.,product_feedback,low,neutral
+T-2181,75,web_form,2026-10-01,Charged twice for order #1474,"Hi, I was charged $149 twice for order #1474 on 2026-10-06. Please refund the duplicate charge.",billing,medium,negative
+T-2175,73,web_form,2026-08-16,Change delivery address,I need to change the delivery address on order #1297 before it ships. I've moved house.,shipping,medium,negative
+T-2088,48,chat,2026-09-15,Cannot log in after password reset,I reset my password but the app still says invalid credentials. I'm using user10@example.com.,account,medium,neutral
+T-2029,60,chat,2026-10-24,Delete my account and data,I want my account and all camera recordings deleted under GDPR. How do I confirm this?,account,medium,neutral
+T-2072,172,web_form,2026-08-29,Where is order #1475?,Order #1475 shipped 14 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,neutral
+T-2082,37,chat,2026-10-12,Video is choppy,Live view on the Cam Pro buffers constantly in the evening although my internet is fast. Error E-317 sometimes.,technical,medium,neutral
+T-2045,2,email,2026-10-02,Marked delivered but not received,Tracking says order #1340 was delivered yesterday but nothing is here. Neighbours haven't seen it either.,shipping,medium,negative
+T-2194,92,email,2026-08-21,Refund still not received,It has been 20 days since you approved the refund for order #1306. Where is my money?,billing,medium,negative
+T-2174,176,email,2026-09-29,Video is choppy,Live view on the Cam Pro buffers constantly in the evening although my internet is fast. Error WIFI-7 sometimes. I'm extremely frustrated.,technical,high,angry
+T-2077,142,email,2026-10-15,Delete my account and data,I want my account and all camera recordings deleted under GDPR. How do I confirm this? Fix this today or I'm disputing the charge.,account,high,angry
+T-2151,160,email,2026-10-17,Feature request,Would love to see multi-home support. Otherwise I'm really happy with the Lumen Bell.,product_feedback,low,neutral
+T-2193,97,email,2026-10-12,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,negative
+T-2008,16,email,2026-09-18,Cannot pair Lumen Cam Pro,I can't pair my new Lumen Cam Pro with the Hub. The light blinks amber and the app says E-102.,technical,medium,negative
+T-2099,122,email,2026-10-08,Charged twice for order #1134,"Hi, I was charged $129 twice for order #1134 on 2026-10-17. Please refund the duplicate charge.",billing,medium,negative
+T-2170,5,web_form,2026-10-27,Need an invoice with VAT number,Could you send an invoice with our company VAT number for order #1079? Our accounting closes Friday.,billing,medium,negative
+T-2059,1,web_form,2026-09-11,Firmware update stuck,The update to firmware 3.0.2 has been stuck at 88% for hours on my Lumen Bell. Is it safe to unplug it?,technical,medium,neutral
+T-2182,40,chat,2026-10-20,Where is order #1125?,Order #1125 shipped 19 days ago and the tracking hasn't changed. When will it arrive? Fix this today or I'm disputing the charge.,shipping,high,angry
+T-2013,122,web_form,2026-10-28,Love the Lumen Lock,"Just wanted to say the Lumen Lock setup took five minutes. Great job, the team should be proud.",product_feedback,low,positive
+T-2089,96,chat,2026-09-16,Promo code WELCOME15 not applied,The code WELCOME15 did not take anything off my Lumen Lock. Please apply the discount to order #1504.,billing,medium,negative
+T-2026,148,email,2026-09-09,Box arrived damaged,The box for order #1349 was crushed and the Lumen Lock has a cracked case.,shipping,medium,negative
+T-2214,93,email,2026-09-28,Change delivery address,I need to change the delivery address on order #1053 before it ships. I've moved house.,shipping,medium,negative
+T-2090,51,email,2026-08-25,Firmware update stuck,The update to firmware 2.5.0 has been stuck at 88% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it? Fix this today or I'm disputing the charge.,technical,high,angry
+T-2040,168,chat,2026-08-02,Firmware update stuck,The update to firmware 2.4.1 has been stuck at 63% for hours on my Lumen Cam Pro. Is it safe to unplug it?,technical,medium,negative
+T-2001,179,email,2026-08-16,Box arrived damaged,The box for order #1403 was crushed and the Lumen Hub has a cracked case.,shipping,medium,negative
+T-2009,98,chat,2026-08-13,Lumen Lock keeps going offline,My Lumen Lock drops off wifi every few hours. I rebooted the router twice and the app shows error E-102.,technical,medium,negative
+T-2155,71,chat,2026-08-16,Feature request,Would love to see longer clip history on the Cam Pro. Otherwise I'm really happy with the Lumen Sensor Kit.,product_feedback,low,positive
+T-2164,69,email,2026-09-30,Firmware update stuck,The update to firmware 3.0.2 has been stuck at 12% for hours on my Lumen Therm. Is it safe to unplug it? This is the third time I'm writing!,technical,high,angry
+T-2023,71,email,2026-08-13,Video is choppy,Live view on the Cam Pro buffers constantly in the evening although my internet is fast. Error E-102 sometimes.,technical,medium,neutral
+T-2180,76,email,2026-09-20,Refund still not received,It has been 10 days since you approved the refund for order #1028. Where is my money? Fix this today or I'm disputing the charge.,billing,high,angry
+T-2041,138,web_form,2026-08-22,Video is choppy,Live view on the Cam Pro buffers constantly in the evening although my internet is fast. Error E-317 sometimes. This is the third time I'm writing!,technical,high,angry
+T-2235,6,chat,2026-09-05,Promo code WELCOME15 not applied,The code WELCOME15 did not take anything off my Lumen Cam Pro. Please apply the discount to order #1021.,billing,medium,negative
+T-2173,174,chat,2026-09-12,Refund still not received,It has been 15 days since you approved the refund for order #1442. Where is my money?,billing,medium,negative
+T-2107,110,email,2026-09-28,Promo code HOLIDAY20 not applied,The code HOLIDAY20 did not take anything off my Lumen Therm. Please apply the discount to order #1185.,billing,medium,negative
+T-2092,61,email,2026-10-26,Video is choppy,Live view on the Cam Pro buffers constantly in the evening although my internet is fast. Error E-317 sometimes.,technical,medium,neutral
+T-2068,50,web_form,2026-10-10,Firmware update stuck,The update to firmware 2.5.0 has been stuck at 12% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it?,technical,medium,negative
+T-2207,170,chat,2026-09-03,App redesign is confusing,The new app layout buries the automations tab. Please bring back the old navigation.,product_feedback,low,positive
+T-2018,163,email,2026-08-06,Suggestion for the Lumen Bell,It would help if the Lumen Bell had a quieter chime option for night time.,product_feedback,low,positive
+T-2224,57,web_form,2026-08-10,Two-factor codes not arriving,"I'm not receiving the SMS codes for two-factor login, so I'm locked out of the app.",account,medium,negative
+T-2110,58,email,2026-08-30,Need an invoice with VAT number,Could you send an invoice with our company VAT number for order #1643? Our accounting closes Friday.,billing,medium,negative
+T-2093,131,email,2026-09-01,Box arrived damaged,The box for order #1612 was crushed and the Lumen Plug 4-pack has a cracked case.,shipping,medium,negative
+T-2130,47,web_form,2026-08-14,Firmware update stuck,The update to firmware 2.5.0 has been stuck at 88% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it?,technical,medium,negative
+T-2171,125,chat,2026-09-16,Love the Lumen Cam Pro,"Just wanted to say the Lumen Cam Pro setup took five minutes. Great job, the team should be proud.",product_feedback,low,positive
+T-2137,117,chat,2026-09-22,Subscription renewed unexpectedly,My Lumen Care plan renewed at $129 and I'm sure I cancelled it back in March. Can you reverse it?,billing,medium,negative
+T-2120,144,web_form,2026-08-10,App redesign is confusing,The new app layout buries the automations tab. Please bring back the old navigation.,product_feedback,low,positive
+T-2166,111,email,2026-10-27,Lumen Bell keeps going offline,My Lumen Bell drops off wifi every few hours. I rebooted the router twice and the app shows error E-317.,technical,medium,neutral
+T-2228,29,chat,2026-09-23,Firmware update stuck,The update to firmware 2.5.0 has been stuck at 99% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it?,technical,medium,negative
+T-2121,20,chat,2026-10-17,Box arrived damaged,The box for order #1489 was crushed and the Lumen Lock has a cracked case.,shipping,medium,negative
+T-2199,59,chat,2026-10-08,Cannot log in after password reset,I reset my password but the app still says invalid credentials. I'm using user21@example.com.,account,medium,negative
+T-2149,178,email,2026-09-04,Love the Lumen Bell,"Just wanted to say the Lumen Bell setup took five minutes. Great job, the team should be proud.",product_feedback,low,positive
+T-2053,106,web_form,2026-08-12,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,negative
+T-2075,9,email,2026-08-16,Refund still not received,It has been 21 days since you approved the refund for order #1458. Where is my money?,billing,medium,negative
+T-2206,175,chat,2026-08-11,Cannot pair Lumen Therm,I can't pair my new Lumen Therm with the Hub. The light blinks amber and the app says WIFI-7.,technical,medium,negative
+T-2157,81,chat,2026-10-18,Feature request,Would love to see Matter support on the Lock. Otherwise I'm really happy with the Lumen Cam Pro.,product_feedback,low,positive
+T-2302,98,chat,2026-10-28,Locked out of my own house,My Lumen Lock stopped responding and I'm locked out with my kids outside. I need help RIGHT NOW.,technical,urgent,angry
+T-2172,37,chat,2026-10-03,Cannot pair Lumen Cam Pro,I can't pair my new Lumen Cam Pro with the Hub. The light blinks amber and the app says AUTH-12. Fix this today or I'm disputing the charge.,technical,high,angry
+T-2159,177,web_form,2026-09-18,Lumen Hub keeps going offline,My Lumen Hub drops off wifi every few hours. I rebooted the router twice and the app shows error E-102.,technical,medium,negative
+T-2070,14,email,2026-10-05,Where is order #1371?,Order #1371 shipped 16 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,negative
+T-2142,50,web_form,2026-10-22,Promo code HOLIDAY20 not applied,The code HOLIDAY20 did not take anything off my Lumen Sensor Kit. Please apply the discount to order #1034.,billing,medium,neutral
+T-2112,27,chat,2026-10-03,Lumen Sensor Kit keeps going offline,My Lumen Sensor Kit drops off wifi every few hours. I rebooted the router twice and the app shows error WIFI-7.,technical,medium,negative
+T-2031,37,chat,2026-08-09,Subscription renewed unexpectedly,My Lumen Care plan renewed at $49 and I'm sure I cancelled it back in June. Can you reverse it?,billing,medium,negative
+T-2076,126,web_form,2026-09-10,Delete my account and data,I want my account and all camera recordings deleted under GDPR. How do I confirm this?,account,medium,neutral
+T-2003,145,web_form,2026-10-27,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,negative
+T-2103,14,web_form,2026-09-01,Wrong item in the box,I ordered a Lumen Hub but received a different product in order #1275. I'm extremely frustrated.,shipping,high,angry
+T-2108,34,email,2026-08-11,Suggestion for the Lumen Cam Pro,It would help if the Lumen Cam Pro had a quieter chime option for night time.,product_feedback,low,negative
+T-2141,107,web_form,2026-08-31,Suggestion for the Lumen Hub,It would help if the Lumen Hub had a quieter chime option for night time.,product_feedback,low,positive
+T-2036,72,email,2026-08-22,App redesign is confusing,The new app layout buries the automations tab. Please bring back the old navigation.,product_feedback,low,positive
+T-2125,115,email,2026-09-13,Promo code WELCOME15 not applied,The code WELCOME15 did not take anything off my Lumen Bell. Please apply the discount to order #1081. I'm extremely frustrated.,billing,high,angry
+T-2135,173,chat,2026-09-03,Refund still not received,It has been 7 days since you approved the refund for order #1632. Where is my money?,billing,medium,neutral
+T-2212,81,web_form,2026-10-05,App redesign is confusing,The new app layout buries the automations tab. Please bring back the old navigation.,product_feedback,low,neutral
+T-2301,63,chat,2026-10-28,URGENT: plug smells of burning,One of the plugs in my Lumen Plug 4-pack got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!,technical,urgent,angry
+T-2221,148,web_form,2026-09-10,Add a family member to my home,How do I give my partner access to our Hub and cameras without sharing my password?,account,medium,negative
+T-2189,60,email,2026-10-25,Add a family member to my home,How do I give my partner access to our Hub and cameras without sharing my password? This is the third time I'm writing!,account,high,angry
+T-2030,18,chat,2026-08-27,Two-factor codes not arriving,"I'm not receiving the SMS codes for two-factor login, so I'm locked out of the app.",account,medium,neutral
+T-2113,72,email,2026-08-12,Delete my account and data,I want my account and all camera recordings deleted under GDPR. How do I confirm this?,account,medium,negative
+T-2051,93,web_form,2026-10-30,Wrong item in the box,I ordered a Lumen Hub but received a different product in order #1522.,shipping,medium,negative
+T-2043,36,chat,2026-10-03,Firmware update stuck,The update to firmware 3.0.2 has been stuck at 88% for hours on my Lumen Cam Pro. Is it safe to unplug it?,technical,medium,negative
+T-2032,89,web_form,2026-09-08,Change delivery address,I need to change the delivery address on order #1253 before it ships. I've moved house. I'm extremely frustrated.,shipping,high,angry
+T-2202,36,web_form,2026-08-30,Marked delivered but not received,Tracking says order #1540 was delivered yesterday but nothing is here. Neighbours haven't seen it either.,shipping,medium,negative
+T-2042,156,web_form,2026-09-27,Lumen Therm keeps going offline,My Lumen Therm drops off wifi every few hours. I rebooted the router twice and the app shows error E-317.,technical,medium,negative
+T-2004,6,web_form,2026-10-26,Change email address on account,"Please change the email on my account from user34@example.com to a new address, I no longer have access to it.",account,medium,negative
+T-2033,12,email,2026-08-21,Firmware update stuck,The update to firmware 3.0.2 has been stuck at 99% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it?,technical,medium,neutral
+T-2097,126,chat,2026-09-12,Love the Lumen Bell,"Just wanted to say the Lumen Bell setup took five minutes. Great job, the team should be proud.",product_feedback,low,positive
+T-2020,127,chat,2026-09-04,Change delivery address,I need to change the delivery address on order #1067 before it ships. I've moved house.,shipping,medium,neutral
+T-2109,123,email,2026-09-01,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,negative
+T-2027,6,web_form,2026-08-05,Feature request,Would love to see multi-home support. Otherwise I'm really happy with the Lumen Bell.,product_feedback,low,positive
+T-2021,96,chat,2026-10-10,Add a family member to my home,How do I give my partner access to our Hub and cameras without sharing my password?,account,medium,negative
+T-2143,33,web_form,2026-08-16,Lumen Therm keeps going offline,My Lumen Therm drops off wifi every few hours. I rebooted the router twice and the app shows error E-504.,technical,medium,negative
+T-2132,6,web_form,2026-09-24,Love the Lumen Lock,"Just wanted to say the Lumen Lock setup took five minutes. Great job, the team should be proud.",product_feedback,low,positive
+T-2124,10,chat,2026-08-21,Wrong item in the box,I ordered a Lumen Cam Pro but received a different product in order #1133.,shipping,medium,neutral
+T-2119,142,web_form,2026-09-03,Lumen Therm keeps going offline,My Lumen Therm drops off wifi every few hours. I rebooted the router twice and the app shows error E-317. I'm extremely frustrated.,technical,high,angry
+T-2188,156,web_form,2026-08-24,Subscription renewed unexpectedly,My Lumen Care plan renewed at $129 and I'm sure I cancelled it back in June. Can you reverse it?,billing,medium,neutral
+T-2061,115,email,2026-10-01,Suggestion for the Lumen Hub,It would help if the Lumen Hub had a quieter chime option for night time.,product_feedback,low,positive
+T-2167,180,web_form,2026-09-21,Subscription renewed unexpectedly,My Lumen Care plan renewed at $29 and I'm sure I cancelled it back in March. Can you reverse it?,billing,medium,neutral
+T-2081,26,email,2026-08-22,Where is order #1180?,Order #1180 shipped 19 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,negative
+T-2128,94,web_form,2026-10-19,Suggestion for the Lumen Hub,It would help if the Lumen Hub had a quieter chime option for night time.,product_feedback,low,positive
+T-2236,180,web_form,2026-10-04,Lumen Plug 4-pack keeps going offline,My Lumen Plug 4-pack drops off wifi every few hours. I rebooted the router twice and the app shows error E-102.,technical,medium,neutral
+T-2210,28,email,2026-10-04,Refund still not received,It has been 11 days since you approved the refund for order #1451. Where is my money? I'm extremely frustrated.,billing,high,angry
+T-2213,108,web_form,2026-08-16,Wrong item in the box,I ordered a Lumen Lock but received a different product in order #1221.,shipping,medium,neutral
+T-2211,93,chat,2026-09-22,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,neutral
+T-2304,128,chat,2026-10-28,Therm heating stuck on,The Lumen Therm won't turn the heating off and the house is 29C. Manual override doesn't work.,technical,urgent,negative
+T-2069,56,web_form,2026-08-26,Firmware update stuck,The update to firmware 2.4.1 has been stuck at 88% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it? This is the third time I'm writing!,technical,high,angry
+T-2002,127,chat,2026-08-05,Firmware update stuck,The update to firmware 2.4.1 has been stuck at 99% for hours on my Lumen Plug 4-pack. Is it safe to unplug it?,technical,medium,negative
+T-2105,142,email,2026-09-26,Feature request,Would love to see Matter support on the Lock. Otherwise I'm really happy with the Lumen Hub.,product_feedback,low,neutral
+T-2154,72,web_form,2026-10-17,Wrong item in the box,I ordered a Lumen Cam Pro but received a different product in order #1219.,shipping,medium,negative
+T-2223,147,chat,2026-09-26,Refund still not received,It has been 3 days since you approved the refund for order #1521. Where is my money?,billing,medium,neutral
+T-2177,26,chat,2026-09-08,Marked delivered but not received,Tracking says order #1202 was delivered yesterday but nothing is here. Neighbours haven't seen it either.,shipping,medium,negative
+T-2083,110,web_form,2026-08-30,Where is order #1655?,Order #1655 shipped 8 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,negative
+T-2010,173,email,2026-09-28,Two-factor codes not arriving,"I'm not receiving the SMS codes for two-factor login, so I'm locked out of the app.",account,medium,neutral
+T-2039,132,email,2026-09-11,Love the Lumen Sensor Kit,"Just wanted to say the Lumen Sensor Kit setup took five minutes. Great job, the team should be proud.",product_feedback,low,positive
+T-2087,56,chat,2026-10-22,App redesign is confusing,The new app layout buries the automations tab. Please bring back the old navigation.,product_feedback,low,neutral
+T-2190,10,web_form,2026-08-10,Promo code WELCOME15 not applied,The code WELCOME15 did not take anything off my Lumen Cam Pro. Please apply the discount to order #1332.,billing,medium,negative
+T-2220,127,chat,2026-08-07,Delete my account and data,I want my account and all camera recordings deleted under GDPR. How do I confirm this?,account,medium,neutral
+T-2106,118,email,2026-08-23,Cannot pair Lumen Bulb 6-pack,I can't pair my new Lumen Bulb 6-pack with the Hub. The light blinks amber and the app says WIFI-7.,technical,medium,neutral
+T-2065,57,email,2026-09-20,Cannot log in after password reset,I reset my password but the app still says invalid credentials. I'm using user94@example.com.,account,medium,negative
+T-2127,118,chat,2026-09-30,Video is choppy,Live view on the Cam Pro buffers constantly in the evening although my internet is fast. Error E-504 sometimes.,technical,medium,neutral
+T-2016,87,web_form,2026-09-01,Promo code PROMO10 not applied,The code PROMO10 did not take anything off my Lumen Hub. Please apply the discount to order #1200.,billing,medium,neutral
+T-2227,61,web_form,2026-09-14,Marked delivered but not received,Tracking says order #1004 was delivered yesterday but nothing is here. Neighbours haven't seen it either.,shipping,medium,neutral
+T-2195,68,web_form,2026-08-04,Feature request,Would love to see multi-home support. Otherwise I'm really happy with the Lumen Lock.,product_feedback,low,negative
+T-2146,47,email,2026-08-10,Where is order #1282?,Order #1282 shipped 6 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,negative
+T-2186,166,web_form,2026-10-24,Where is order #1476?,Order #1476 shipped 17 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,negative
+T-2134,3,web_form,2026-10-16,Cannot pair Lumen Bulb 6-pack,I can't pair my new Lumen Bulb 6-pack with the Hub. The light blinks amber and the app says E-317.,technical,medium,neutral
+T-2122,9,email,2026-09-04,Wrong item in the box,I ordered a Lumen Cam Pro but received a different product in order #1029.,shipping,medium,negative
+T-2158,177,web_form,2026-09-25,Need an invoice with VAT number,Could you send an invoice with our company VAT number for order #1466? Our accounting closes Friday.,billing,medium,neutral
+T-2104,157,chat,2026-09-11,Love the Lumen Sensor Kit,"Just wanted to say the Lumen Sensor Kit setup took five minutes. Great job, the team should be proud.",product_feedback,low,positive
+T-2218,87,web_form,2026-10-17,Love the Lumen Sensor Kit,"Just wanted to say the Lumen Sensor Kit setup took five minutes. Great job, the team should be proud.",product_feedback,low,positive
+T-2215,108,email,2026-10-12,Lumen Sensor Kit keeps going offline,My Lumen Sensor Kit drops off wifi every few hours. I rebooted the router twice and the app shows error AUTH-12.,technical,medium,negative
+T-2064,33,chat,2026-09-18,Box arrived damaged,The box for order #1239 was crushed and the Lumen Cam Pro has a cracked case.,shipping,medium,neutral
+T-2152,166,web_form,2026-09-15,Firmware update stuck,The update to firmware 3.0.2 has been stuck at 63% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it?,technical,medium,negative
+T-2126,80,web_form,2026-08-12,Hub shows a red light,The Lumen Hub has had a solid red light since the power cut yesterday and none of my devices respond.,technical,medium,negative
+T-2054,179,chat,2026-10-07,Refund still not received,It has been 12 days since you approved the refund for order #1353. Where is my money?,billing,medium,negative
+T-2044,107,web_form,2026-09-06,Firmware update stuck,The update to firmware 2.5.0 has been stuck at 63% for hours on my Lumen Bulb 6-pack. Is it safe to unplug it?,technical,medium,neutral
+T-2144,40,email,2026-10-19,Two-factor codes not arriving,"I'm not receiving the SMS codes for two-factor login, so I'm locked out of the app.",account,medium,negative
+T-2025,133,web_form,2026-10-10,Wrong item in the box,I ordered a Lumen Bulb 6-pack but received a different product in order #1355.,shipping,medium,neutral
+T-2022,105,chat,2026-10-03,Charged twice for order #1303,"Hi, I was charged $49 twice for order #1303 on 2026-10-06. Please refund the duplicate charge.",billing,medium,negative
+T-2162,136,web_form,2026-09-10,Promo code WELCOME15 not applied,The code WELCOME15 did not take anything off my Lumen Bulb 6-pack. Please apply the discount to order #1062.,billing,medium,neutral
+T-2208,21,chat,2026-10-18,Box arrived damaged,The box for order #1474 was crushed and the Lumen Hub has a cracked case.,shipping,medium,negative
+T-2037,56,web_form,2026-08-05,Change delivery address,I need to change the delivery address on order #1103 before it ships. I've moved house.,shipping,medium,negative
+T-2086,98,email,2026-09-17,Feature request,Would love to see Matter support on the Lock. Otherwise I'm really happy with the Lumen Therm.,product_feedback,low,positive
+T-2080,57,chat,2026-08-14,Charged twice for order #1562,"Hi, I was charged $49 twice for order #1562 on 2026-08-09. Please refund the duplicate charge.",billing,medium,negative
+T-2165,14,chat,2026-09-04,Two-factor codes not arriving,"I'm not receiving the SMS codes for two-factor login, so I'm locked out of the app.",account,medium,negative
+T-2234,70,email,2026-08-10,Where is order #1161?,Order #1161 shipped 4 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,negative
+T-2145,63,web_form,2026-09-18,Where is order #1586?,Order #1586 shipped 14 days ago and the tracking hasn't changed. When will it arrive?,shipping,medium,neutral
+T-2123,129,email,2026-09-10,Refund still not received,It has been 13 days since you approved the refund for order #1579. Where is my money?,billing,medium,neutral
+T-2095,135,chat,2026-10-29,Charged twice for order #1136,"Hi, I was charged $49 twice for order #1136 on 2026-08-05. Please refund the duplicate charge.",billing,medium,negative
+T-2115,57,web_form,2026-08-12,Video is choppy,Live view on the Cam Pro buffers constantly in the evening although my internet is fast. Error AUTH-12 sometimes.,technical,medium,neutral
+T-2060,122,web_form,2026-10-29,Need an invoice with VAT number,Could you send an invoice with our company VAT number for order #1047? Our accounting closes Friday.,billing,medium,negative
+T-2198,111,web_form,2026-09-24,Cannot pair Lumen Lock,I can't pair my new Lumen Lock with the Hub. The light blinks amber and the app says AUTH-12.,technical,medium,neutral
+T-2102,135,chat,2026-09-08,Box arrived damaged,The box for order #1622 was crushed and the Lumen Therm has a cracked case.,shipping,medium,neutral
+T-2007,65,email,2026-08-14,Love the Lumen Cam Pro,"Just wanted to say the Lumen Cam Pro setup took five minutes. Great job, the team should be proud.",product_feedback,low,negative
+T-2148,134,web_form,2026-09-02,Marked delivered but not received,Tracking says order #1306 was delivered yesterday but nothing is here. Neighbours haven't seen it either.,shipping,medium,negative
+T-2058,1,chat,2026-10-29,Delete my account and data,I want my account and all camera recordings deleted under GDPR. How do I confirm this?,account,medium,negative
+T-2116,142,chat,2026-09-01,Lumen Therm keeps going offline,My Lumen Therm drops off wifi every few hours. I rebooted the router twice and the app shows error E-102.,technical,medium,neutral
+T-2028,85,web_form,2026-09-27,Love the Lumen Lock,"Just wanted to say the Lumen Lock setup took five minutes. Great job, the team should be proud.",product_feedback,low,positive
+T-2183,122,email,2026-10-04,Lumen Hub keeps going offline,My Lumen Hub drops off wifi every few hours. I rebooted the router twice and the app shows error AUTH-12.,technical,medium,negative
+T-2140,121,email,2026-09-14,Add a family member to my home,How do I give my partner access to our Hub and cameras without sharing my password?,account,medium,neutral
+T-2196,145,web_form,2026-10-29,Promo code WELCOME15 not applied,The code WELCOME15 did not take anything off my Lumen Bell. Please apply the discount to order #1268.,billing,medium,negative
+T-2096,108,email,2026-09-10,Change email address on account,"Please change the email on my account from user45@example.com to a new address, I no longer have access to it. Fix this today or I'm disputing the charge.",account,high,angry
+T-2101,131,chat,2026-10-11,Need an invoice with VAT number,Could you send an invoice with our company VAT number for order #1133? Our accounting closes Friday.,billing,medium,negative
+T-2187,135,chat,2026-10-05,Cannot log in after password reset,I reset my password but the app still says invalid credentials. I'm using user36@example.com.,account,medium,neutral

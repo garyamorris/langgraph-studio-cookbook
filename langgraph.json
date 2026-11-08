@@ -1,0 +1,40 @@
+{
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "adaptive_qa_router": "./src/deepdive/examples/adaptive_qa_router.py:graph",
+    "classifier_bakeoff": "./src/deepdive/examples/classifier_bakeoff.py:graph",
+    "conversation_memory": "./src/deepdive/examples/conversation_memory.py:graph",
+    "corrective_rag": "./src/deepdive/examples/corrective_rag.py:graph",
+    "credit_decision_gate": "./src/deepdive/examples/credit_decision_gate.py:graph",
+    "draft_critic_loop": "./src/deepdive/examples/draft_critic_loop.py:graph",
+    "functional_moderation": "./src/deepdive/examples/functional_moderation.py:graph",
+    "live_digest_stream": "./src/deepdive/examples/live_digest_stream.py:graph",
+    "memory_concierge": "./src/deepdive/examples/memory_concierge.py:graph",
+    "ops_copilot": "./src/deepdive/examples/ops_copilot.py:graph",
+    "plan_execute_analyst": "./src/deepdive/examples/plan_execute_analyst.py:graph",
+    "portfolio_desk_lite": "./src/deepdive/examples/portfolio_desk_lite.py:graph",
+    "pricing_whatif": "./src/deepdive/examples/pricing_whatif.py:graph",
+    "refund_approval": "./src/deepdive/examples/refund_approval.py:graph",
+    "report_orchestrator": "./src/deepdive/examples/report_orchestrator.py:graph",
+    "research_supervisor": "./src/deepdive/examples/research_supervisor.py:graph",
+    "resilient_enrichment": "./src/deepdive/examples/resilient_enrichment.py:graph",
+    "review_insights_parallel": "./src/deepdive/examples/review_insights_parallel.py:graph",
+    "sales_react_agent": "./src/deepdive/examples/sales_react_agent.py:graph",
+    "sql_analyst": "./src/deepdive/examples/sql_analyst.py:graph",
+    "subject_line_tournament": "./src/deepdive/examples/subject_line_tournament.py:graph",
+    "support_swarm": "./src/deepdive/examples/support_swarm.py:graph",
+    "ticket_router": "./src/deepdive/examples/ticket_router.py:graph"
+  },
+  "store": {
+    "index": {
+      "dims": 256,
+      "embed": "./src/deepdive/common/embeddings.py:embed",
+      "fields": [
+        "text"
+      ]
+    }
+  },
+  "env": ".env"
+}

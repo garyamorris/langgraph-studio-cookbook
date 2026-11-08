@@ -1,0 +1,181 @@
+headline_id,date,ticker,headline,label
+H-0062,2026-04-06,HELO,Helio Solar schedules earnings call for the 14th,neutral
+H-0172,2026-04-08,CBLT,Cobalt Semiconductor shares fall despite record bookings as one-off charge weighs,neutral
+H-0033,2026-04-13,FTHM,Fathom Cloud unveils product line that outpaces rivals in early tests,positive
+H-0173,2026-04-13,FTHM,Fathom Cloud opens regional office in Singapore,neutral
+H-0012,2026-04-14,ACMR,Acme Robotics completes routine refinancing of existing notes,neutral
+H-0029,2026-04-15,BORE,Borealis Energy beats quarterly revenue estimates as demand accelerates,positive
+H-0076,2026-04-16,GRNT,Analysts upgrade Granite Bank citing margin expansion,positive
+H-0073,2026-04-17,FTHM,"Fathom Cloud faces probe, but analysts say exposure is immaterial",neutral
+H-0013,2026-04-17,GRNT,Granite Bank raises full-year guidance after record bookings,positive
+H-0134,2026-04-20,CBLT,Cobalt Semiconductor beats quarterly revenue estimates as demand accelerates,positive
+H-0107,2026-04-20,DLPH,Analysts downgrade Delphi Health on weakening demand,negative
+H-0057,2026-04-20,GRNT,Granite Bank lifts guidance only after accounting restatement,negative
+H-0053,2026-04-20,HELO,Helio Solar shares fall despite record bookings as one-off charge weighs,neutral
+H-0162,2026-04-22,DLPH,Delphi Health misses on EPS yet announces $40M buyback and strong order backlog,neutral
+H-0167,2026-04-23,BORE,Borealis Energy lifts guidance only after accounting restatement,negative
+H-0137,2026-04-27,DLPH,Delphi Health lifts guidance only after accounting restatement,negative
+H-0112,2026-04-28,BORE,Analysts downgrade Borealis Energy on weakening demand,negative
+H-0041,2026-04-28,CBLT,Cobalt Semiconductor misses earnings estimates and cuts guidance,negative
+H-0118,2026-04-28,FTHM,Fathom Cloud recalls flagship product after safety complaints,negative
+H-0104,2026-04-29,CBLT,Cobalt Semiconductor shares fall despite record bookings as one-off charge weighs,neutral
+H-0177,2026-04-29,DLPH,Delphi Health to present at industry conference next week,neutral
+H-0066,2026-04-30,BORE,Borealis Energy unveils product line that outpaces rivals in early tests,positive
+H-0103,2026-04-30,GRNT,Granite Bank opens regional office in Singapore,neutral
+H-0128,2026-04-30,HELO,Helio Solar warns of supply shortages hitting second-half sales,negative
+H-0169,2026-05-01,DLPH,Delphi Health schedules earnings call for the 14th,neutral
+H-0004,2026-05-04,BORE,Borealis Energy misses on EPS yet announces $120M buyback and strong order backlog,neutral
+H-0056,2026-05-04,CBLT,Cobalt Semiconductor completes routine refinancing of existing notes,neutral
+H-0036,2026-05-06,ACMR,Acme Robotics beats quarterly revenue estimates as demand accelerates,positive
+H-0163,2026-05-07,DLPH,Delphi Health schedules earnings call for the 14th,neutral
+H-0074,2026-05-07,HELO,Helio Solar CFO resigns abruptly ahead of results,negative
+H-0031,2026-05-08,HELO,Helio Solar schedules earnings call for the 14th,neutral
+H-0087,2026-05-11,HELO,Helio Solar to present at industry conference next week,neutral
+H-0083,2026-05-14,ACMR,Analysts downgrade Acme Robotics on weakening demand,negative
+H-0099,2026-05-14,ACMR,Acme Robotics beats quarterly revenue estimates as demand accelerates,positive
+H-0176,2026-05-14,EMBR,Ember Foods raises full-year guidance after record bookings,positive
+H-0133,2026-05-18,BORE,Borealis Energy warns of supply shortages hitting second-half sales,negative
+H-0035,2026-05-18,EMBR,Ember Foods shares fall despite record bookings as one-off charge weighs,neutral
+H-0078,2026-05-20,DLPH,Delphi Health misses earnings estimates and cuts guidance,negative
+H-0109,2026-05-20,GRNT,Regulators open probe into Granite Bank accounting practices,negative
+H-0002,2026-05-25,ACMR,Acme Robotics misses earnings estimates and cuts guidance,negative
+H-0100,2026-05-25,EMBR,Ember Foods warns of supply shortages hitting second-half sales,negative
+H-0093,2026-05-25,HELO,Regulators open probe into Helio Solar accounting practices,negative
+H-0034,2026-05-26,EMBR,Ember Foods misses on EPS yet announces $40M buyback and strong order backlog,neutral
+H-0152,2026-05-26,GRNT,Granite Bank warns of supply shortages hitting second-half sales,negative
+H-0054,2026-05-27,FTHM,Fathom Cloud cuts jobs as part of efficiency plan; margins to improve,positive
+H-0140,2026-05-28,EMBR,Regulators open probe into Ember Foods accounting practices,negative
+H-0006,2026-05-29,ACMR,Analysts downgrade Acme Robotics on weakening demand,negative
+H-0010,2026-05-29,ACMR,Acme Robotics raises full-year guidance after record bookings,positive
+H-0017,2026-06-01,EMBR,Analysts downgrade Ember Foods on weakening demand,negative
+H-0142,2026-06-02,GRNT,Granite Bank misses earnings estimates and cuts guidance,negative
+H-0082,2026-06-02,HELO,Helio Solar misses on EPS yet announces $75M buyback and strong order backlog,neutral
+H-0015,2026-06-03,BORE,Borealis Energy lifts guidance only after accounting restatement,negative
+H-0058,2026-06-03,BORE,Borealis Energy announces $600M buyback and a higher dividend,positive
+H-0168,2026-06-03,CBLT,Analysts downgrade Cobalt Semiconductor on weakening demand,negative
+H-0141,2026-06-04,ACMR,Regulators open probe into Acme Robotics accounting practices,negative
+H-0153,2026-06-04,BORE,Borealis Energy completes routine refinancing of existing notes,neutral
+H-0102,2026-06-05,HELO,Helio Solar misses earnings estimates and cuts guidance,negative
+H-0171,2026-06-08,BORE,Borealis Energy warns of supply shortages hitting second-half sales,negative
+H-0079,2026-06-09,ACMR,Acme Robotics CFO resigns abruptly ahead of results,negative
+H-0126,2026-06-09,DLPH,Delphi Health names new head of investor relations,neutral
+H-0094,2026-06-10,BORE,Borealis Energy announces $40M buyback and a higher dividend,positive
+H-0096,2026-06-10,EMBR,Ember Foods unveils product line that outpaces rivals in early tests,positive
+H-0101,2026-06-11,FTHM,Fathom Cloud shares fall despite record bookings as one-off charge weighs,neutral
+H-0122,2026-06-11,GRNT,Analysts upgrade Granite Bank citing margin expansion,positive
+H-0097,2026-06-16,GRNT,Regulators open probe into Granite Bank accounting practices,negative
+H-0024,2026-06-22,ACMR,Acme Robotics warns of supply shortages hitting second-half sales,negative
+H-0144,2026-06-23,BORE,Analysts upgrade Borealis Energy citing margin expansion,positive
+H-0145,2026-06-23,DLPH,Regulators open probe into Delphi Health accounting practices,negative
+H-0060,2026-06-23,GRNT,Granite Bank completes routine refinancing of existing notes,neutral
+H-0061,2026-06-24,FTHM,Fathom Cloud to present at industry conference next week,neutral
+H-0045,2026-06-26,GRNT,"Granite Bank faces probe, but analysts say exposure is immaterial",neutral
+H-0043,2026-06-29,ACMR,Acme Robotics shares fall despite record bookings as one-off charge weighs,neutral
+H-0003,2026-06-29,CBLT,Cobalt Semiconductor recalls flagship product after safety complaints,negative
+H-0120,2026-06-30,DLPH,Delphi Health misses on EPS yet announces $120M buyback and strong order backlog,neutral
+H-0156,2026-07-01,HELO,Helio Solar opens regional office in Singapore,neutral
+H-0084,2026-07-02,CBLT,Analysts upgrade Cobalt Semiconductor citing margin expansion,positive
+H-0125,2026-07-02,CBLT,Cobalt Semiconductor names new head of investor relations,neutral
+H-0028,2026-07-02,HELO,Helio Solar recalls flagship product after safety complaints,negative
+H-0051,2026-07-03,GRNT,Granite Bank beats revenue estimates but slashes full-year outlook,negative
+H-0071,2026-07-06,ACMR,Acme Robotics beats quarterly revenue estimates as demand accelerates,positive
+H-0007,2026-07-07,BORE,Borealis Energy misses earnings estimates and cuts guidance,negative
+H-0135,2026-07-09,BORE,Borealis Energy announces $120M buyback and a higher dividend,positive
+H-0042,2026-07-09,EMBR,Ember Foods schedules earnings call for the 14th,neutral
+H-0127,2026-07-10,HELO,Analysts upgrade Helio Solar citing margin expansion,positive
+H-0138,2026-07-13,ACMR,Acme Robotics CFO resigns abruptly ahead of results,negative
+H-0165,2026-07-14,CBLT,Analysts upgrade Cobalt Semiconductor citing margin expansion,positive
+H-0016,2026-07-15,GRNT,Granite Bank beats quarterly revenue estimates as demand accelerates,positive
+H-0065,2026-07-20,BORE,Borealis Energy beats quarterly revenue estimates as demand accelerates,positive
+H-0022,2026-07-21,BORE,Borealis Energy announces $75M buyback and a higher dividend,positive
+H-0068,2026-07-21,FTHM,Fathom Cloud announces $250M buyback and a higher dividend,positive
+H-0030,2026-07-22,ACMR,Acme Robotics beats revenue estimates but slashes full-year outlook,negative
+H-0063,2026-07-23,BORE,Borealis Energy beats quarterly revenue estimates as demand accelerates,positive
+H-0146,2026-07-23,EMBR,Ember Foods unveils product line that outpaces rivals in early tests,positive
+H-0018,2026-07-30,DLPH,Delphi Health raises full-year guidance after record bookings,positive
+H-0026,2026-07-30,DLPH,"Delphi Health faces probe, but analysts say exposure is immaterial",neutral
+H-0025,2026-08-03,ACMR,Acme Robotics raises full-year guidance after record bookings,positive
+H-0121,2026-08-03,DLPH,Delphi Health shares fall despite record bookings as one-off charge weighs,neutral
+H-0114,2026-08-05,EMBR,Ember Foods unveils product line that outpaces rivals in early tests,positive
+H-0049,2026-08-06,CBLT,Analysts downgrade Cobalt Semiconductor on weakening demand,negative
+H-0014,2026-08-07,DLPH,Delphi Health misses earnings estimates and cuts guidance,negative
+H-0159,2026-08-07,HELO,Helio Solar wins multi-year contract worth $250M,positive
+H-0092,2026-08-11,GRNT,Granite Bank wins multi-year contract worth $40M,positive
+H-0106,2026-08-12,CBLT,Cobalt Semiconductor completes routine refinancing of existing notes,neutral
+H-0123,2026-08-12,CBLT,Cobalt Semiconductor unveils product line that outpaces rivals in early tests,positive
+H-0046,2026-08-14,ACMR,Acme Robotics CFO resigns abruptly ahead of results,negative
+H-0113,2026-08-14,BORE,Borealis Energy to present at industry conference next week,neutral
+H-0175,2026-08-14,CBLT,Cobalt Semiconductor announces $75M buyback and a higher dividend,positive
+H-0059,2026-08-17,DLPH,Delphi Health warns of supply shortages hitting second-half sales,negative
+H-0095,2026-08-17,DLPH,Delphi Health opens regional office in Singapore,neutral
+H-0108,2026-08-17,FTHM,Fathom Cloud unveils product line that outpaces rivals in early tests,positive
+H-0047,2026-08-17,HELO,Helio Solar warns of supply shortages hitting second-half sales,negative
+H-0085,2026-08-18,ACMR,Acme Robotics schedules earnings call for the 14th,neutral
+H-0039,2026-08-18,BORE,Analysts upgrade Borealis Energy citing margin expansion,positive
+H-0155,2026-08-19,EMBR,Ember Foods schedules earnings call for the 14th,neutral
+H-0149,2026-08-19,HELO,Analysts upgrade Helio Solar citing margin expansion,positive
+H-0157,2026-08-21,BORE,Borealis Energy to present at industry conference next week,neutral
+H-0021,2026-08-21,GRNT,Granite Bank beats quarterly revenue estimates as demand accelerates,positive
+H-0098,2026-08-24,CBLT,Cobalt Semiconductor unveils product line that outpaces rivals in early tests,positive
+H-0129,2026-08-24,EMBR,Ember Foods lifts guidance only after accounting restatement,negative
+H-0011,2026-08-25,CBLT,Analysts upgrade Cobalt Semiconductor citing margin expansion,positive
+H-0005,2026-08-26,GRNT,Granite Bank completes routine refinancing of existing notes,neutral
+H-0154,2026-08-27,GRNT,Granite Bank wins multi-year contract worth $75M,positive
+H-0179,2026-08-27,HELO,Helio Solar recalls flagship product after safety complaints,negative
+H-0048,2026-08-28,CBLT,Cobalt Semiconductor names new head of investor relations,neutral
+H-0148,2026-08-28,DLPH,Delphi Health beats quarterly revenue estimates as demand accelerates,positive
+H-0110,2026-08-28,HELO,Helio Solar lifts guidance only after accounting restatement,negative
+H-0040,2026-08-31,ACMR,Analysts downgrade Acme Robotics on weakening demand,negative
+H-0032,2026-09-03,ACMR,Acme Robotics raises full-year guidance after record bookings,positive
+H-0067,2026-09-03,BORE,Borealis Energy misses earnings estimates and cuts guidance,negative
+H-0136,2026-09-03,CBLT,Cobalt Semiconductor cuts jobs as part of efficiency plan; margins to improve,positive
+H-0072,2026-09-03,HELO,Helio Solar to present at industry conference next week,neutral
+H-0069,2026-09-04,FTHM,Fathom Cloud warns of supply shortages hitting second-half sales,negative
+H-0089,2026-09-07,ACMR,Acme Robotics recalls flagship product after safety complaints,negative
+H-0091,2026-09-08,BORE,Borealis Energy warns of supply shortages hitting second-half sales,negative
+H-0158,2026-09-08,FTHM,Analysts downgrade Fathom Cloud on weakening demand,negative
+H-0147,2026-09-11,GRNT,"Granite Bank faces probe, but analysts say exposure is immaterial",neutral
+H-0164,2026-09-14,ACMR,Acme Robotics wins multi-year contract worth $120M,positive
+H-0019,2026-09-14,EMBR,Ember Foods wins multi-year contract worth $250M,positive
+H-0077,2026-09-14,FTHM,Fathom Cloud recalls flagship product after safety complaints,negative
+H-0075,2026-09-15,BORE,Borealis Energy to present at industry conference next week,neutral
+H-0023,2026-09-17,DLPH,Delphi Health names new head of investor relations,neutral
+H-0052,2026-09-18,CBLT,Cobalt Semiconductor cuts jobs as part of efficiency plan; margins to improve,positive
+H-0174,2026-09-21,ACMR,Acme Robotics beats quarterly revenue estimates as demand accelerates,positive
+H-0115,2026-09-21,EMBR,Ember Foods warns of supply shortages hitting second-half sales,negative
+H-0009,2026-09-23,ACMR,Acme Robotics schedules earnings call for the 14th,neutral
+H-0160,2026-09-23,DLPH,Delphi Health warns of supply shortages hitting second-half sales,negative
+H-0038,2026-09-23,EMBR,Ember Foods announces $120M buyback and a higher dividend,positive
+H-0143,2026-09-25,BORE,Borealis Energy names new head of investor relations,neutral
+H-0150,2026-09-28,ACMR,Acme Robotics schedules earnings call for the 14th,neutral
+H-0117,2026-09-28,CBLT,Cobalt Semiconductor recalls flagship product after safety complaints,negative
+H-0132,2026-09-28,GRNT,Analysts upgrade Granite Bank citing margin expansion,positive
+H-0027,2026-09-28,HELO,Regulators open probe into Helio Solar accounting practices,negative
+H-0070,2026-09-28,HELO,Helio Solar recalls flagship product after safety complaints,negative
+H-0130,2026-09-29,ACMR,Acme Robotics wins multi-year contract worth $40M,positive
+H-0111,2026-09-30,CBLT,Cobalt Semiconductor warns of supply shortages hitting second-half sales,negative
+H-0151,2026-09-30,GRNT,Granite Bank misses earnings estimates and cuts guidance,negative
+H-0001,2026-10-05,FTHM,Fathom Cloud to present at industry conference next week,neutral
+H-0131,2026-10-05,HELO,Helio Solar warns of supply shortages hitting second-half sales,negative
+H-0020,2026-10-06,ACMR,Acme Robotics recalls flagship product after safety complaints,negative
+H-0119,2026-10-06,EMBR,Ember Foods misses on EPS yet announces $120M buyback and strong order backlog,neutral
+H-0081,2026-10-07,ACMR,Acme Robotics recalls flagship product after safety complaints,negative
+H-0161,2026-10-07,CBLT,Cobalt Semiconductor announces $75M buyback and a higher dividend,positive
+H-0166,2026-10-08,CBLT,Regulators open probe into Cobalt Semiconductor accounting practices,negative
+H-0124,2026-10-08,FTHM,Fathom Cloud opens regional office in Singapore,neutral
+H-0178,2026-10-12,GRNT,Analysts upgrade Granite Bank citing margin expansion,positive
+H-0170,2026-10-13,BORE,Borealis Energy raises full-year guidance after record bookings,positive
+H-0080,2026-10-14,HELO,Helio Solar completes routine refinancing of existing notes,neutral
+H-0064,2026-10-15,DLPH,Delphi Health raises full-year guidance after record bookings,positive
+H-0050,2026-10-15,EMBR,Ember Foods completes routine refinancing of existing notes,neutral
+H-0090,2026-10-16,ACMR,Acme Robotics misses on EPS yet announces $600M buyback and strong order backlog,neutral
+H-0008,2026-10-21,DLPH,Delphi Health unveils product line that outpaces rivals in early tests,positive
+H-0037,2026-10-21,DLPH,Delphi Health lifts guidance only after accounting restatement,negative
+H-0116,2026-10-22,HELO,Helio Solar opens regional office in Singapore,neutral
+H-0088,2026-10-23,CBLT,Cobalt Semiconductor announces $75M buyback and a higher dividend,positive
+H-0044,2026-10-23,HELO,Helio Solar beats revenue estimates but slashes full-year outlook,negative
+H-0105,2026-10-23,HELO,Helio Solar beats revenue estimates but slashes full-year outlook,negative
+H-0139,2026-10-27,EMBR,Ember Foods raises full-year guidance after record bookings,positive
+H-0055,2026-10-27,FTHM,Fathom Cloud schedules earnings call for the 14th,neutral
+H-0180,2026-10-28,HELO,Helio Solar CFO resigns abruptly ahead of results,negative
+H-0086,2026-10-30,ACMR,Acme Robotics wins multi-year contract worth $120M,positive

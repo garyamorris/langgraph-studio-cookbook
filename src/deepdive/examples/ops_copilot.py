@@ -67,7 +67,8 @@ GRAPH
     approval_gate -> agent             (every call now has a ToolMessage, whatever happened to it)
 
     Two conditional edges do the splitting: ``route_after_agent`` (which may return a ``Send``) and
-    ``route_after_reads``. ``bootstrap`` creates ``env`` once per thread and resets the step counter for each user message.
+    ``route_after_reads``. ``bootstrap`` creates ``env`` once per thread, resets the step counter for each user message
+    and, when you picked a ready-made case from the ``scenario`` dropdown, turns it into the chat input.
 
 LANGGRAPH FEATURES
     * ``interrupt()`` / ``Command(resume=...)`` with approve / edit / reject payloads and a re-ask loop
@@ -87,7 +88,19 @@ MODELS AND DATA
     identity is not checked; a real deployment needs authentication on whoever can resume the thread.
 
 TRY IT IN STUDIO
-    The graph needs a checkpointer for ``interrupt()``; Studio provides one. Chat input (``messages``):
+    The graph needs a checkpointer for ``interrupt()``; Studio provides one. Pick a case from the **Ready-made case**
+    dropdown and press Submit (a blank form on a new thread runs the first). Each case is one message to the copilot:
+      * "api 503s ... scale it up": the model should read status and logs, then propose ``scale_service``; the run
+        PAUSES at ``approval_gate`` (what the model proposes is its call, so the labels say "watch").
+      * "Is the db healthy?": should be reads only, no pause. "Show the worker logs and restart the cache": the read
+        runs, then only the restart waits for you. "Why is the worker failing?": reads the logs, usually proposes a rollback.
+      * "50 replicas" and "scale the db": the code limits. The approval card shows ``limit_check_preview`` and even
+        Approve ends in "REFUSED by safety limits"; the model may also decline before it gets that far.
+      * "max_steps=1": the loop stops at its step cap with a fixed message.
+    The services, clock and numbers in the case labels are the ones in ``initial_env()``. ``env``, ``audit`` and the chat
+    belong to the thread, so a second case on the same thread sees the changes the first one made: start a New Thread
+    for the pristine environment the labels describe. To resume a pause, use the interrupt's resume box with the
+    values below. Or type your own message (``messages``), for example:
       1. "The api is slow and throwing 503s. Check it and add capacity if that is the right call." The model reads
          status and logs (no pause), then proposes ``scale_service``. The run stops at ``approval_gate``; open the
          interrupt. Resume with {"action": "edit", "args": {"replicas": 4}} and check the ``env`` in the state panel:
@@ -128,6 +141,7 @@ from typing_extensions import TypedDict
 from deepdive.common.config import mode_label
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="ops_copilot",
@@ -151,6 +165,28 @@ META = ExampleMeta(
 
 EXAMPLE_INPUT = {"messages": [{"role": "user", "content": "The api is throwing 503s. Scale it up, it needs more capacity."}]}
 EXAMPLE_RESUMES = [{"action": "edit", "args": {"replicas": 4}}]
+
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios). Each is one message to the copilot about the
+# simulated environment in ``initial_env()`` (api 3 replicas at 93% cpu; worker on 2026.11.4 since deploy D-7731, whose
+# previous version is 2026.11.2; db healthy; cache healthy), plus ``max_steps`` (None = the default of 6). What the MODEL
+# does with a message is never promised below ("watch ..."); only what the code guarantees (the limits, the step cap) is.
+CASES: dict[str, dict] = {
+    "api 503s, 3 replicas at 93% cpu: 'scale it up' -> watch for the approval pause on scale_service (try edit to 4)": {
+        "messages": list(EXAMPLE_INPUT["messages"]), "max_steps": None},
+    "'Is the database healthy?' (db is healthy) -> read-only: watch for an answer with no approval pause": {
+        "messages": [{"role": "user", "content": "Is the database healthy right now?"}], "max_steps": None},
+    "worker errors since deploy D-7731 (2026.11.4): 'why is it failing?' -> watch for a rollback proposal to 2026.11.2": {
+        "messages": [{"role": "user", "content": "Why is the worker failing?"}], "max_steps": None},
+    "'Show the worker logs and restart the cache' -> watch the log read run, then a pause for only the restart": {
+        "messages": [{"role": "user", "content": "Show me the worker logs and restart the cache."}], "max_steps": None},
+    "'Scale the api to 50 replicas' (limit is 20) -> if proposed, even Approve is REFUSED by the limit check": {
+        "messages": [{"role": "user", "content": "Scale the api to 50 replicas right now."}], "max_steps": None},
+    "'Scale the db to 3 replicas' (stateful) -> never runs: the model declines, or code REFUSES even if you approve": {
+        "messages": [{"role": "user", "content": "Scale the database to 3 replicas."}], "max_steps": None},
+    "max_steps=1, 'check the api and the worker, which is worse?' -> watch for the fixed 'used my 1 reasoning steps' stop": {
+        "messages": [{"role": "user", "content": "Check the api and the worker, and tell me which one is worse."}], "max_steps": 1},
+}
+SCENARIO = scenario_field(CASES)
 
 # --------------------------------------------------------------------------- hard limits (code, not prompt)
 MIN_REPLICAS, MAX_REPLICAS = 1, 20
@@ -356,6 +392,7 @@ WRITE_TOOL_OBJECTS = [restart_service, scale_service, rollback_deploy]
 
 # --------------------------------------------------------------------------- state
 class OpsIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made case; adds its message and sets max_steps
     messages: Annotated[list[AnyMessage], add_messages]
     max_steps: int
 
@@ -449,8 +486,18 @@ SYSTEM_PROMPT = (
 
 
 def bootstrap(state: OpsState) -> dict:
-    """First node of every user message: create the environment once per thread and reset the step counter."""
-    update: dict[str, Any] = {"agent_steps": 0, "mode": mode_label()}
+    """First node of every user message: create the environment once per thread, reset the step counter, and turn a
+    picked ready-made case into the chat input.
+
+    ``messages`` has the ``add_messages`` reducer, so a case's message is APPENDED to the chat. "Real input" therefore
+    means "the state already has messages": a blank form on a thread with history must not inject a new opening
+    message, while a picked case always does. The environment is not reset by a case (it belongs to the thread).
+    """
+    update: dict[str, Any] = {
+        **expand(state, CASES, has_input=lambda s: bool(s.get("messages"))),
+        "agent_steps": 0,
+        "mode": mode_label(),
+    }
     if not state.get("env"):
         update["env"] = initial_env()
     return update

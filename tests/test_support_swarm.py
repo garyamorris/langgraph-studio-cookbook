@@ -325,3 +325,99 @@ def test_search_kb_cites_public_article_ids_and_never_returns_internal_articles(
     assert "[device-setup-and-wifi]" in text
     internal = ex.search_kb.invoke({"query": "refund approval matrix manager approval fraud review authority levels"})
     assert "refund-approval-matrix" not in internal
+
+
+# --------------------------------------------------------------------------- ready-made cases (the Studio dropdown)
+def case(prefix: str) -> str:
+    return next(k for k in ex.CASES if k.startswith(prefix))
+
+
+def test_a_blank_form_runs_the_first_case_but_never_injects_a_message_into_a_thread_with_history():
+    pb = Playbook()
+    set_chat_handler(pb)
+    g = new_graph()
+    out = g.invoke({}, cfg())  # Studio's Submit on an empty form
+    assert out["messages"][0].content == ex.EXAMPLE_INPUT["messages"][0]["content"] and pb.agents()[0] == "triage"
+    humans = lambda: [m.content for m in g.get_state(cfg()).values["messages"] if isinstance(m, HumanMessage)]  # noqa: E731
+    before = humans()
+    set_chat_handler(lambda messages, tools: AIMessage(content="Anything else?"))
+    g.invoke({}, cfg())  # the thread already has a chat: nothing may be typed on the customer's behalf
+    assert humans() == before and len(before) == 1
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        g.invoke({"scenario": "not a case"}, cfg())
+
+
+def test_the_input_schema_keeps_messages_for_studios_chat_view_and_offers_the_dropdown():
+    schema = new_graph().get_input_jsonschema()
+    assert {"messages", "scenario"} <= set(schema["properties"]) and not schema.get("required")
+
+
+def test_a_picked_case_is_a_new_contact_that_starts_at_triage_even_on_a_thread_another_agent_holds():
+    pb = Playbook()
+    set_chat_handler(pb)
+    g = new_graph()
+    g.invoke({"messages": [HumanMessage("Hello, my camera keeps going offline")]}, cfg())
+    assert g.get_state(cfg()).values["active_agent"] == "technical"
+    n = len(pb.calls)
+    out = g.invoke({"scenario": case("Order 1828 (Plug")}, cfg())
+    assert pb.agents(n)[0] == "triage", "a case starts at the front desk"
+    assert [m.content for m in out["messages"] if isinstance(m, HumanMessage)][-1] == ex.EXAMPLE_INPUT["messages"][0]["content"]
+    assert len([m for m in out["messages"] if isinstance(m, HumanMessage)]) == 2, "added to the chat, not replacing it"
+
+    n = len(pb.calls)  # but a typed message still resumes with whoever held the conversation
+    g.invoke({"messages": [HumanMessage("Thanks. Also my camera keeps dropping offline.")]}, cfg())
+    assert pb.agents(n)[0] == "billing"
+
+
+def test_the_order_cases_state_the_policy_verdict_the_code_really_gives():
+    seen = 0
+    for label, fields in ex.CASES.items():
+        text = fields["messages"][0]["content"]
+        if not label.startswith("Order "):
+            continue
+        order_id = int(label.split()[1])
+        assert str(order_id) in text, f"{label}: the message must mention the order the label leads with"
+        order, verdict = ex._fetch_order(order_id), ex.refund_eligibility(order_id)
+        assert order is not None, f"{label}: order {order_id} is not in store.sqlite"
+        seen += 1
+        if "policy check:" not in label:  # the safety case: no verdict is claimed
+            continue
+        eligible = verdict["eligible_for_return_refund"]
+        assert label.endswith("policy check: ELIGIBLE") if eligible else label.endswith("policy check: NOT eligible"), label
+        if "days since delivery" in label:
+            assert f"{verdict['days_since_delivery']} days since delivery" in label, label
+        for product in ("Plug 4-pack", "Bell", "Therm"):
+            if product in label:
+                assert any(product in i["product"] for i in order["items"]), f"{label}: {product} is not in order {order_id}"
+    assert seen == 4, "the plug, the Bell + Plug, the refunded Therm order, and the hot plug in order 1828"
+
+
+def test_the_mixed_case_needs_two_transfers_which_fits_under_the_cap_of_three():
+    def chat(messages, tools):
+        agent, last = which_agent(tools), messages[-1]
+        if agent == "triage":
+            return call(("transfer_to_billing", {"reason": "return from order 1828, plus a camera fault"}))
+        if agent == "billing":
+            if isinstance(last, ToolMessage) and last.name == "lookup_order":
+                return call(("transfer_to_technical", {"reason": "Cam Pro drops off wifi"}))
+            return call(("lookup_order", {"order_id": ORDER}))
+        if isinstance(last, ToolMessage) and last.name == "search_kb":
+            return AIMessage(content="See [device-setup-and-wifi].")
+        return call(("search_kb", {"query": "camera drops offline wifi"}))
+
+    set_chat_handler(chat)
+    out = new_graph().invoke({"scenario": case("Return from order 1828 AND")}, cfg())
+    assert [(h["from"], h["to"]) for h in out["handoffs"]] == [("triage", "billing"), ("billing", "technical")]
+    assert len(out["handoffs"]) <= ex.MAX_HANDOFFS_PER_TURN and out["active_agent"] == "technical"
+    assert_valid_history(out["messages"])
+
+
+def test_the_technical_and_safety_cases_use_wording_from_the_ticket_data():
+    from deepdive.common.data import read_csv
+
+    bodies = " ".join(read_csv("support_tickets.csv").body)
+    assert "drops off wifi every few hours. I rebooted the router twice and the app shows error E-102" in bodies
+    assert "got extremely hot and there's a burning plastic smell" in bodies
+    texts = [f["messages"][0]["content"] for f in ex.CASES.values()]
+    assert any("drops off wifi every few hours. I rebooted the router twice and the app shows error E-102" in t for t in texts)
+    assert any("got extremely hot and there's a burning plastic smell" in t for t in texts)

@@ -62,18 +62,24 @@ MODELS AND DATA
     database (2026-11-01), because the database is a frozen snapshot.
 
 TRY IT IN STUDIO
-    Input ``{"question": "Which region had the most returned orders in the last 6 months?"}``. Open the
-    ``inspect_schema`` output to see the context the model gets (note the VALUES list), then ``write_sql`` for the SQL
-    and its rationale, ``guard`` for the query actually run, and the final ``answer`` / ``rows``.
-    Then try questions that exercise the safety net:
-      * ``"How many orders came in through the online channel?"`` - 'online' is not a value in the database; read the
-        ``rationale`` in ``write_sql`` to see which real channel it was mapped to (and, if it guessed a literal that
-        does not exist, the empty-result repair that follows).
-      * ``"Delete all cancelled orders"`` or ``"Show me every customer's email address"`` - a model may refuse by
-        writing a harmless SELECT instead, but if it writes a DELETE, or reads ``customers.email``, ``guard`` rejects
-        it, the reason appears under ``failed_attempts`` and the repair loop asks again; the database is never
-        touched either way.
-      * ``"Which region had the most returned orders last month?"`` - a three-way tie; the answer should say so.
+    Open the ``Ready-made case`` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+    the first one). Each case is a question the shop database can answer, or a deliberate trap:
+      * ``Which region had the most returned orders in the last 6 months?`` - the plain case. Open ``inspect_schema``
+        to see the context the model gets (note the VALUES list), then ``write_sql`` for the SQL and its rationale,
+        ``guard`` for the query actually run, and the final ``answer`` / ``rows``.
+      * ``How many orders came in through the online channel?`` - 'online' is not a value in the database (the channels
+        are web, app, retail_partner, marketplace); read the ``rationale`` in ``write_sql`` to see which real channel it
+        was mapped to, or the empty-result repair that follows a guessed literal.
+      * ``... returned orders last month?`` - a three-way tie (one each); the answer should say so.
+      * ``... delivered revenue by product category in the last 3 months?`` - a three-table join with the house rules
+        for revenue and discounts.
+      * ``Delete all cancelled orders`` and ``Show me every customer's email address`` - a model may refuse by writing
+        a harmless SELECT instead, but if it writes a DELETE, or reads ``customers.email``, ``guard`` rejects it, the
+        reason appears under ``failed_attempts`` and the repair loop asks again; the database is never touched either way.
+      * ``How many orders were placed in 2030?`` - the data ends on 2026-10-31, so the query comes back empty; watch the
+        repair loop and whether it ends as ``no_rows``.
+    To ask your own, paste ``{"question": "Which region had the most returned orders in the last 6 months?"}`` (any
+    question works) instead of picking a case.
 
 EXTEND IT
     * Add a column-level description table (a semantic layer) and pass only the relevant tables to the model.
@@ -104,6 +110,7 @@ from deepdive.common.config import mode_label
 from deepdive.common.data import db_connect, db_schema
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm, structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="sql_analyst",
@@ -125,6 +132,27 @@ META = ExampleMeta(
 )
 
 EXAMPLE_INPUT = {"question": "Which region had the most returned orders in the last 6 months?"}
+
+# Ready-made questions for Studio's dropdown (see deepdive.common.scenarios). The first one runs on a blank form. The
+# facts in the labels (channel names, the 32 cancelled orders, the tie, the last order date) come from store.sqlite and
+# are pinned by tests/test_sql_analyst.py; what the MODEL does with each question is only ever "watch for".
+CASES: dict[str, dict] = {
+    "Which region had the most returned orders in the last 6 months? -> read the SQL, its date window and the ranking": {
+        "question": "Which region had the most returned orders in the last 6 months?"},
+    "How many orders came in through the online channel? -> no channel is called 'online': watch how it maps or repairs": {
+        "question": "How many orders came in through the online channel?"},
+    "Which region had the most returned orders last month? -> a three-way tie, 1 each: does the answer say so?": {
+        "question": "Which region had the most returned orders last month?"},
+    "What was delivered revenue by product category in the last 3 months? -> watch the 3-table join and the discount maths": {
+        "question": "What was delivered revenue by product category in the last 3 months?"},
+    "Delete all cancelled orders -> a write request: nothing is ever written, all 32 cancelled orders stay": {
+        "question": "Delete all cancelled orders"},
+    "Show me every customer's email address -> email is restricted: watch the guard block it, or the model refuse": {
+        "question": "Show me every customer's email address"},
+    "How many orders were placed in 2030? -> the data ends 2026-10-31: watch the empty-result repair, then how it ends": {
+        "question": "How many orders were placed in 2030?"},
+}
+SCENARIO = scenario_field(CASES)
 
 # --------------------------------------------------------------------------- limits (all named so tests can see them)
 MAX_ATTEMPTS = 3  # write_sql runs at most this many times per question
@@ -381,7 +409,8 @@ class SqlDraft(BaseModel):
     rationale: str = Field(description="One short sentence: how you read the question, including any date or revenue assumption")
 
 
-class QuestionIn(TypedDict):
+class QuestionIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made question; replaces `question`
     question: str  # plain-English question about orders, customers, products, returns or revenue
 
 
@@ -438,13 +467,17 @@ EMPTY_RESULT = (
 
 
 def inspect_schema(state: AnalystState) -> dict:
-    """Build the model's context from the live database (schema, real literals, date convention, house rules)."""
-    question = (state.get("question") or "").strip()
-    if not question:
+    """Build the model's context from the live database (schema, real literals, date convention, house rules).
+
+    Also the entry node, so it first resolves a picked ready-made question (or runs the first one on a blank form).
+    """
+    picked = expand(state, CASES, has_input=lambda s: bool((s.get("question") or "").strip()))
+    question = ({**state, **picked}.get("question") or "").strip()
+    if not question:  # unreachable while every case has a question; keeps the invariant visible
         raise ValueError("Provide a non-empty `question`.")
     # ``failed_attempts`` appends (operator.add) and Studio reuses the thread: reset it, or the previous question's
     # failures would be shown to the writer as "earlier attempts" and count towards giving up.
-    return {"question": question, "schema_context": build_schema_context(), "attempts": 0, "failed_attempts": Overwrite([])}
+    return {**picked, "question": question, "schema_context": build_schema_context(), "attempts": 0, "failed_attempts": Overwrite([])}
 
 
 def _same_sql(a: str, b: str) -> bool:

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import itertools
 import json
+import re
 
 import pandas as pd
 import pytest
@@ -212,8 +213,11 @@ def test_max_tool_rounds_and_messages_are_validated():
     for bad in (0, 11, True):
         with pytest.raises(ValueError, match="max_tool_rounds must be"):
             ex.graph.invoke({**user("q"), "max_tool_rounds": bad})
+    # a round limit with no message is real input that cannot run (a blank form, by contrast, runs the first ready-made case)
     with pytest.raises(ValueError, match="Send at least one user message"):
-        ex.graph.invoke({"messages": []})
+        ex.graph.invoke({"max_tool_rounds": 3})
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
 
 
 # --------------------------------------------------------------------------- history is bounded
@@ -283,3 +287,94 @@ def test_tokens_stream_from_the_agent_node_only():
     assert len([c for c in chunks if c]) > 3, "the answer arrives as several token chunks"
     assert "".join(chunks) == final
     assert "tools" in other_nodes, "tool results are streamed too, from a different node, so a UI can filter them out"
+
+
+# --------------------------------------------------------------------------- the ready-made opening messages
+def label_for(start: str) -> str:
+    return next(k for k in ex.CASES if k.startswith(start))
+
+
+def test_a_blank_form_asks_the_first_ready_made_question():
+    first = next(iter(ex.CASES.values()))["messages"][0]["content"]
+    script = Script(AIMessage("ok"))
+    set_chat_handler(script)
+    for blank in ({}, {"messages": []}):  # Studio's Submit on an empty form: no dead end
+        out = ex.graph.invoke(blank)
+        assert [type(m).__name__ for m in out["messages"]] == ["HumanMessage", "AIMessage"] and out["messages"][0].content == first
+    sent = [m.content for m in script.calls[0][0] if isinstance(m, HumanMessage)]
+    assert sent == [first], "the model was sent the opening question, and nothing else from the user"
+
+
+def test_every_case_is_one_user_message_with_a_valid_round_limit_and_its_label_leads_with_it():
+    for label, fields in ex.CASES.items():
+        (message,) = fields["messages"]
+        assert message["role"] == "user" and label.startswith(message["content"]), f"{label}: lead with the question the case asks"
+        rounds = fields["max_tool_rounds"]
+        assert rounds is None or 1 <= rounds <= ex.MAX_TOOL_ROUNDS_LIMIT
+        stated = re.search(r"\((\d+) tool rounds?\)|\((\d+) rounds\)", label)
+        assert (int(next(g for g in stated.groups() if g)) if stated else None) == rounds, f"{label}: the label must state the limit the case sets"
+
+
+def test_picking_a_case_on_a_thread_with_history_adds_to_it_like_any_typed_message():
+    g = ex.build_graph(checkpointer=InMemorySaver())
+    cfg = {"configurable": {"thread_id": "history"}}
+    set_chat_handler(Script(AIMessage("a1"), AIMessage("a2")))
+    g.invoke(user("first question"), cfg)
+    out = g.invoke({"scenario": label_for("What did customers say")}, cfg)
+    assert [m.content for m in out["messages"]] == ["first question", "a1", "What did customers say about the Therm price?", "a2"]
+    assert g.get_state(cfg).values.get("scenario") is None
+    # and a blank submit on a thread that already has messages is not given a new opening message
+    blank = g.invoke({}, cfg)
+    assert [m.content for m in blank["messages"]][:4] == ["first question", "a1", "What did customers say about the Therm price?", "a2"]
+    assert "Which region had the highest return rate" not in " ".join(str(m.content) for m in blank["messages"])
+
+
+def test_a_picked_case_is_trimmed_with_the_history_so_the_newest_question_is_always_kept(monkeypatch):
+    monkeypatch.setattr(ex, "HISTORY_TOKEN_BUDGET", 60)
+    g = ex.build_graph(checkpointer=InMemorySaver())
+    cfg = {"configurable": {"thread_id": "trim"}}
+    set_chat_handler(Script(AIMessage("An answer long enough to take real room in the history window of this chat.")))
+    for i in range(3):
+        g.invoke(user(f"Older question number {i}, please answer in some detail"), cfg)
+    out = g.invoke({"scenario": label_for("What did customers say")}, cfg)
+    stored = g.get_state(cfg).values["messages"]
+    assert isinstance(stored[0], HumanMessage), "the kept window starts at a user message"
+    assert "What did customers say about the Therm price?" in [m.content for m in stored], "the newest question is always kept"
+    assert "Older question number 0, please answer in some detail" not in [m.content for m in stored], "old turns were trimmed"
+    assert_history_is_valid(out["messages"])
+
+
+def test_the_facts_in_the_ready_made_labels_are_true():
+    d = completed()
+    cam = d[(d["product"] == "Lumen Cam Pro") & (d["d"] >= "2026-07-01") & (d["d"] <= "2026-09-30")]
+    rate = cam.groupby("region")["status"].apply(lambda x: (x == "returned").mean() * 100)
+    top = rate.idxmax()
+    label = label_for("Which region had the highest return rate")
+    assert top in label and f"{round(rate[top])}%" in label and f"{(cam['region'] == top).sum()} lines" in label
+    eu = d[d["region"] == "Europe"]
+    october = eu[(eu["d"] >= "2026-10-01") & (eu["d"] <= "2026-10-31")]["revenue"].sum()
+    july = eu[(eu["d"] >= "2026-07-01") & (eu["d"] <= "2026-07-31")]["revenue"].sum()
+    assert f"${october:,.2f} vs ${july:,.2f}" in label_for("Compare Europe's October")
+    assert not {"review", "comment", "feedback", "satisfaction", "text"} & {c.lower() for c in read_csv("sales.csv").columns}
+    assert "Lumen Doorbell" not in set(d["product"]) and "'Lumen Bell'" in label_for("How many Lumen Doorbells")
+    assert json.loads(ex.describe_dataset.invoke({}))["last_full_quarter"]["label"] in label_for("What products and regions")
+
+
+def test_picking_the_doorbell_case_returns_an_error_message_the_model_recovers_from():
+    bad = call("query_sales", {"metrics": ["units"], "product": "Lumen Doorbell", "period": "2026Q3"})
+    fixed = call("query_sales", {"metrics": ["units"], "product": "Lumen Bell", "period": "2026Q3"})
+    set_chat_handler(Script(bad, fixed, AIMessage("We sold some Lumen Bell units.")))
+    out = ex.graph.invoke({"scenario": label_for("How many Lumen Doorbells")})
+    first, second = tool_messages(out)
+    assert first.status == "error" and "Did you mean 'Lumen Bell'" in first.content and second.status == "success"
+    assert out["tool_rounds"] == 2
+
+
+def test_picking_the_one_round_case_stops_the_loop_at_its_cap_and_still_answers():
+    script = Script(lambda messages, tools: call("describe_dataset"))  # a model that never stops asking for tools
+    set_chat_handler(script)
+    out = ex.graph.invoke({"scenario": label_for("How did each product's revenue change")})
+    assert len(tool_messages(out)) == 1 and out["tool_rounds"] == 1 and len(script.calls) == 2
+    assert script.calls[-1][1] == [], "the second model call is made with no tools bound"
+    assert "used all 1 of my tool calls" in out["messages"][-1].content
+    assert_history_is_valid(out["messages"])

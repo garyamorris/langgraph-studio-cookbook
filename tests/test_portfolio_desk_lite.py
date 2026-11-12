@@ -210,7 +210,7 @@ def test_graph_structure_is_what_the_docstring_draws():
 
 def test_studio_sees_a_clean_input_form_and_result():
     inp = ex.graph.get_input_jsonschema()["properties"]
-    assert set(inp) == {"focus_hint", "nav_usd", "max_revisions"}
+    assert set(inp) == {"scenario", "focus_hint", "nav_usd", "max_revisions"}  # the dropdown, then the three real fields
     out = set(ex.graph.get_output_jsonschema()["properties"])
     assert {"blotter", "verdict", "note", "risk_history", "resize_log", "cap_forced", "mode", "disclaimer"} <= out
     assert not out & {"legs", "book", "risk", "review"}  # internals stay internal
@@ -945,3 +945,109 @@ def test_the_risk_history_and_resize_log_start_empty_on_a_reused_thread(decision
     again = g.invoke(FIRST_HINT, cfg)
     assert [h["pass"] for h in again["risk_history"]] == [h["pass"] for h in first["risk_history"]]
     assert len(again["resize_log"]) == len(first["resize_log"])
+
+
+# --------------------------------------------------------------------------- ready-made cases (Studio's dropdown)
+def case(start):
+    label = next(k for k in ex.CASES if k.startswith(start))
+    return label, ex.CASES[label]
+
+
+def test_a_blank_form_runs_the_first_ready_made_case_which_is_the_example_input():
+    first = next(iter(ex.CASES.values()))
+    assert first == ex.EXAMPLE_INPUT
+    blank = run({})  # Studio's Submit on an empty form: no dead end
+    typed = run(dict(ex.EXAMPLE_INPUT))
+    assert normalise(blank.out) == normalise(typed.out)
+    assert blank.out["mandate"]["focus_tickers"] and blank.state["nav_usd"] == NAV and blank.state["max_revisions"] == 2
+    assert blank.state["scenario"] is None, "the pick is consumed, so a later blank submit cannot mistake it for input"
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        run({"scenario": "not a case"})
+
+
+def test_the_revision_loop_case_is_the_offline_walkthrough_the_docstring_describes():
+    _, c = case("GRNT, DLPH, ACMR, FTHM at $10M")
+    assert c == ex.OFFLINE_WALKTHROUGH_INPUT
+
+
+def test_every_ready_made_label_agrees_with_its_fields_and_the_data():
+    known = {c["ticker"]: c for c in ex._companies()}
+    for label, c in ex.CASES.items():
+        tickers = re.findall(r"\b[A-Z]{4}\b", label)
+        absent = {"TSLA", "NVDA"} if label.startswith("TSLA") else set()
+        assert set(tickers) - absent <= set(known), f"{label}: a ticker is not in companies.csv"
+        assert not absent & set(known), "the 'not in the data' tickers must really be absent"
+        for amount, unit in re.findall(r"\$(\d+)( billion|M)\b", label):
+            assert int(amount) * (1_000_000_000 if unit == " billion" else 1_000_000) == c["nav_usd"], label
+        for rounds in re.findall(r"(\d+) rounds", label) + re.findall(r"max_revisions (\d+)", label):
+            assert int(rounds) == c["max_revisions"], label
+        assert set(re.findall(r"\b[A-Z]{4}\b", c["focus_hint"] or "")) - absent <= set(known), f"{label}: the hint names an unknown ticker"
+    groups = {t: v["group"] for t, v in known.items()}
+    assert {t for t, g in groups.items() if g == "technology"} == {"ACMR", "CBLT", "FTHM"}, "the 'technology' label names them"
+    assert {t for t, g in groups.items() if g == "defensives"} == {"DLPH", "EMBR"}, "the 'Defensives' label names them"
+    assert dm.MAX_GROUP_PCT == 0.35, "the label says one 35% cap"
+
+
+def test_the_technology_hint_makes_the_deterministic_fallback_pick_all_three_technology_names():
+    _, c = case("Hint 'technology'")
+    focus = run(dict(c)).out["mandate"]["focus_tickers"]
+    assert {"ACMR", "CBLT", "FTHM"} <= set(focus) and run(dict(c)).out["mandate"]["source"] == "fallback"
+
+
+def test_max_revisions_zero_case_never_sends_anything_back_and_trims_a_breach_in_place(decisions, monkeypatch):
+    label, c = case("GRNT, DLPH, ACMR, FTHM with max_revisions 0")
+    assert c["max_revisions"] == 0
+    r = run({"scenario": label})
+    assert r.out["resize_log"] == [] and not r.nodes("resize_worker") and r.out["revision_count"] == 0
+    assert [h["action"] for h in r.out["risk_history"]] == ["trim"], "the walkthrough names breach, so the committee trims"
+    assert r.out["cap_forced"] is True and "trimmed" in {x["status"] for x in r.out["blotter"]["rows"]}
+    # and with a book that certainly breaches, whatever the models say
+    choose("ACMR", "BORE", "DLPH", "EMBR", budget=0.7)
+    fixed_book(monkeypatch, {"ACMR": ("LONG", 2_000_000), "BORE": ("LONG", 1_000_000), "DLPH": ("LONG", 1_000_000), "EMBR": ("LONG", 1_000_000)})
+    model = lazy(0.99)
+    forced = run({"scenario": label})
+    assert model.calls == [] and forced.out["resize_log"] == [] and forced.out["cap_forced"] is True
+    assert_blotter_clean(forced.out)
+
+
+def test_tickers_that_are_not_in_the_data_never_reach_research(decisions):
+    label, c = case("TSLA, NVDA and ACMR")
+    assert "TSLA" in c["focus_hint"] and "NVDA" in c["focus_hint"]
+    # offline CIO (placeholder tickers): the fallback reads the hint, ignores names it does not know and tops up from the data
+    out = run({"scenario": label}).out
+    focus = out["mandate"]["focus_tickers"]
+    assert focus[0] == "ACMR" and set(focus) <= set(ALL) and 4 <= len(focus) <= 5
+    assert {d["ticker"] for d in out["dossiers"]} == set(focus)
+    # a CIO model that takes the hint literally: the unknown names are dropped, recorded, and never get a Decisions call
+    set_structured_handler(ex.CioMandate, lambda text: ex.CioMandate(focus_tickers=["TSLA", "NVDA", "ACMR", "BORE", "DLPH"], gross_budget=0.4, rationale="r"))
+    decisions.calls.clear()
+    out = run({"scenario": label}).out
+    assert out["mandate"]["focus_tickers"] == ["ACMR", "BORE", "DLPH"] and out["mandate"]["dropped"] == ["TSLA", "NVDA"]
+    assert {c[1] for c in decisions.ticker_calls()} == {"ACMR", "BORE", "DLPH"}
+
+
+def test_the_no_hint_case_gives_the_cio_model_the_choice(decisions):
+    label, c = case("No hint")
+    assert c["focus_hint"] is None
+    seen = []
+    set_structured_handler(ex.CioMandate, lambda text: seen.append(text) or ex.CioMandate(focus_tickers=["DLPH", "EMBR", "FTHM"], gross_budget=0.4, rationale="r"))
+    out = run({"scenario": label}).out
+    assert "PM HINT: (none)" in seen[0] and out["mandate"]["source"] == "model"
+    assert out["mandate"]["focus_tickers"] == ["DLPH", "EMBR", "FTHM"]
+
+
+def test_the_size_cases_change_the_execution_in_the_direction_the_labels_say(decisions):
+    choose("DLPH", "GRNT", "EMBR", "HELO", budget=0.5)
+    huge = run({"scenario": case("GRNT, DLPH, ACMR, FTHM at $2 billion")[0]}).out["blotter"]
+    small = run({"scenario": case("Defensives")[0]}).out["blotter"]
+    assert max(r["slices"] for r in huge["rows"]) > 13 and max(r["slices"] for r in small["rows"]) <= 13
+    assert huge["totals"]["est_cost_bps"] > small["totals"]["est_cost_bps"]
+
+
+def test_switching_between_ready_made_cases_on_one_thread_replaces_the_hint_the_size_and_the_rounds():
+    unknown, nohint = case("TSLA, NVDA")[0], case("No hint")[0]
+    reused, fresh = run_twice(lambda: ex.build_graph(checkpointer=InMemorySaver()), {"scenario": unknown}, {"scenario": nohint})
+    assert normalise(reused.output) == normalise(fresh.output), "a None hint must replace the previous hint"
+    big, zero = case("GRNT, DLPH, ACMR, FTHM at $2 billion")[0], case("GRNT, DLPH, ACMR, FTHM with max_revisions 0")[0]
+    reused, fresh = run_twice(lambda: ex.build_graph(checkpointer=InMemorySaver()), {"scenario": big}, {"scenario": zero})
+    assert normalise(reused.output) == normalise(fresh.output) and reused.output["blotter"]["nav_usd"] == NAV

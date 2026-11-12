@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import re
+
+import pytest
 from langchain_core.messages import AIMessage, AIMessageChunk
 from langgraph.checkpoint.memory import InMemorySaver
 
@@ -201,3 +204,69 @@ def test_cli_prints_a_live_view(capsys):
     text = capsys.readouterr().out
     assert "[100%]" in text and "rating_histogram" in text and "Headline sentence." in text
     assert ex.main(["Nope"]) == 1
+
+
+# --------------------------------------------------------------------------- ready-made cases (Studio's dropdown)
+def test_a_blank_form_runs_the_first_ready_made_case(monkeypatch):
+    slept: list[float] = []
+    monkeypatch.setattr(ex.time, "sleep", slept.append)
+    evs = list(ex.iter_ui_events(ex.build_graph(), {}))  # Studio's Submit on an empty form: no dead end
+    assert evs[-1]["kind"] == "stage_done" and evs[-1]["node"] == "finish", "the run completes instead of erroring"
+    first = next(iter(ex.CASES.values()))
+    assert first["product"] == ex.EXAMPLE_INPUT["product"] and first["max_reviews"] == ex.EXAMPLE_INPUT["max_reviews"]
+    assert slept == [first["pace_s"]] * 5, "the first case is the paced demo: one pause per stage"
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
+    with pytest.raises(ValueError, match="Unknown product None"):
+        ex.graph.invoke({"pace_s": 0.5})  # a pause with no product is a bad value, not a blank form
+
+
+# label start -> (reviews analysed, review ids that ``scan_risks`` must flag in that window)
+CASE_FACTS = {
+    "Lumen Plug 4-pack, newest 40": (40, {"R-0315"}),
+    "Lumen Lock, all 22": (22, {"R-0319", "R-0167", "R-0262"}),
+    "Lumen Cam Pro, newest 200 (all 57)": (57, {"R-0317"}),
+    "Lumen Hub, newest 30": (30, {"R-0320"}),
+    "Lumen Bell, newest 5": (5, set()),
+}
+
+
+def test_every_ready_made_case_agrees_with_its_label(monkeypatch):
+    """Counts, risk flags and pauses are decided by code, so the labels may promise them."""
+    slept: list[float] = []
+    monkeypatch.setattr(ex.time, "sleep", slept.append)
+    assert [k for k in ex.CASES if not any(k.startswith(start) for start in CASE_FACTS)] == [], "a case has no facts row"
+    df = read_csv("product_reviews.csv")
+    for label, fields in ex.CASES.items():
+        start = next(s for s in CASE_FACTS if label.startswith(s))
+        analysed, flagged = CASE_FACTS[start]
+        assert label.startswith(fields["product"]), f"{label}: the label must lead with its product"
+        slept.clear()
+        out = ex.graph.invoke({"scenario": label})
+        assert out["n_reviews"] == analysed, label
+        assert {r["review_id"] for r in out["risks"]} == flagged, f"{label}: scan_risks disagrees with the label"
+        assert all(i in label for i in flagged), f"{label}: name the flagged reviews"
+        assert not flagged or "flags nothing" not in label
+        for nth in re.findall(r"\((\d+)th newest\)", label):  # "R-0320 (12th newest)" must be true
+            newest = df[df["product"] == fields["product"]].sort_values(["date", "review_id"], ascending=False)
+            assert list(newest["review_id"]).index(next(iter(flagged))) + 1 == int(nth), label
+        if "(all 57)" in label or "all 22" in label:
+            assert (df["product"] == fields["product"]).sum() == analysed, f"{label}: 'all' must mean every review"
+        pace = fields["pace_s"]
+        assert slept == ([pace] * 5 if pace else []), f"{label}: pauses disagree with pace_s"
+        if pace:
+            assert f"{pace:g} s per stage" in label
+
+
+def test_picking_another_case_on_the_same_thread_replaces_the_pause_and_the_window(monkeypatch):
+    slept: list[float] = []
+    monkeypatch.setattr(ex.time, "sleep", slept.append)
+    g = ex.build_graph(checkpointer=InMemorySaver())
+    cfg = {"configurable": {"thread_id": "pick-twice"}}
+    plug = next(iter(ex.CASES))
+    bell = next(k for k in ex.CASES if k.startswith("Lumen Bell"))
+    assert g.invoke({"scenario": plug}, cfg)["n_reviews"] == 40 and slept == [0.5] * 5
+    slept.clear()
+    out = g.invoke({"scenario": bell}, cfg)
+    assert out["n_reviews"] == 5 and out["risks"] == []
+    assert slept == [], "the Plug case's 0.5 s pause must not leak into the Bell case"

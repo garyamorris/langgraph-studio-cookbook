@@ -80,12 +80,17 @@ keyword risks but no themes; run it live for themes.
 
 ## Try it in Studio
 
-Input `{"product": "Lumen Plug 4-pack"}`. The burning-plug review R-0315 is flagged in `keyword_risk_scan`
-even if `llm_risk_scan` returns nothing, and the digest opens with a Risks section. Open the four parallel
-nodes to compare their outputs, then `write_digest` to see them merged (`detected_by` shows which detector
-fired). Try `{"product": "Lumen Therm", "max_reviews": 20}` (a legal threat), `"Lumen Cam Pro"` (privacy)
-or `"Lumen Lock"` (three flags: a jammed lock and two lock-outs). `"Lumen Bell"` has no risk language, so the Risks section
-gives way to a one-line risk check at the end of the digest.
+Pick a ready-made case from the "Ready-made case" dropdown and press Submit (a blank form on a new thread runs the
+first one). Each case is a real product from the data; the label says which review to look for:
+  * Plug 4-pack: the burning-plug review R-0315 is flagged in `keyword_risk_scan` even if `llm_risk_scan`
+    returns nothing, and the digest opens with a Risks section. Open the four parallel nodes to compare their
+    outputs, then `write_digest` to see them merged (`detected_by` shows which detector fired).
+  * Lock: three flags (a jammed lock and two lock-outs). Therm (newest 20): a legal threat. Cam Pro (newest 8):
+    another household's camera feed. Hub: a counterfeit listing.
+  * Cam Pro (newest 5): the same product, but the privacy review is the 8th newest, so a window of 5 never sees it
+    and nothing is flagged: `max_reviews` decides what the scanners can see.
+  * Bell: no risk language, so the Risks section gives way to a one-line risk check at the end of the digest.
+Or paste your own input, for example `{"product": "Lumen Therm", "max_reviews": 20}`.
 
 ## Extend it
 
@@ -128,6 +133,20 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | Lumen Plug 4-pack, all 53 reviews -> burning-plug review R-0315 opens the digest under Risks | `{"product": "Lumen Plug 4-pack"}` |
+| 2 | Lumen Lock, all 22 reviews -> 3 keyword flags: R-0319 (jammed lock) and lock-outs R-0167, R-0262 | `{"product": "Lumen Lock"}` |
+| 3 | Lumen Therm, newest 20 of 40 -> R-0316 (overheating plus a lawyer) is flagged | `{"product": "Lumen Therm", "max_reviews": 20}` |
+| 4 | Lumen Cam Pro, newest 8 of 57 -> R-0317 (another household's feed) is flagged as a privacy risk | `{"product": "Lumen Cam Pro", "max_reviews": 8}` |
+| 5 | Lumen Cam Pro, newest 5 of 57 -> R-0317 is the 8th newest, so the keyword scan flags nothing | `{"product": "Lumen Cam Pro", "max_reviews": 5}` |
+| 6 | Lumen Hub, all 44 reviews -> R-0320 (a counterfeit listing) is the only keyword flag | `{"product": "Lumen Hub"}` |
+| 7 | Lumen Bell, all 33 reviews -> keyword scan flags nothing: watch for the one-line Risk check at the end | `{"product": "Lumen Bell"}` |
+
 ## Example input
 
 ```json
@@ -136,4 +155,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `review_insights_parallel`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `review_insights_parallel`, pick a case from the **Ready-made case** dropdown, or paste the input above.

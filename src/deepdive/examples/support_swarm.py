@@ -34,9 +34,12 @@ DESIGN
         "a human will follow up" reply (no model call).
 
 GRAPH
-    START --(route on active_agent)--> triage | billing | technical --> END
+    START -> load_case --(route on active_agent)--> triage | billing | technical --> END
               each agent is a subgraph:  agent <-> tools   (ToolNode)
               a transfer tool returns Command(goto=<peer>, graph=Command.PARENT) and jumps across to the peer
+
+    ``load_case`` only turns a picked ready-made case (the ``scenario`` dropdown) into the chat input; it does nothing
+    for a message you type. The routing edge reads ``active_agent`` AFTER it, so it can send a picked case to the front desk.
 
 LANGGRAPH FEATURES
     * ``Command(goto=..., graph=Command.PARENT, update=...)`` returned from a tool: peer-to-peer handoff from inside a
@@ -58,19 +61,29 @@ MODELS AND DATA
     follow up, and a real system would need an ``escalate_to_human`` tool.
 
 TRY IT IN STUDIO
-    Open a new thread and send the message (in chat mode, or as input)::
-
-        {"messages": [{"role": "user", "content": "Hi, can I still return the Lumen Plug 4-pack from order 1828?"}]}
-
-    Watch ``triage`` transfer to ``billing`` (open the ``handoffs`` and ``active_agent`` state), then billing call
-    ``lookup_order`` and ``check_refund_eligibility``. On the SAME thread send a second message::
+    Pick a case from the **Ready-made case** dropdown and press Submit (a blank form on a new thread runs the first).
+    The order ids, products and day counts in the labels come from ``store.sqlite`` and the fixed ``AS_OF`` date:
+      * "Order 1828 ... ELIGIBLE", "Order 1677 ... NOT eligible", "Order 1836 ... NOT eligible": triage should hand the
+        customer to billing, which calls ``lookup_order`` and ``check_refund_eligibility``. That verdict is plain code,
+        so it is the same on every run (inside the window; 62 days, outside; already refunded).
+      * "Cam Pro offline": triage should hand to technical, which searches the knowledge base and cites article ids.
+      * "Return from order 1828 AND Cam Pro offline": one message, two specialists. Open ``handoffs`` and
+        ``active_agent`` in the state: triage -> billing -> technical, inside the cap of 3 transfers per message.
+      * "Order 1828 plug 'extremely hot', burning smell": technical should tell the customer to unplug and promise a human
+        follow-up. That is the prompt's job only (this example has no safety lexicon; compare ``ticket_router``).
+    Which agent and which tools the MODEL picks is not guaranteed, so the labels say "watch". A picked case is a new
+    contact: it starts at triage even on a thread that already has a chat, and its message is added to that chat. Then
+    type a follow-up in the chat view (or put it in ``messages``) to see the swarm resume with whoever held the thread
+    last, for example after the first case::
 
         {"messages": [{"role": "user", "content": "Thanks. Separately my Cam Pro keeps dropping offline after the update."}]}
 
     The run starts at ``billing`` (not triage), which transfers to ``technical``; technical searches the knowledge base
-    and cites article ids. A third message about the refund returns to billing. Other orders to ask about: 1677
-    (outside the 30-day window), 1767 (delivered exactly 30 days ago: still eligible), 1836 (already refunded), 1840
-    (cancelled).
+    and cites article ids. A third message about the refund returns to billing. Other orders to ask about: 1767
+    (delivered exactly 30 days ago: still eligible), 1840 (cancelled). To type a first message yourself, leave the
+    dropdown empty and send::
+
+        {"messages": [{"role": "user", "content": "Hi, can I still return the Lumen Plug 4-pack from order 1828?"}]}
 
 EXTEND IT
     Add an ``escalate_to_human`` tool that ``interrupt()``s for an agent to take over. Add identity verification before
@@ -87,6 +100,7 @@ from typing import Annotated, Any, Literal
 from langchain_core.messages import AIMessage, AnyMessage, BaseMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.tools import InjectedToolCallId, tool
 from langgraph.graph import END, START, MessagesState, StateGraph
+from langgraph.graph.message import add_messages
 from langgraph.prebuilt import InjectedState, ToolNode, tools_condition
 from langgraph.types import Command
 from typing_extensions import TypedDict
@@ -96,6 +110,7 @@ from deepdive.common.data import db_connect
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm
 from deepdive.common.retrieval import get_retriever
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="support_swarm",
@@ -116,6 +131,25 @@ META = ExampleMeta(
 )
 
 EXAMPLE_INPUT = {"messages": [{"role": "user", "content": "Hi, can I still return the Lumen Plug 4-pack from order 1828?"}]}
+
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios): one first message from a customer each. The orders
+# are real rows of store.sqlite; "days since delivery" is evaluated on AS_OF with the assumed 5-day transit (the policy
+# verdict is code, see refund_eligibility). Which specialist the MODEL hands the customer to is never promised ("watch").
+CASES: dict[str, dict] = {
+    "Order 1828 (Plug 4-pack, 7 days since delivery): return it? -> watch triage > billing; policy check: ELIGIBLE": {
+        "messages": list(EXAMPLE_INPUT["messages"])},
+    "Cam Pro drops off wifi, error E-102, no order given (T-2084's words) -> watch triage > technical and a KB citation": {
+        "messages": [{"role": "user", "content": "My Lumen Cam Pro drops off wifi every few hours. I rebooted the router twice and the app shows error E-102."}]},
+    "Return from order 1828 AND Cam Pro offline in ONE message -> watch handoffs: triage > billing > technical": {
+        "messages": [{"role": "user", "content": "Can I return the Lumen Plug 4-pack from order 1828? Also, separately, my Lumen Cam Pro keeps dropping off wifi, error E-102."}]},
+    "Order 1677 (Bell x3 + Plug, 62 days since delivery): 'changed my mind' -> watch billing; policy check: NOT eligible": {
+        "messages": [{"role": "user", "content": "Hello, I would like to send back the Lumen Bell and the plug from order 1677. I changed my mind. Is that still possible?"}]},
+    "Order 1836 (Therm) is already refunded; customer asks again -> watch billing; policy check: NOT eligible": {
+        "messages": [{"role": "user", "content": "Hi, please refund my Lumen Therm from order 1836."}]},
+    "Order 1828 plug 'extremely hot', burning smell (T-2301 words) -> watch: unplug + human follow-up (prompt only)": {
+        "messages": [{"role": "user", "content": "One of the plugs in my Lumen Plug 4-pack (order 1828) got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!"}]},
+}
+SCENARIO = scenario_field(CASES)
 
 AGENTS = ("triage", "billing", "technical")
 AS_OF = date(2026, 11, 6)  # the fixed "today" (last order 2026-10-31 + 5 days): results never depend on the real clock
@@ -139,6 +173,13 @@ class AgentState(MessagesState):
     mode: str  # "live" or "offline": which kind of model produced the replies
 
 
+class SwarmIn(TypedDict, total=False):
+    """What Studio's form (and chat view) sends: the chat message(s), or a ready-made case. Nothing is required."""
+
+    scenario: SCENARIO  # a ready-made case; adds its first message and starts the conversation at triage
+    messages: Annotated[list[AnyMessage], add_messages]
+
+
 class SwarmState(AgentState):
     """Parent state = the shared keys plus the audit log.
 
@@ -148,6 +189,7 @@ class SwarmState(AgentState):
     """
 
     handoffs: Annotated[list[dict], operator.add]  # {"from", "to", "reason"} per transfer
+    scenario: SCENARIO | None  # the picked ready-made case; load_case clears it once used
 
 
 class SwarmOut(TypedDict, total=False):
@@ -363,6 +405,18 @@ def make_agent(name: str, tools: list):
     return g.compile(name=name)
 
 
+def load_case(state: SwarmState) -> dict:
+    """Turn a picked ready-made case into the first chat message; leave a message you typed alone.
+
+    ``messages`` has the ``add_messages`` reducer, so a case's message is APPENDED to the chat. "Real input" therefore
+    means "the state already has messages": a blank form on a thread with history must not inject a new opening
+    message, while a picked case always does. A picked case is a new customer contact, so it also resets
+    ``active_agent`` to the front desk (a typed message still resumes with whoever held the conversation last).
+    """
+    update = expand(state, CASES, has_input=lambda s: bool(s.get("messages")))
+    return {**update, "active_agent": "triage"} if update.get("messages") else update
+
+
 def route_to_active_agent(state: SwarmState) -> Literal["triage", "billing", "technical"]:
     """Where a new user message goes: to whoever held the conversation last (triage for a brand-new thread)."""
     active = state.get("active_agent")
@@ -380,13 +434,15 @@ OWN_TOOLS = {"triage": [], "billing": [lookup_order, check_refund_eligibility], 
 
 
 def build_graph(**compile_kwargs):
-    g = StateGraph(SwarmState, input_schema=MessagesState, output_schema=SwarmOut)
+    g = StateGraph(SwarmState, input_schema=SwarmIn, output_schema=SwarmOut)
+    g.add_node("load_case", load_case)
     for name in AGENTS:
         peers = [dst for (src, dst) in HANDOFF_WHEN if src == name]
         handoffs = [make_handoff_tool(name, dst, HANDOFF_WHEN[(name, dst)]) for dst in peers]
         # destinations tells Studio which peers an agent can jump to (the jumps themselves come from the transfer tools)
         g.add_node(name, make_agent(name, OWN_TOOLS[name] + handoffs), destinations=(*peers, END))
-    g.add_conditional_edges(START, route_to_active_agent, list(AGENTS))
+    g.add_edge(START, "load_case")
+    g.add_conditional_edges("load_case", route_to_active_agent, list(AGENTS))
     for name in AGENTS:
         g.add_edge(name, END)
     return g.compile(**compile_kwargs)

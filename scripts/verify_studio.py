@@ -6,6 +6,8 @@ I/O on the server's event loop) and that runs - including interrupt/resume - wor
     uv run python scripts/verify_studio.py                  # all examples, offline (no OpenAI calls)
     uv run python scripts/verify_studio.py ticket_router    # just some
     uv run python scripts/verify_studio.py --live           # use your real OPENAI_API_KEY (costs money)
+    uv run python scripts/verify_studio.py --cases          # also run EVERY ready-made case (the "Ready-made case"
+                                                            # dropdown in Studio's form) and a blank form, over HTTP
 """
 
 from __future__ import annotations
@@ -31,11 +33,50 @@ def load_module(target: str):
     return importlib.import_module(path)
 
 
+def run_cases(c: httpx.Client, found: dict[str, str], registry: dict[str, str], ids: list[str]) -> list[str]:
+    """Submit each example's ready-made cases the way Studio's form does: ``{"scenario": <label>}``, one fresh thread each.
+
+    A run that pauses at an ``interrupt()`` counts as fine (the approval gate is the point); an error does not. Also
+    checks the schema Studio draws its form from offers the dropdown, and that a blank form runs.
+    """
+    failures: list[str] = []
+    print("\nready-made cases (as picked from Studio's dropdown):")
+    for gid in ids:
+        if gid not in found:
+            continue
+        mod = load_module(registry[gid])
+        cases = getattr(mod, "CASES", None)
+        if not cases:
+            continue
+        schema = c.get(f"/assistants/{found[gid]}/schemas").json()["input_schema"]
+        offered = (schema.get("properties", {}).get("scenario") or {}).get("enum")
+        if offered != list(cases):
+            failures.append(f"{gid}: the Studio form's dropdown does not match CASES ({offered!r})")
+            print(f"  FAIL {gid:28s} dropdown missing or different")
+            continue
+        for n, (label, payload) in enumerate([("(blank form)", {}), *((k, {"scenario": k}) for k in cases)]):
+            thread = c.post("/threads", json={}).json()["thread_id"]
+            t0 = time.time()
+            try:
+                r = c.post(f"/threads/{thread}/runs/wait", json={"assistant_id": gid, "input": payload})
+                if r.status_code >= 400:
+                    raise RuntimeError(f"HTTP {r.status_code}: {r.text[:300]}")
+                out = r.json()
+                paused = isinstance(out, dict) and bool(out.get("__interrupt__"))
+                print(f"  ok   {gid:28s} {time.time() - t0:5.1f}s  {'paused at an interrupt' if paused else 'finished':22s} {label[:60]}")
+            except Exception as e:  # noqa: BLE001
+                print(f"  FAIL {gid:28s} {label[:60]}: {e}")
+                failures.append(f"{gid}: case {label[:50]!r}: {e}")
+    return failures
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("ids", nargs="*", help="graph ids (default: all in langgraph.json)")
     ap.add_argument("--port", type=int, default=2035)
     ap.add_argument("--live", action="store_true", help="use real OpenAI calls instead of offline stand-ins")
+    ap.add_argument("--cases", action="store_true",
+                    help="also submit every ready-made case (and a blank form) of each example, as Studio's dropdown does")
     args = ap.parse_args()
 
     registry: dict[str, str] = json.loads((ROOT / "langgraph.json").read_text())["graphs"]
@@ -122,6 +163,9 @@ def main() -> int:
                 except Exception as e:  # noqa: BLE001
                     print(f"  FAIL {gid:28s} {e}")
                     failures.append(f"{gid}: {e}")
+
+            if args.cases:
+                failures += run_cases(c, found, registry, ids)
     finally:
         proc.terminate()
         try:

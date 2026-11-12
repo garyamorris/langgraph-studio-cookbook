@@ -51,11 +51,21 @@ MODELS AND DATA
     check you could add after the ``agent`` node).
 
 TRY IT IN STUDIO
-    Open the graph in chat mode and ask "Which region had the highest return rate for Lumen Cam Pro last quarter?"
-    (the tool result also shows how many order lines each rate rests on). Then follow up in the same thread with "And
-    in the quarter before?" to see history and the quarter arithmetic at work. Or paste the input
-    ``{"messages": [{"role": "user", "content": "Compare Europe's October revenue with July's"}], "max_tool_rounds": 3}``.
-    Ask "What did customers say about the Therm price?": the sales data has no such field, so a good run says so.
+    Open the ``Ready-made case`` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+    the first one). Each case is an opening question plus a tool-round limit; the tool results show how many order lines
+    each figure rests on:
+      * ``Which region had the highest return rate for Lumen Cam Pro last quarter?`` - APAC leads at 20%, on only 10
+        order lines; a good answer says the rate is shaky. Then follow up in the same thread (type in the chat) with
+        "And in the quarter before?" to see history and the quarter arithmetic at work.
+      * ``Compare Europe's October revenue with July's`` (3 rounds) - two figures, then the calculator for the change.
+      * ``What did customers say about the Therm price?`` - the sales data has no such field, so a good run says so.
+      * ``How many Lumen Doorbells did we sell last quarter?`` - the product is called ``Lumen Bell``; a wrong name
+        comes back as an error ``ToolMessage`` listing the valid ones, and the model corrects itself.
+      * ``What products and regions does the data cover, and what is 'last quarter'?`` - the ``describe_dataset`` tool.
+      * ``How did each product's revenue change from Q2 to Q3?`` (1 tool round) - more work than one round allows; watch
+        the next model call be made without tools and answer from what it has.
+    To ask your own, paste ``{"messages": [{"role": "user", "content": "Compare Europe's October revenue with July's"}],
+    "max_tool_rounds": 3}``.
 
 EXTEND IT
     Add a ``plot_series`` tool that returns chart data for the UI to render. Persist per-user preferences (default
@@ -81,6 +91,7 @@ from typing_extensions import TypedDict
 from deepdive.common.config import mode_label
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm
+from deepdive.common.scenarios import expand, scenario_field
 from deepdive.common.tools import calculator
 from deepdive.examples import _sales_tools as st
 
@@ -97,6 +108,31 @@ META = ExampleMeta(
 )
 
 EXAMPLE_INPUT = {"messages": [{"role": "user", "content": "Which region had the highest return rate for Lumen Cam Pro last quarter?"}]}
+
+# Ready-made opening messages for Studio's dropdown (see deepdive.common.scenarios). The first one runs on a blank form.
+# Every case sets the same two keys (None = the default round limit). The facts in the labels come from data/sales.csv and
+# the tool layer and are pinned by tests/test_sales_react_agent.py; what the model does with each is only ever "watch for".
+CASES: dict[str, dict] = {
+    "Which region had the highest return rate for Lumen Cam Pro last quarter? -> APAC 20% on just 10 lines: watch the caveat": {
+        "messages": [{"role": "user", "content": "Which region had the highest return rate for Lumen Cam Pro last quarter?"}],
+        "max_tool_rounds": None},
+    "Compare Europe's October revenue with July's (3 rounds) -> gross $5,254.70 vs $3,446.30: watch the calculator": {
+        "messages": [{"role": "user", "content": "Compare Europe's October revenue with July's"}],
+        "max_tool_rounds": 3},
+    "What did customers say about the Therm price? -> the sales data has no review text: does a good run say so?": {
+        "messages": [{"role": "user", "content": "What did customers say about the Therm price?"}],
+        "max_tool_rounds": None},
+    "How many Lumen Doorbells did we sell last quarter? -> no such product ('Lumen Bell'): watch for an error, then a retry": {
+        "messages": [{"role": "user", "content": "How many Lumen Doorbells did we sell last quarter?"}],
+        "max_tool_rounds": None},
+    "What products and regions does the data cover, and what is 'last quarter'? -> watch describe_dataset: it says 2026Q3": {
+        "messages": [{"role": "user", "content": "What products and regions does the data cover, and what is 'last quarter'?"}],
+        "max_tool_rounds": None},
+    "How did each product's revenue change from Q2 to Q3, in percent? (1 tool round) -> watch the cap stop the loop": {
+        "messages": [{"role": "user", "content": "How did each product's revenue change from Q2 to Q3, in percent?"}],
+        "max_tool_rounds": 1},
+}
+SCENARIO = scenario_field(CASES)
 
 DEFAULT_MAX_TOOL_ROUNDS = 5
 MAX_TOOL_ROUNDS_LIMIT = 10
@@ -177,6 +213,7 @@ def explain_tool_error(error: Exception) -> str:
 
 # --------------------------------------------------------------------------- state
 class AgentIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made opening message (and round limit); added to `messages` below
     messages: Annotated[list[AnyMessage], add_messages]
     max_tool_rounds: int  # tool-calling rounds allowed per user message (default 5, at most 10)
 
@@ -212,14 +249,30 @@ def trim_history(messages: list[AnyMessage], budget: int) -> list[RemoveMessage]
 
 # --------------------------------------------------------------------------- nodes
 def prepare_turn(state: AgentState) -> dict:
-    """Start of a user turn: reset the tool-round counter and trim old history."""
-    messages = state.get("messages") or []
+    """Start of a user turn: reset the tool-round counter and trim old history.
+
+    This is the entry node, so it first resolves a picked ready-made case. In a chat the messages ARE the thread's
+    memory, so "the caller typed input" means the thread already has messages (or a round limit was typed with none): a
+    case is then never added unless it was picked. A picked case appends its opening message to the history, like any
+    message the user types; on a fresh thread that is the whole conversation.
+    """
+    picked = expand(state, CASES, has_input=lambda s: bool(s.get("messages")) or s.get("max_tool_rounds") is not None)
+    opening = add_messages([], picked["messages"]) if picked.get("messages") else []  # dicts -> messages, with ids
+    messages = add_messages(state.get("messages") or [], opening)  # what the reducer will make of the history
+    max_rounds = picked["max_tool_rounds"] if "max_tool_rounds" in picked else state.get("max_tool_rounds")
     if not messages:
         raise ValueError("Send at least one user message, e.g. 'Which region had the highest return rate for Cam Pro last quarter?'")
-    cap = DEFAULT_MAX_TOOL_ROUNDS if state.get("max_tool_rounds") is None else state["max_tool_rounds"]
+    cap = DEFAULT_MAX_TOOL_ROUNDS if max_rounds is None else max_rounds
     if not isinstance(cap, int) or isinstance(cap, bool) or not 1 <= cap <= MAX_TOOL_ROUNDS_LIMIT:
         raise ValueError(f"max_tool_rounds must be a whole number between 1 and {MAX_TOOL_ROUNDS_LIMIT}; got {cap!r}.")
-    return {"tool_rounds": 0, "max_tool_rounds": cap, "mode": mode_label(), "messages": trim_history(messages, HISTORY_TOKEN_BUDGET)}
+    # The opening message goes first, then the removals: both are one update, so the trim sees the new question.
+    return {
+        **picked,
+        "tool_rounds": 0,
+        "max_tool_rounds": cap,
+        "mode": mode_label(),
+        "messages": [*opening, *trim_history(messages, HISTORY_TOKEN_BUDGET)],
+    }
 
 
 SYSTEM_PROMPT = """You are the sales analyst assistant for Lumen Home, a smart-home hardware company. You answer questions about its order data using tools.

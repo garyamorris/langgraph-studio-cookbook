@@ -85,7 +85,8 @@ read_tools    -> agent             nothing left to approve
 approval_gate -> agent             (every call now has a ToolMessage, whatever happened to it)
 
 Two conditional edges do the splitting: ``route_after_agent`` (which may return a ``Send``) and
-``route_after_reads``. ``bootstrap`` creates ``env`` once per thread and resets the step counter for each user message.
+``route_after_reads``. ``bootstrap`` creates ``env`` once per thread, resets the step counter for each user message
+and, when you picked a ready-made case from the ``scenario`` dropdown, turns it into the chat input.
 ```
 
 ## LangGraph features
@@ -109,7 +110,19 @@ identity is not checked; a real deployment needs authentication on whoever can r
 
 ## Try it in Studio
 
-The graph needs a checkpointer for `interrupt()`; Studio provides one. Chat input (`messages`):
+The graph needs a checkpointer for `interrupt()`; Studio provides one. Pick a case from the **Ready-made case**
+dropdown and press Submit (a blank form on a new thread runs the first). Each case is one message to the copilot:
+  * "api 503s ... scale it up": the model should read status and logs, then propose `scale_service`; the run
+    PAUSES at `approval_gate` (what the model proposes is its call, so the labels say "watch").
+  * "Is the db healthy?": should be reads only, no pause. "Show the worker logs and restart the cache": the read
+    runs, then only the restart waits for you. "Why is the worker failing?": reads the logs, usually proposes a rollback.
+  * "50 replicas" and "scale the db": the code limits. The approval card shows `limit_check_preview` and even
+    Approve ends in "REFUSED by safety limits"; the model may also decline before it gets that far.
+  * "max_steps=1": the loop stops at its step cap with a fixed message.
+The services, clock and numbers in the case labels are the ones in `initial_env()`. `env`, `audit` and the chat
+belong to the thread, so a second case on the same thread sees the changes the first one made: start a New Thread
+for the pristine environment the labels describe. To resume a pause, use the interrupt's resume box with the
+values below. Or type your own message (`messages`), for example:
   1. "The api is slow and throwing 503s. Check it and add capacity if that is the right call." The model reads
      status and logs (no pause), then proposes `scale_service`. The run stops at `approval_gate`; open the
      interrupt. Resume with {"action": "edit", "args": {"replicas": 4}} and check the `env` in the state panel:
@@ -163,6 +176,20 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | api 503s, 3 replicas at 93% cpu: 'scale it up' -> watch for the approval pause on scale_service (try edit to 4) | `{"messages": [{"role": "user", "content": "The api is throwing 503s. Scale it up, it needs more capacity."}]}` |
+| 2 | 'Is the database healthy?' (db is healthy) -> read-only: watch for an answer with no approval pause | `{"messages": [{"role": "user", "content": "Is the database healthy right now?"}]}` |
+| 3 | worker errors since deploy D-7731 (2026.11.4): 'why is it failing?' -> watch for a rollback proposal to 2026.11.2 | `{"messages": [{"role": "user", "content": "Why is the worker failing?"}]}` |
+| 4 | 'Show the worker logs and restart the cache' -> watch the log read run, then a pause for only the restart | `{"messages": [{"role": "user", "content": "Show me the worker logs and restart the cache."}]}` |
+| 5 | 'Scale the api to 50 replicas' (limit is 20) -> if proposed, even Approve is REFUSED by the limit check | `{"messages": [{"role": "user", "content": "Scale the api to 50 replicas right now."}]}` |
+| 6 | 'Scale the db to 3 replicas' (stateful) -> never runs: the model declines, or code REFUSES even if you approve | `{"messages": [{"role": "user", "content": "Scale the database to 3 replicas."}]}` |
+| 7 | max_steps=1, 'check the api and the worker, which is worse?' -> watch for the fixed 'used my 1 reasoning steps' stop | `{"messages": [{"role": "user", "content": "Check the api and the worker, and tell me which one is worse."}], "max_steps": 1}` |
+
 ## Example input
 
 ```json
@@ -189,4 +216,4 @@ Resume values (answers to the interrupts, in order):
 ]
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `ops_copilot`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `ops_copilot`, pick a case from the **Ready-made case** dropdown, or paste the input above.

@@ -101,11 +101,22 @@ def render_example(gid: str, mod) -> str:
         out.append("")
     out += ["## Compiled graph", "", "Drawn from the compiled graph by `scripts/gen_docs.py` (one level of subgraphs expanded).", "",
             "```mermaid", mermaid(mod), "```", ""]
+    cases = getattr(mod, "CASES", None)
+    if cases:  # the ready-made cases in Studio's "Ready-made case" dropdown (deepdive.common.scenarios)
+        out += ["## Ready-made cases in Studio", "",
+                "The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press "
+                "Submit; a blank form on a new thread runs the first.", "",
+                "| # | Case (as shown in the dropdown) | Input it stands for |", "|---|---|---|"]
+        for i, (label, fields) in enumerate(cases.items(), 1):
+            shown = {k: v for k, v in fields.items() if v is not None}
+            out.append(f"| {i} | {label.replace('|', '/')} | `{json.dumps(shown, default=str).replace('|', '/')}` |")
+        out.append("")
     out += ["## Example input", "", "```json", json.dumps(mod.EXAMPLE_INPUT, indent=2, default=str), "```", ""]
     resumes = getattr(mod, "EXAMPLE_RESUMES", None)
     if resumes:
         out += ["Resume values (answers to the interrupts, in order):", "", "```json", json.dumps(resumes, indent=2, default=str), "```", ""]
-    out += ["Run it: `uv run langgraph dev`, open Studio, choose `" + gid + "`, paste the input above.", ""]
+    pick = "pick a case from the **Ready-made case** dropdown, or paste" if cases else "paste"
+    out += ["Run it: `uv run langgraph dev`, open Studio, choose `" + gid + "`, " + pick + " the input above.", ""]
     return "\n".join(out)
 
 

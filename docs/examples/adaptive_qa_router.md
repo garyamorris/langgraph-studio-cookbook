@@ -77,17 +77,21 @@ disappears (a test fails when it does).
 
 ## Try it in Studio
 
-1. `{"question": "what about last month, then?"}` - the run pauses at `clarify` and shows the question it
-   wants answered. Resume with a value such as `"Total orders placed"` (a JSON string). Watch `classify` run
-   again and send the combined text ("what about last month, then? Total orders placed") to `database`.
-2. `{"question": "How do I pause a graph and wait for a human to approve?"}` -> `handbook`. Open the
-   `handbook` node to see the subgraph's grading and citations in `details`.
-3. `{"question": "Which region had the most returned orders in the last 6 months?"}` -> `database`;
-   `details` carries the SQL, the rows and the repair history.
-4. `{"question": "thanks, that helped!"}` -> `small_talk` (neither specialist runs).
-5. `{"question": "How long do refunds take?"}` -> `handbook` with the `support` knowledge base.
-To see the cap, answer each clarification with something equally vague; after two, the classifier can no longer ask
-and must pick a route.
+Open the `Ready-made case` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+the first one). Which route a question takes is the classifier's call, so watch `classify` for the `route`
+and its `reason`:
+1. `what about last month, then?` - the run pauses at `clarify` and shows the question it wants answered.
+   Resume with a value such as `"Total orders placed"` (a JSON string). Watch `classify` run again and send the
+   combined text ("what about last month, then? Total orders placed") to `database`.
+2. `How do I pause a graph and wait for a human to approve?` -> `handbook`. Open the `handbook` node to see the
+   subgraph's grading and citations in `details`.
+3. `How long do refunds take?` -> `handbook` with the `support` knowledge base.
+4. `Which region had the most returned orders in the last 6 months?` -> `database`; `details` carries the SQL,
+   the rows and the repair history.
+5. `thanks, that helped!` -> `small_talk` (neither specialist runs).
+6. `and the other one?` - to see the cap, answer each clarification with something equally vague; after two, the
+   classifier can no longer ask and must pick a route.
+To ask your own, paste `{"question": "what about last month, then?"}` (any question works).
 
 ## Extend it
 
@@ -168,6 +172,19 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | what about last month, then? -> no subject: watch for a clarifying question, then type an answer in the Resume box | `{"question": "what about last month, then?"}` |
+| 2 | How do I pause a graph and wait for a human to approve? -> watch for the handbook route (LangGraph) with citations | `{"question": "How do I pause a graph and wait for a human to approve?"}` |
+| 3 | How long do refunds take? -> watch for the handbook route on the support policies, not the LangGraph docs | `{"question": "How long do refunds take?"}` |
+| 4 | Which region had the most returned orders in the last 6 months? -> watch for the database route: SQL and rows in details | `{"question": "Which region had the most returned orders in the last 6 months?"}` |
+| 5 | thanks, that helped! -> watch for small_talk: neither the handbook nor the database runs | `{"question": "thanks, that helped!"}` |
+| 6 | and the other one? -> a dangling reference: keep answering vaguely and see the 2-question cap force a route | `{"question": "and the other one?"}` |
+
 ## Example input
 
 ```json
@@ -185,4 +202,4 @@ Resume values (answers to the interrupts, in order):
 ]
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `adaptive_qa_router`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `adaptive_qa_router`, pick a case from the **Ready-made case** dropdown, or paste the input above.

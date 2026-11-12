@@ -212,9 +212,90 @@ def test_partial_and_uncovered_quarters_are_labelled_instead_of_compared_unfairl
 
 
 def test_bad_quarters_are_rejected_with_a_clear_message():
-    for bad, msg in (("2026-X", "Could not read quarter"), ("", "Could not read quarter"), ("2024Q1", "No data for 2024Q1")):
+    for bad, msg in (("2026-X", "Could not read quarter"), ("2026Q5", "Could not read quarter"), ("2024Q1", "No data for 2024Q1")):
         with pytest.raises(ValueError, match=msg):
             ex.graph.invoke({"quarter": bad})
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
+
+
+# --------------------------------------------------------------------------- ready-made cases (the Studio dropdown)
+def case(prefix: str) -> str:
+    return next(label for label in ex.CASES if label.startswith(prefix))
+
+
+def test_a_blank_form_runs_the_first_ready_made_quarter_instead_of_failing():
+    for blank in ({}, {"quarter": ""}, {"quarter": "   "}, {"quarter": None}):
+        out, _ = run_input(blank)
+        assert out["quarter"] == Q2 == ex.EXAMPLE_INPUT["quarter"], blank
+        assert [s["title"] for s in out["sections"]] == ["Headline", "Price cut", "Cam Pro returns"]
+
+
+def run_input(payload):
+    set_structured_handler(ex.ReportPlan, scripted([three_sections()]))
+    chat = Chat()
+    set_chat_handler(chat)
+    return ex.graph.invoke(payload), chat
+
+
+def test_the_first_case_is_the_example_input_and_every_case_names_a_quarter_the_data_covers():
+    assert next(iter(ex.CASES.values())) == ex.EXAMPLE_INPUT
+    for label, fields in ex.CASES.items():
+        assert set(fields) == {"quarter"} and label.startswith(fields["quarter"]), label
+        ex.build_facts(fields["quarter"])  # raises if the dataset has nothing for it
+
+
+def test_case_labels_quote_what_the_facts_say_about_their_quarter():
+    for label, fields in ex.CASES.items():
+        facts = ex.build_facts(fields["quarter"])
+        kpi = facts["kpi.overview"]
+        if found := re.search(r"revenue (\$[\d,]+\.\d\d)", label):
+            assert found.group(1) == ex.money(kpi["data"]["revenue"]), label
+        if found := re.search(r"return rate ([\d.]+%)", label):
+            assert found.group(1) == ex.pct(kpi["data"]["return_rate"]), label
+        if found := re.search(r"(\d+) of (\d+) days", label):
+            assert f"the data covers {found.group(1)} of {found.group(2)} days" in kpi["text"], label
+        anomalies = [k for k in facts if k.startswith("anomaly.")]
+        if "no anomaly flags" in label:
+            assert not anomalies, f"{label}: anomaly facts are {anomalies}"
+        if "flagged" in label:
+            assert anomalies, label
+        if "no like-for-like previous quarter" in label or "no previous quarter" in label:
+            assert "no like-for-like previous quarter" in kpi["text"] and kpi["data"]["prior_comparable"] is False, label
+        if "partial" in label or "Nov-Dec only" in label or "October only" in label:
+            assert "partial quarter" in kpi["text"], label
+        if "full quarter" in label:
+            assert "full quarter" in kpi["text"], label
+        if "compared with July" in label:
+            assert "2026-07-01 to 2026-07-31" in kpi["text"], label
+        if "$149" in label:
+            assert "entirely at $149.00" in facts["pricing.lumen_therm"]["text"], label
+
+
+def test_the_flagged_anomalies_named_in_the_labels_are_the_ones_the_facts_hold():
+    assert "anomaly.lumen_cam_pro.return_rate" in ex.build_facts("2026Q2") and "Cam Pro" in case("2026Q2")
+    assert "anomaly.lumen_lock.revenue" in ex.build_facts("2025Q4") and "Lock" in case("2025Q4")
+
+
+def test_a_flagged_case_always_gets_a_section_whatever_the_planner_chose():
+    for label in (case("2026Q2"), case("2025Q4")):
+        facts = ex.build_facts(ex.CASES[label]["quarter"])
+        anomalies = {k for k in facts if k.startswith("anomaly.")}
+        out, _ = run(plan=ex.ReportPlan(sections=[section("Headline", "kpi.overview")]), quarter=ex.CASES[label]["quarter"])
+        covered = {k for p in out["plan"] for k in p["fact_keys"]}
+        assert anomalies <= covered, f"{label}: the planner's plan hid {anomalies - covered}"
+
+
+def test_picking_a_quarter_after_another_on_one_thread_reports_the_picked_quarter():
+    g = ex.build_graph(checkpointer=InMemorySaver())
+    cfg = {"configurable": {"thread_id": "picks"}}
+    set_structured_handler(ex.ReportPlan, scripted([three_sections()]))
+    set_chat_handler(Chat())
+    for label in (case("2026Q4"), case("2026Q2"), case("2025Q4")):
+        out = g.invoke({"scenario": label}, cfg)
+        assert out["quarter"] == ex.CASES[label]["quarter"] and out["report"].startswith(f"# Quarterly sales report: {out['quarter']}")
+        state = g.get_state(cfg).values
+        assert state["scenario"] is None and len(state["section_drafts"]) == len(out["sections"])
 
 
 # --------------------------------------------------------------------------- plan hygiene and ordering

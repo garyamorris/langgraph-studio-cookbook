@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 import pandas as pd
 import pytest
 from langchain_core.messages import AIMessage
@@ -259,9 +261,80 @@ def test_citations_must_point_at_steps_that_exist_and_succeeded():
 
 
 def test_inputs_are_validated():
-    for bad, msg in (({}, "Provide a question"), ({"question": "x" * 700}, "too long"), ({"question": "q", "max_steps": 0}, "max_steps must be"), ({"question": "q", "max_steps": 11}, "max_steps must be")):
+    # A budget with no question is real input that cannot run (a blank form, by contrast, runs the first ready-made case).
+    for bad, msg in (({"max_steps": 3}, "Provide a question"), ({"question": "x" * 700}, "too long"), ({"question": "q", "max_steps": 0}, "max_steps must be"), ({"question": "q", "max_steps": 11}, "max_steps must be")):
         with pytest.raises(ValueError, match=msg):
             ex.graph.invoke(bad)
+
+
+def test_a_blank_form_runs_the_first_ready_made_question_and_an_unknown_case_is_refused():
+    first = next(iter(ex.CASES.values()))
+    out = ex.graph.invoke({})  # Studio's Submit on an empty form: no dead end
+    assert out["question"] == first["question"] and out["conclusion"]
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
+
+
+def label_for(start: str) -> str:
+    return next(k for k in ex.CASES if k.startswith(start))
+
+
+def test_the_ready_made_questions_agree_with_the_sales_data():
+    d = completed()
+    # Therm: equal windows either side of the 2026-05-01 cut
+    t = d[d["product"] == THERM]
+    before = t[(t["d"] >= "2026-02-01") & (t["d"] <= "2026-04-30")]
+    after = t[(t["d"] >= "2026-05-01") & (t["d"] <= "2026-07-31")]
+    label = label_for("Did the Therm price cut")
+    assert f"units {before['quantity'].sum()} -> {after['quantity'].sum()}" in label
+    assert f"revenue +{round((after['revenue'].sum() / before['revenue'].sum() - 1) * 100)}%" in label
+    # Cam Pro: the region with the highest return rate last quarter, and how many lines it rests on
+    q3 = d[(d["product"] == "Lumen Cam Pro") & (d["d"] >= "2026-07-01") & (d["d"] <= "2026-09-30")]
+    rate = q3.groupby("region")["status"].apply(lambda x: (x == "returned").mean() * 100)
+    top = rate.idxmax()
+    label = label_for("Which region had the highest return rate")
+    assert top in label and f"{round(rate[top])}%" in label and f"{(q3['region'] == top).sum()} lines" in label
+    # margin: the two leaders last quarter
+    q3_all = d[(d["d"] >= "2026-07-01") & (d["d"] <= "2026-09-30")]
+    leaders = q3_all.groupby("product")["margin"].sum().sort_values(ascending=False).index[:2]
+    assert [p.removeprefix("Lumen ") for p in leaders] == ["Therm", "Hub"] and "Therm and Hub" in label_for("Top 2 products")
+    # unanswerable and misnamed
+    assert not any("satisf" in c.lower() for c in read_csv("sales.csv").columns), "the data has no satisfaction field"
+    assert "Lumen Doorbell" not in set(d["product"]) and "'Lumen Bell'" in label_for("How did the Lumen Doorbell")
+    bad = ex.run_step({"tool": "revenue_summary", "args": {"product": "Lumen Doorbell", "period": "2026Q3"}}, [])
+    assert not bad["ok"] and "Did you mean 'Lumen Bell'" in bad["error"]
+
+
+def test_every_ready_made_case_has_a_valid_budget_and_its_label_states_it():
+    for label, fields in ex.CASES.items():
+        budget = fields["max_steps"]
+        assert budget is None or 1 <= budget <= ex.MAX_STEPS_LIMIT
+        stated = re.search(r"\((\d+) steps\)", label)
+        assert (int(stated.group(1)) if stated else None) == budget, f"{label}: the label must state the budget the case sets"
+        assert len(fields["question"]) <= ex.MAX_QUESTION_CHARS
+
+
+def test_picking_the_budget_case_cuts_a_longer_plan_at_two_steps():
+    many = plan(*[step("top_n", group_by=g, metric="revenue", period="2026") for g in ("region", "channel", "product")])
+    set_structured_handler(ex.Plan, scripted([many]))
+    set_structured_handler(ex.Replan, scripted([CONTINUE]))
+    set_chat_handler(conclusion_model())
+    out = ex.graph.invoke({"scenario": label_for("Break down 2026 revenue")})
+    assert [s["args"]["group_by"] for s in out["steps"]] == ["region", "channel"], "the third grouping never runs"
+    assert out["stop_reason"] == "max_steps" and out["conclusion"]
+
+
+def test_picking_the_doorbell_case_turns_the_unknown_product_into_an_error_the_replanner_fixes_inside_the_budget():
+    bad = plan(step("revenue_summary", product="Lumen Doorbell", period="2026Q3"))
+    fix = replan("revise_remaining", step("revenue_summary", product="Lumen Bell", period="2026Q3"))
+    set_structured_handler(ex.Plan, scripted([bad]))
+    replanner = Spy(fix, FINISH)
+    set_structured_handler(ex.Replan, replanner)
+    set_chat_handler(conclusion_model())
+    out = ex.graph.invoke({"scenario": label_for("How did the Lumen Doorbell")})
+    first, second = out["steps"]
+    assert not first["ok"] and "Did you mean 'Lumen Bell'" in first["error"] and second["ok"], "the failed call still counts against the budget"
+    assert out["revisions"] == 1 and "1 tool calls left" in replanner.prompts[0]
 
 
 def test_state_is_reset_when_a_thread_is_reused():

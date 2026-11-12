@@ -205,7 +205,7 @@ def test_paused_run_holds_until_resumed_and_the_resume_value_is_used():
     cfg = {"configurable": {"thread_id": "c1"}}
     paused = g.invoke({"question": "and the other one?"}, cfg)
     assert paused["__interrupt__"][0].value["ask"] == "Which measure?"
-    assert "answer" not in paused, "nothing was answered while waiting"
+    assert not paused.get("answer"), "nothing was answered while waiting"
     done = g.invoke(Command(resume="the cameras"), cfg)
     assert done["clarifications"][0]["answer"] == "the cameras" and done["route"] == "small_talk"
 
@@ -254,9 +254,32 @@ def test_subgraph_nodes_appear_under_their_own_namespace_when_streaming():
     assert {"inspect_schema", "write_sql", "guard", "execute", "answer"} <= inner
 
 
-def test_blank_question_is_rejected():
-    with pytest.raises(ValueError, match="question"):
-        new_graph().invoke({"question": "  "}, {"configurable": {"thread_id": "e1"}})
+def test_a_blank_form_runs_the_first_ready_made_question_and_an_unknown_case_is_refused():
+    first = next(iter(ex.CASES.values()))["question"]
+    for n, blank in enumerate(({}, {"question": "  "})):  # Studio's Submit on an empty form: no dead end
+        Seen(ex.RouteDecision, [decision("clarify", ask="Last month's what?")])
+        chat("ok")
+        res = run_graph(new_graph(), blank, config={"configurable": {"thread_id": f"blank{n}"}})
+        assert res.interrupts[0]["original_question"] == first
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        new_graph().invoke({"scenario": "not a case"}, {"configurable": {"thread_id": "e1"}})
+
+
+def test_each_ready_made_label_leads_with_its_question_and_states_the_real_clarification_cap():
+    for label, fields in ex.CASES.items():
+        assert label.startswith(fields["question"]), f"{label}: lead with the question the case asks"
+    assert ex.CASES and ex.MAX_CLARIFICATIONS == 2
+    assert f"{ex.MAX_CLARIFICATIONS}-question cap" in next(k for k in ex.CASES if k.startswith("and the other one"))
+
+
+def test_picking_the_vague_case_and_answering_vaguely_hits_the_cap_and_forces_a_route():
+    label = next(k for k in ex.CASES if k.startswith("and the other one"))
+    Seen(ex.RouteDecision, [decision("clarify", ask="The other what?")])  # would ask forever
+    forced = Seen(ex.RouteGuess, [guess("small_talk")])
+    chat("Happy to help: ask me about the handbook or the shop.")
+    res = run_graph(new_graph(), {"scenario": label}, resumes=["the other one", "you know"])
+    assert len(res.interrupts) == ex.MAX_CLARIFICATIONS and len(forced) == 1
+    assert res.output["route"] == "small_talk" and res.output["effective_question"] == "and the other one? the other one you know"
 
 
 # --------------------------------------------------------------------------- a reused thread behaves like a fresh one
@@ -304,3 +327,14 @@ def test_an_old_clarification_is_not_glued_onto_the_next_question():
     second = run_graph(g, {"question": "Hello there"}, config=cfg)
     assert second.output["effective_question"] == "Hello there"
     assert second.output["clarifications"] == [] and second.interrupts == []
+
+
+def test_a_run_paused_at_clarify_shows_nothing_from_the_previous_questions_answer():
+    route_by_question()
+    g = new_graph()
+    cfg = {"configurable": {"thread_id": "stale"}}
+    done = run_graph(g, {"question": "Hello there"}, config=cfg)
+    assert done.output["answer"] == "scripted reply" and done.output["effective_question"] == "Hello there"
+    paused = run_graph(g, {"question": "what about last month, then?"}, config=cfg)
+    assert paused.interrupts, "the second question needs clarifying"
+    assert not paused.output.get("answer") and not paused.output.get("details") and not paused.output.get("effective_question")

@@ -8,7 +8,7 @@ import pytest
 from langchain_core.messages import AIMessage
 from langgraph.checkpoint.memory import InMemorySaver
 
-from deepdive.common.data import read_csv
+from deepdive.common.data import db_connect, read_csv
 from deepdive.common.fakes import scripted, set_chat_handler, set_structured_handler
 from deepdive.common.testing import check_example, lint_openai_strict, normalise, run_twice
 from deepdive.examples import sql_analyst as ex
@@ -202,9 +202,54 @@ def test_schema_context_lists_real_literals_dates_and_hides_pii():
     assert "COUNT(DISTINCT orders.order_id)" in ctx
 
 
-def test_blank_question_is_an_input_error():
-    with pytest.raises(ValueError, match="question"):
-        ex.graph.invoke({"question": "   "})
+def test_a_blank_form_runs_the_first_ready_made_question_and_an_unknown_case_is_refused():
+    first = next(iter(ex.CASES.values()))["question"]
+    assert ex.graph.invoke({})["question"] == first, "Studio's Submit on an empty form: no dead end"
+    assert ex.graph.invoke({"question": "   "})["question"] == first, "whitespace is a blank form too"
+    assert ex.graph.invoke({"question": "How many orders are there?"})["question"] == "How many orders are there?"
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
+
+
+def label_for(start: str) -> str:
+    return next(k for k in ex.CASES if k.startswith(start))
+
+
+def test_the_ready_made_questions_say_only_what_the_database_makes_true():
+    con = db_connect()
+    try:
+        one = lambda sql: con.execute(sql).fetchone()[0]  # noqa: E731
+        channels = {r[0] for r in con.execute("SELECT DISTINCT channel FROM orders")}
+        assert "online" not in channels and {"web", "app"} <= channels, "'online' is the invented value the label warns about"
+        assert f"{one('SELECT COUNT(*) FROM orders WHERE status = ' + repr('cancelled'))} cancelled orders" in label_for("Delete")
+        assert one("SELECT MAX(order_date) FROM orders") in label_for("How many orders were placed in 2030"), "the data really ends there"
+        assert one("SELECT COUNT(*) FROM orders WHERE order_date >= '2030-01-01'") == 0
+        last_month = con.execute(
+            "SELECT c.region, COUNT(DISTINCT o.order_id) n FROM orders o JOIN customers c USING (customer_id) "
+            "WHERE o.status = 'returned' AND o.order_date >= '2026-10-01' AND o.order_date < '2026-11-01' GROUP BY 1 ORDER BY 2 DESC"
+        ).fetchall()
+        assert [n for _, n in last_month] == [1, 1, 1], "a three-way tie, one each"
+        assert "three-way tie, 1 each" in label_for("Which region had the most returned orders last month")
+        assert ("customers", "email") in ex.RESTRICTED_COLUMNS and "restricted" in label_for("Show me every customer's email")
+    finally:
+        con.close()
+    assert len({c["question"] for c in ex.CASES.values()}) == len(ex.CASES), "no two cases ask the same thing"
+
+
+@pytest.mark.parametrize(
+    "start, sql, reason",
+    [
+        ("Delete all cancelled orders", "DELETE FROM orders WHERE status = 'cancelled'", "only a single SELECT"),
+        ("Show me every customer's email", "SELECT name, email FROM customers", "restricted personal data"),
+    ],
+)
+def test_the_refusal_cases_are_stopped_by_code_and_leave_the_shop_untouched(start, sql, reason):
+    drafts(sql)  # a model that does what the question says, every time
+    chat = count_chat_calls()
+    out = ex.graph.invoke({"scenario": label_for(start)})
+    assert out["status"] == "failed" and out["attempts"] == ex.MAX_ATTEMPTS and chat == []
+    assert all(reason in f["problem"] for f in out["failed_attempts"])
+    assert ex.run_query(ex.check_sql("SELECT COUNT(*) AS n FROM orders WHERE status = 'cancelled'").run_sql).rows == [{"n": 32}]
 
 
 # --------------------------------------------------------------------------- the graph

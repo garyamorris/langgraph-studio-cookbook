@@ -6,6 +6,8 @@ import pytest
 from langchain_core.messages import AIMessage
 from langgraph.checkpoint.memory import InMemorySaver
 
+from deepdive.common.config import data_dir
+from deepdive.common.data import read_csv
 from deepdive.common.decisions import Answer, DecisionResult, set_decision_override
 from deepdive.common.fakes import set_chat_handler
 from deepdive.common.testing import check_example, normalise, run_twice
@@ -317,8 +319,10 @@ def test_no_survivors_returns_the_reasons_and_no_winner(monkeypatch):
 def test_brief_must_be_complete(missing):
     with pytest.raises(ValueError, match=missing):
         ex.build_graph().invoke({**BRIEF, missing: "   "})
-    with pytest.raises(ValueError, match="missing: product, audience, goal"):
-        ex.build_graph().invoke({})
+    with pytest.raises(ValueError, match="missing: audience, goal"):
+        ex.build_graph().invoke({"product": "Lumen Plug 4-pack"})  # a half-typed brief is a bad value, not a blank form
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.build_graph().invoke({"scenario": "not a case"})
 
 
 # --------------------------------------------------------------------------- a reused thread behaves like a fresh one
@@ -370,3 +374,62 @@ def test_a_no_contest_run_after_a_judged_run_does_not_show_the_old_judgement():
     assert reused.output["status"] == "no_survivors"
     assert "decision" not in reused.output or reused.output["decision"] == {}, "the judge never ran for this brief"
     assert normalise(reused.output) == normalise(fresh.output)
+
+
+# --------------------------------------------------------------------------- ready-made cases (Studio's dropdown)
+def spy_on_decide(monkeypatch):
+    asked: list[str] = []
+    real = ex.decide
+    monkeypatch.setattr(ex, "decide", lambda text, qs, **kw: (asked.append(text), real(text, qs, **kw))[1])
+    return asked
+
+
+def test_a_blank_form_runs_the_first_ready_made_brief(monkeypatch):
+    Writers()
+    pin()
+    asked = spy_on_decide(monkeypatch)
+    out = ex.build_graph().invoke({})  # Studio's Submit on an empty form: no dead end
+    first = next(iter(ex.CASES.values()))
+    assert out["status"] == "judged" and first == ex.EXAMPLE_INPUT, "the first case is the standard brief"
+    assert all(first[k] in asked[0] for k in ("product", "audience", "goal")), "the judge saw the first case's brief"
+
+
+def test_every_ready_made_brief_is_complete_and_rests_on_real_data():
+    sales = read_csv("sales.csv")
+    prices = {p: g.sort_values("order_date").iloc[-1]["unit_price"] for p, g in sales.groupby("product")}
+    firmware = " ".join((data_dir() / "kb" / "support" / "firmware-updates.md").read_text().split())
+    for label, c in ex.CASES.items():
+        assert set(c) == {"product", "audience", "goal"} and all(c[k].strip() for k in c), f"{label}: a complete triple"
+        assert c["product"] in prices and label.startswith(c["product"]), f"{label}: lead with a product that is in the data"
+        for dollars in re.findall(r"\$(\d+)", label):  # a price in a label is a price in the data (the Therm's old one too)
+            known = set(sales[sales["product"] == c["product"]]["unit_price"])
+            assert float(dollars) in known, f"{label}: ${dollars} is not a {c['product']} price"
+        if "3.0.2" in label:
+            assert "Firmware 3.0.2 fixes" in firmware and "pairing timeout (E-317) on Cam Pro" in firmware
+    therm = next(c for c in ex.CASES.values() if c["product"] == "Lumen Therm")
+    assert "$149, down from $159" in therm["goal"] and prices["Lumen Therm"] == 149.0
+    assert len({c["audience"] for c in ex.CASES.values()}) == len(ex.CASES), "each case has its own audience"
+
+
+def test_the_spam_pushing_case_asks_for_exactly_what_the_guardrail_rejects():
+    """The label only says 'watch for rejected'; what is certain is that the words its goal asks for are rejected."""
+    label = next(k for k in ex.CASES if "spam" in k)
+    goal = ex.CASES[label]["goal"]
+    for phrase in ("FREE", "urgent", "guaranteed winner"):
+        assert phrase in goal
+        assert any(r["code"] in ("spam_trigger", "all_caps") for r in ex.check_line(f"Open this: {phrase}", [])), phrase
+    Writers({a: "FREE gift, urgent, a guaranteed winner" for a in ex.ANGLE_ORDER})  # writers that obey the goal
+    out = ex.build_graph().invoke({"scenario": label})
+    assert out["status"] in ("single_survivor", "no_survivors") and len(out["rejected"]) >= 5
+    assert all(r["reasons"][0]["code"] in ("spam_trigger", "all_caps", "near_duplicate") for r in out["rejected"])
+
+
+def test_a_second_ready_made_brief_on_the_same_thread_is_the_same_as_on_a_fresh_thread():
+    writers_per_product()
+    pin()
+    labels = list(ex.CASES)
+    reused, fresh = run_twice(
+        lambda: ex.build_graph(checkpointer=InMemorySaver()), {"scenario": labels[0]}, {"scenario": labels[1]}
+    )
+    assert normalise(reused.output) == normalise(fresh.output)
+    assert all("Lumen Therm" in r["text"] for r in reused.output["ranking"]), "nothing from the first brief survived"

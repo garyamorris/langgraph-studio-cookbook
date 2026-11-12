@@ -273,3 +273,72 @@ def test_memory_changes_are_emitted_as_custom_events():
         events += list(graph.stream({"messages": [{"role": "user", "content": f"chatter {i}"}]}, c, stream_mode="custom"))
     folded = [e for e in events if e["event"] == "summarized"]
     assert folded and folded[0]["folded"] >= 2 and folded[0]["kept"] == 2
+
+
+# --------------------------------------------------------------------------- ready-made cases (the Studio dropdown)
+CASE_EXPECT = {
+    # label prefix: (order numbers pinned after the first Submit, folded_messages, messages left in the window)
+    "Pasted 5-message": (["#1042"], 4, 2),
+    "Priya + order #1042": (["#1042"], 0, 2),
+    "Long message": (["#1042", "#1828", "#1838"], 0, 2),
+    "Order-number spellings": (["#1828", "#1677", "#1767"], 0, 2),
+    "Nonsense settings": (["#1767"], 4, 2),
+}
+
+
+def test_a_blank_form_runs_the_first_case_which_folds_at_once_but_never_injects_into_a_thread_with_history():
+    model = ScriptedModel()
+    graph, c = ex.build_graph(checkpointer=InMemorySaver()), cfg()
+    out = graph.invoke({}, c)  # Studio's Submit on an empty form
+    assert len(model.summaries) == 1 and out["folded_messages"] == 4 and [m.type for m in out["messages"]] == ["human", "ai"]
+    assert out["summary"].startswith("SUMMARY v1") and out["facts"]["order_ids"] == ["#1042"] and out["facts"]["customer_name"] == "Priya"
+    assert out["turn"] == 1 and out["mode"] == "offline"
+
+    humans = lambda: [m.content for m in graph.get_state(c).values["messages"] if m.type == "human"]  # noqa: E731
+    before = humans()
+    graph.invoke({}, c)  # a blank form on a thread that already has a chat must not add an opening message of its own
+    assert humans() == before
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        graph.invoke({"scenario": "not a case"}, c)
+
+
+def test_every_ready_made_case_does_what_its_label_claims():
+    assert len(ex.CASES) == len(CASE_EXPECT), "a new case needs an entry in CASE_EXPECT"
+    for label, fields in ex.CASES.items():
+        order_ids, folded, kept = next(v for k, v in CASE_EXPECT.items() if label.startswith(k))
+        ScriptedModel()
+        graph, c = ex.build_graph(checkpointer=InMemorySaver()), cfg()
+        out = graph.invoke({"scenario": label}, c)
+        assert out["facts"]["order_ids"] == order_ids, label
+        assert out.get("folded_messages", 0) == folded and len(out["messages"]) == kept, label
+        assert bool(out.get("summary")) is bool(folded), label
+        assert graph.get_state(c).values.get("scenario") is None
+        for number in ("max_messages", "keep_last"):  # numbers quoted in a label are the numbers the case sets
+            if f"{number}=" in label:
+                assert f"{number}={fields[number]}" in label, label
+        if label.startswith("Nonsense"):
+            assert ex.limits(graph.get_state(c).values) == (4, 2)
+
+
+def test_the_long_message_case_folds_two_messages_later_with_all_three_orders_still_pinned():
+    model = ScriptedModel()
+    graph, c = ex.build_graph(checkpointer=InMemorySaver()), cfg()
+    label = next(k for k in ex.CASES if k.startswith("Long message"))
+    graph.invoke({"scenario": label}, c)
+    say(graph, c, "ok, one more thing: the hub light")
+    assert not model.summaries
+    out = say(graph, c, "and the app crashes at login")  # 6 stored messages > max_messages 4
+    assert len(model.summaries) == 1 and out["folded_messages"] == 4 and out["summary"]
+    assert out["facts"]["order_ids"] == ["#1042", "#1828", "#1838"]
+
+
+def test_the_orders_in_the_cases_exist_in_the_shop_database():
+    from deepdive.common.data import db_connect
+
+    con = db_connect()
+    try:
+        known = {f"#{r[0]}" for r in con.execute("SELECT order_id FROM orders")}
+    finally:
+        con.close()
+    mentioned = {oid for fields in ex.CASES.values() for m in fields["messages"] for oid in ex.extract_order_ids(m["content"])}
+    assert mentioned and mentioned <= known, mentioned - known

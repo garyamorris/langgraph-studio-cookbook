@@ -312,11 +312,11 @@ def test_reply_tokens_stream_from_respond_only():
     assert "".join(c.content for c, _ in chunks).strip() == "Here are three mesh routers that suit a tall house."
 
 
-def test_nodes_run_recall_then_respond_then_remember():
+def test_nodes_run_load_case_then_recall_then_respond_then_remember():
     g, _ = new_graph()
     extractor([])
     updates = list(g.stream({"messages": [{"role": "user", "content": "hi"}]}, {"configurable": {"thread_id": "s2"}}, stream_mode="updates"))
-    assert [next(iter(u)) for u in updates] == ["recall", "respond", "remember"]
+    assert [next(iter(u)) for u in updates] == ["load_case", "recall", "respond", "remember"]
 
 
 def test_offline_placeholder_operations_never_pollute_the_store():
@@ -329,3 +329,92 @@ def test_offline_placeholder_operations_never_pollute_the_store():
 def test_missing_store_is_a_clear_error():
     with pytest.raises(RuntimeError, match="needs a store"):
         ex.graph.invoke({"messages": [{"role": "user", "content": "hi"}]})
+
+
+# --------------------------------------------------------------------------- ready-made cases (the Studio dropdown)
+def case(prefix: str) -> str:
+    return next(k for k in ex.CASES if k.startswith(prefix))
+
+
+def test_a_blank_form_runs_the_first_case_but_never_injects_a_message_into_a_thread_with_history():
+    g, _ = new_graph()
+    extractor([], [])
+    cfg = {"configurable": {"thread_id": "blank"}}
+    first = g.invoke({}, cfg)
+    assert [m.type for m in first["messages"]] == ["human", "ai"] and first["messages"][0].content == ex.EXAMPLE_INPUT["messages"][0]["content"]
+    again = g.invoke({}, cfg)  # the thread already has a chat: nothing new may be typed on the user's behalf
+    assert [m.type for m in again["messages"]].count("human") == 1
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        g.invoke({"scenario": "not a case"}, cfg)
+
+
+def test_the_recall_case_brings_its_own_memories_so_it_needs_no_earlier_run():
+    g, store = new_graph()  # a brand-new, empty store: nothing was saved by any other case
+    extractor([])
+    prompts = concierge_prompts()
+    out = g.invoke({"scenario": case("Customer 'ria'")}, {"configurable": {"thread_id": "t"}})
+    wanted = {n["text"] for n in ex.CASES[case("Customer 'ria'")]["saved_notes"]}
+    assert {m["text"] for m in out["recalled"]} == wanted and len(wanted) == 2 and out["user_id"] == "ria"
+    assert all(t in prompts[0] for t in wanted), "the saved notes reached the model"
+    assert {v["text"] for v in items(store, "ria").values()} == wanted
+    assert items(store) == {}, "nothing leaked into demo_user"
+
+
+def test_a_customer_without_notes_recalls_nothing_even_when_another_case_saved_notes():
+    g, store = new_graph()
+    extractor([], [])
+    g.invoke({"scenario": case("Customer 'ria'")}, {"configurable": {"thread_id": "a"}})
+    out = g.invoke({"scenario": case("Customer 'zed'")}, {"configurable": {"thread_id": "b"}})
+    assert out["recalled"] == [] and out["user_id"] == "zed" and items(store, "zed") == {}
+
+
+def test_repeating_the_forget_case_restores_its_notes_and_a_follow_up_turn_does_not_resurrect_them():
+    g, store = new_graph()
+    label, cfg = case("Customer 'ben'"), {"configurable": {"thread_id": "ben"}}
+    notes = {n["text"] for n in ex.CASES[label]["saved_notes"]}
+    # the extractor sees "[key] (kind) text" lines; forget the one about subscriptions, as a good model would
+    extractor_fn(lambda prompt: [op("forget", key=next(m.group(1) for m in re.finditer(r"\[([0-9a-f]{8})\] \(\w+\) Dislikes subscriptions", prompt)))])
+    out = g.invoke({"scenario": label}, cfg)
+    assert [c["status"] for c in out["memory_changes"]] == ["forgotten"]
+    assert {v["text"] for v in items(store, "ben").values()} == notes - {"Dislikes subscriptions and monthly fees."}
+
+    extractor([])
+    g.invoke({"messages": [{"role": "user", "content": "What do you remember about me?"}]}, cfg)
+    assert "Dislikes subscriptions and monthly fees." not in {v["text"] for v in items(store, "ben").values()}, "notes are written once, not on every turn"
+    assert g.get_state(cfg).values["saved_notes"] is None and g.get_state(cfg).values["as_user"] == "ben", "ben stays the customer of this thread"
+
+    extractor([])
+    g.invoke({"scenario": label}, {"configurable": {"thread_id": "ben-again"}})  # picking the case again restores the demo
+    assert {v["text"] for v in items(store, "ben").values()} == notes
+    assert len(items(store, "ben")) == 2, "same keys: no copies"
+
+
+def test_the_card_number_case_never_stores_the_number_even_if_the_extractor_proposes_it():
+    g, store = new_graph()
+    label = case("Card number")
+    seen = extractor([op(text="Customer's card number is 4242 4242 4242 4242", kind="other"), op(text="Prefers Matter-compatible gear.", kind="preference")])
+    out = g.invoke({"scenario": label}, {"configurable": {"thread_id": "dee"}})
+    assert "4242" not in json.dumps(items(store, "dee")) and "4242" not in json.dumps(out["memory_changes"])
+    assert "4242" not in seen[0] and "[REDACTED]" in seen[0]
+    assert [c["status"] for c in out["memory_changes"]] == ["refused", "stored"]
+
+
+def test_as_user_beats_the_assistants_user_id_setting_and_saved_notes_obey_the_privacy_filter():
+    ctx = lambda c: SimpleNamespace(context=c)  # noqa: E731
+    assert ex.resolve_user_id(ctx(ex.Context("ctx")), {"configurable": {"user_id": "cfg"}}, "form") == "form"
+    assert ex.resolve_user_id(ctx(ex.Context("ctx")), {}, None) == "ctx" and ex.resolve_user_id(ctx(ex.Context("ctx")), {}, "") == "ctx"
+
+    store = make_store()
+    ns = ("memories", "kai")
+    n = ex.seed_notes(store, ns, [{"text": "Prefers quiet fans.", "kind": "preference"}, {"text": "My card is 4242 4242 4242 4242"}, "Owns a Lumen Hub.", {"text": ""}, {"text": None}, None])
+    assert n == 2 and {v["text"] for v in items(store, "kai").values()} == {"Prefers quiet fans.", "Owns a Lumen Hub."}
+    assert ex.seed_notes(store, ns, ["Owns a Lumen Hub."]) == 1 and len(items(store, "kai")) == 2, "idempotent: same key, no copy"
+
+
+def test_every_case_is_self_contained_and_its_saved_notes_are_ordinary_facts():
+    for label, fields in ex.CASES.items():
+        notes = fields["saved_notes"] or []
+        assert all(ex.privacy_violation(n["text"]) is None and n["kind"] in ex.KINDS for n in notes), label
+        assert (fields["as_user"] is None) <= (not notes), f"{label}: saved notes need their own customer, not the shared demo_user"
+        assert fields["as_user"] is None or f"'{fields['as_user']}'" in label or label.startswith("Card number"), label
+        assert [m["role"] for m in fields["messages"]] == ["user"]

@@ -58,16 +58,24 @@ MODELS AND DATA
     offline run shows the shape of the output, not good answers; ``mode`` in the output says which ran.
 
 TRY IT IN STUDIO
-    Input ``{"question": "How do I pause a graph and wait for a human to approve?"}``. Open the ``retrieve`` output,
-    then ``grade``: compare the BM25 order with the probabilities (the interrupts article is retrieved 4th but is
-    the one that should pass). Then try
-      * ``{"question": "How can I let a person sign off before the workflow continues?"}`` - weak vocabulary overlap,
-        so expect a ``rewrite`` and a second round;
-      * ``{"question": "What is the capital of France?"}`` - no article shares a word with it, so there is nothing to
-        grade; expect up to two rewrites and then ``abstain`` with no generation;
-      * ``{"question": "How long do refunds take?", "corpus": "support"}``.
+    Open the ``Ready-made case`` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+    the first one). Each case sets the question and the knowledge base:
+      * ``How do I pause a graph and wait for a human to approve?`` - open the ``retrieve`` output, then ``grade``:
+        compare the BM25 order with the probabilities (the interrupts article is retrieved 4th but is the one that
+        should pass).
+      * ``How can I let a person sign off before the workflow continues?`` - weak vocabulary overlap, so none of the
+        first four hits is the interrupts article; expect a ``rewrite`` and a second round.
+      * ``How do I stream tokens to a UI?`` - the easy case: one article matches, so there is nothing to rewrite.
+      * ``What is the capital of France?`` - no article shares a word with it, so there is nothing to grade; expect up
+        to two rewrites and then ``abstain`` with no generation.
+      * ``How long do refunds take?`` (support policies) - a cited answer from the ``support`` knowledge base.
+      * ``What refund amount needs manager approval?`` (support policies) - the answer exists only in an article marked
+        "(internal)", which the retriever never returns; expect the grader to reject what it does return and the run to
+        abstain instead of guessing.
     In the output, ``grading`` lists every round (query, articles, probabilities, kept or not), ``sources`` the
     articles the answer was allowed to use, and ``dropped_citations`` any citation that was removed.
+    To ask your own, paste ``{"question": "How do I pause a graph and wait for a human to approve?", "corpus":
+    "langgraph"}`` (``corpus`` is ``langgraph`` or ``support``).
 
 EXTEND IT
     * Cache grades per (question, article) so a rewrite that re-retrieves a known article does not pay for it again.
@@ -94,6 +102,7 @@ from deepdive.common.decisions import decide, predicate
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm, structured_llm
 from deepdive.common.retrieval import get_retriever
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="corrective_rag",
@@ -116,6 +125,26 @@ META = ExampleMeta(
 
 EXAMPLE_INPUT = {"question": "How do I pause a graph and wait for a human to approve?"}
 
+# Ready-made questions for Studio's dropdown (see deepdive.common.scenarios). The first one runs on a blank form. Every
+# case sets the same two keys (None = the default corpus, the LangGraph handbook). The retrieval facts in the labels are
+# decided by the BM25 index and pinned by tests/test_corrective_rag.py; what the grader and the rewriter do with each
+# question is only ever "watch for".
+CASES: dict[str, dict] = {
+    "How do I pause a graph and wait for a human to approve? -> BM25 ranks the right article 4th: watch grade pick it": {
+        "question": "How do I pause a graph and wait for a human to approve?", "corpus": None},
+    "How can I let a person sign off before the workflow continues? -> the right article misses the top 4: watch the rewrite": {
+        "question": "How can I let a person sign off before the workflow continues?", "corpus": None},
+    "How do I stream tokens to a UI? -> BM25 finds only the streaming article: watch it pass grading with no rewrite": {
+        "question": "How do I stream tokens to a UI?", "corpus": None},
+    "What is the capital of France? -> no article shares a word with it: watch the rewrites, then the abstain": {
+        "question": "What is the capital of France?", "corpus": None},
+    "How long do refunds take? (support) -> returns-and-refunds says 5 to 7 business days: watch the cited answer": {
+        "question": "How long do refunds take?", "corpus": "support"},
+    "What refund amount needs manager approval? (support) -> only the internal matrix says, and it is never retrieved: watch": {
+        "question": "What refund amount needs manager approval?", "corpus": "support"},
+}
+SCENARIO = scenario_field(CASES)
+
 TOP_K = 4  # articles retrieved per round
 RELEVANCE_THRESHOLD = 0.6  # an article is kept when the grader's probability is >= this
 MAX_REWRITES = 2  # query rewrites before the graph abstains (so at most MAX_REWRITES + 1 retrieval rounds)
@@ -132,6 +161,7 @@ class Rewrite(BaseModel):
 
 
 class RagIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made question (and knowledge base); replaces the two fields below
     question: str
     corpus: Literal["langgraph", "support"]  # which knowledge base to search (default "langgraph")
 
@@ -213,8 +243,15 @@ def start_run(state: RagState) -> dict:
     """Forget what an earlier run on this thread left behind (Studio keeps submitting runs on the same thread).
 
     ``retrieve`` is also where ``rewrite`` loops back to, so it cannot reset anything itself: without this node a new
-    question would search with the old rewritten ``query`` and start with the rewrite budget already spent."""
-    return {"query": "", "rewrites": 0, "stalled": False, "kept": [], "queries": Overwrite([]), "grading": Overwrite([])}
+    question would search with the old rewritten ``query`` and start with the rewrite budget already spent.
+
+    This is the entry node, so it also resolves a picked ready-made question (or runs the first one on a blank form).
+    A typed ``corpus`` with no question is real input too: ``retrieve`` gives it the "Provide a non-empty question" error.
+    """
+    picked = expand(
+        state, CASES, has_input=lambda s: bool((s.get("question") or "").strip()) or s.get("corpus") is not None
+    )
+    return {**picked, "query": "", "rewrites": 0, "stalled": False, "kept": [], "queries": Overwrite([]), "grading": Overwrite([])}
 
 
 def retrieve(state: RagState) -> dict:

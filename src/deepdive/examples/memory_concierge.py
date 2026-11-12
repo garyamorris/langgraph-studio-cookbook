@@ -34,10 +34,14 @@ DESIGN
       promises ("I'll forget that"); ``memory_changes`` in the output is the record of what actually happened.
 
 GRAPH
-    START -> recall -> respond -> remember -> END
-              |                      |
-        store.search(ns, query)   store.put / store.delete  (only operations that passed the code checks)
-        ns = ("memories", user_id)
+    START -> load_case -> recall -> respond -> remember -> END
+                            |                      |
+                      store.search(ns, query)   store.put / store.delete  (only operations that passed the code checks)
+                      ns = ("memories", user_id)
+
+    ``load_case`` is demo setup, not part of the memory design: it turns a picked ready-made case (the ``scenario``
+    dropdown) into the chat input and, when the case says the customer already has notes, writes them to the store first
+    (see ``saved_notes`` below). It does nothing for a message you type.
 
 LANGGRAPH FEATURES
     * ``BaseStore`` injection (a ``store`` parameter on the node) and namespaces to isolate users
@@ -59,11 +63,25 @@ MODELS AND DATA
 
 TRY IT IN STUDIO
     Needs OPENAI_API_KEY: memory extraction is a model call, and the offline stand-in cannot extract facts.
+    Pick a case from the **Ready-made case** dropdown and press Submit (a blank form on a new thread runs the first):
+      * "New customer says ...": three durable facts in one message; open ``memory_changes`` to see what was stored.
+      * "Customer 'ria' has 2 saved notes ...": the long-term-memory payoff. ``recalled`` lists both notes with their
+        scores (that is decided by the store search, not by the model) and the reply should use them unprompted.
+      * "'ben' ... forget that": ``memory_changes`` should show ``forgotten``. "'cam' ... 250": ``updated`` with the
+        ``previous`` text, still one note. Both depend on the extraction model, so read ``memory_changes`` for what it did.
+      * "Card number ...": the number is redacted before the extraction model sees it and can never be stored, whatever
+        the model proposes; ``memory_changes`` shows ``refused`` if it tried. "'zed' has NO notes": ``recalled`` is empty.
+    Cases never depend on each other: each one acts as its own customer (the ``as_user`` field, which beats the
+    assistant's ``user_id`` setting for the rest of the thread) and, if the customer should already have notes, lists
+    them in ``saved_notes`` (``[{"text": ..., "kind": ...}]``). Those are written to that customer's memory before the
+    chat starts, under a key derived from the text, so repeating a case restores its notes instead of piling up copies.
+    The first case leaves ``as_user`` empty and so uses ``demo_user`` (or the assistant's ``user_id`` setting).
+    To use your own input instead, leave the dropdown empty and fill ``messages``:
     1. Send ``{"messages": [{"role": "user", "content": "Hi! I live in a three-storey house and the wifi has dead
        zones upstairs. I would rather avoid anything with a subscription. What would you suggest?"}]}``. Look at the
-       ``memory_changes`` output: facts were stored. To act as a different customer, set ``user_id`` in the assistant's
-       context / configuration (default ``demo_user``). The reply streams token by token from the ``respond`` node; the memory
-       work happens after it and is not streamed.
+       ``memory_changes`` output: facts were stored. To act as a different customer, set ``as_user`` (or ``user_id`` in
+       the assistant's context / configuration; default ``demo_user``). The reply streams token by token from the
+       ``respond`` node; the memory work happens after it and is not streamed.
     2. Start a NEW thread (new conversation) with the same user and ask ``"Which camera should I buy?"``. The reply
        should reflect the earlier facts without being told; ``recalled`` shows which memories were used and their
        scores.
@@ -82,10 +100,11 @@ EXTEND IT
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import re
 import uuid
 from dataclasses import dataclass
-from typing import Annotated, Literal
+from typing import Annotated, Literal, get_args
 
 from langchain_core.messages import AnyMessage, HumanMessage, SystemMessage
 from langchain_core.runnables import RunnableConfig
@@ -100,6 +119,7 @@ from typing_extensions import TypedDict
 from deepdive.common.config import mode_label
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm, structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="memory_concierge",
@@ -131,6 +151,33 @@ EXAMPLE_INPUT = {
     ]
 }
 
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios). Memory lives in the Store, outside any thread, so a
+# case that needs earlier memories must bring them itself: it names its own customer (``as_user``) and the notes that
+# customer already has (``saved_notes``, written by ``load_case``). That way no case depends on one run before it.
+# Every case sets all three keys (None = not used).
+_NOTE_HOUSE = {"text": "Lives in a three-storey house with wifi dead zones upstairs.", "kind": "household"}
+_NOTE_NO_SUBS = {"text": "Dislikes subscriptions and monthly fees.", "kind": "preference"}
+CASES: dict[str, dict] = {
+    "New customer says: 3-storey house, wifi dead zones upstairs, no subscriptions -> watch memory_changes (stored notes)": {
+        "messages": list(EXAMPLE_INPUT["messages"]), "as_user": None, "saved_notes": None},
+    "Customer 'ria' has 2 saved notes, asks 'Which camera should I buy?' -> recalled lists both; watch the reply use them": {
+        "messages": [{"role": "user", "content": "Which camera should I buy?"}],
+        "as_user": "ria", "saved_notes": [_NOTE_HOUSE, _NOTE_NO_SUBS]},
+    "Customer 'ben' has 2 saved notes, says 'forget that I dislike subscriptions' -> watch memory_changes: forgotten": {
+        "messages": [{"role": "user", "content": "Actually, forget that I dislike subscriptions."}],
+        "as_user": "ben", "saved_notes": [_NOTE_NO_SUBS, {"text": "Owns two cats.", "kind": "household"}]},
+    "Customer 'cam' saved 'budget 100 dollars', now says 250 -> watch memory_changes: updated in place, not a 2nd note": {
+        "messages": [{"role": "user", "content": "Actually my budget went up to 250 dollars."}],
+        "as_user": "cam", "saved_notes": [{"text": "Has a budget of 100 dollars.", "kind": "constraint"}]},
+    "Card number 4242... + 'I prefer Matter-compatible gear' -> number never stored (redacted first); watch the rest": {
+        "messages": [{"role": "user", "content": "My card number is 4242 4242 4242 4242 and I prefer Matter-compatible gear."}],
+        "as_user": "dee", "saved_notes": None},
+    "Customer 'zed' has NO saved notes, asks 'Which camera should I buy?' -> recalled is empty: memory is per customer": {
+        "messages": [{"role": "user", "content": "Which camera should I buy?"}],
+        "as_user": "zed", "saved_notes": None},
+}
+SCENARIO = scenario_field(CASES)
+
 DEFAULT_USER = "demo_user"
 MAX_RECALL = 5  # memories searched into the prompt
 MAX_MEMORIES = 50  # per user
@@ -141,6 +188,7 @@ FORGET_MIN_SCORE = 0.3  # forget-by-description deletes the best match only if i
 OFFLINE_MARK = "(offline stub)"
 
 Kind = Literal["preference", "constraint", "household", "device", "other"]
+KINDS = get_args(Kind)
 
 
 # --------------------------------------------------------------------------- privacy filter (pure code)
@@ -227,8 +275,11 @@ class Context:
     user_id: str = DEFAULT_USER
 
 
-class ConciergeIn(TypedDict):
+class ConciergeIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made case; adds its message and sets the two fields below
     messages: Annotated[list[AnyMessage], add_messages]  # [{"role": "user", "content": "..."}]
+    as_user: str  # act as this customer (beats the assistant's user_id setting for the thread); blank = the setting
+    saved_notes: list[dict]  # demo setup: [{"text", "kind"}] written to that customer's memory before the chat
 
 
 class ConciergeOut(TypedDict):
@@ -247,11 +298,12 @@ class ConciergeState(ConciergeIn, total=False):
 
 
 # --------------------------------------------------------------------------- helpers
-def resolve_user_id(runtime: Runtime[Context], config: RunnableConfig) -> str:
-    """``context.user_id`` -> ``config["configurable"]["user_id"]`` -> ``"demo_user"``; made safe for a namespace label."""
+def resolve_user_id(runtime: Runtime[Context], config: RunnableConfig, as_user: str | None = None) -> str:
+    """``as_user`` (the form field) -> ``context.user_id`` -> ``config["configurable"]["user_id"]`` -> ``"demo_user"``;
+    made safe for a namespace label."""
     ctx = runtime.context
     uid = ctx.get("user_id") if isinstance(ctx, dict) else getattr(ctx, "user_id", None)
-    uid = uid or (config.get("configurable") or {}).get("user_id") or DEFAULT_USER
+    uid = as_user or uid or (config.get("configurable") or {}).get("user_id") or DEFAULT_USER
     return re.sub(r"[^A-Za-z0-9_@-]", "_", str(uid))[:64] or DEFAULT_USER  # store labels may not contain "."
 
 
@@ -337,10 +389,46 @@ def apply_ops(store: BaseStore, ns: tuple[str, ...], ops: list[MemoryOp]) -> lis
     return changes
 
 
+def seed_notes(store: BaseStore, ns: tuple[str, ...], notes: list) -> int:
+    """Demo setup: write the notes a ready-made case says this customer already has. Returns how many were written.
+
+    Not a model path, but the same code rules apply (privacy filter, length, 50-memory cap). The key is derived from the
+    text, so repeating a case rewrites its notes (restoring one the last run forgot or edited) instead of adding copies.
+    """
+    existing = {it.key for it in store.search(ns, limit=MAX_MEMORIES + 1)}
+    written = 0
+    for note in notes[:MAX_OPS_PER_TURN]:
+        text = str((note.get("text") if isinstance(note, dict) else note) or "").strip()
+        kind = note.get("kind") if isinstance(note, dict) and note.get("kind") in KINDS else "other"
+        key = hashlib.sha1(_norm(text).encode()).hexdigest()[:8]
+        if not text or len(text) > MAX_FACT_CHARS or privacy_violation(text) or (key not in existing and len(existing) >= MAX_MEMORIES):
+            continue
+        store.put(ns, key, {"text": text, "kind": kind, "created_at": _now()})
+        existing.add(key)
+        written += 1
+    return written
+
+
 # --------------------------------------------------------------------------- nodes
+def load_case(state: ConciergeState, runtime: Runtime[Context], config: RunnableConfig, store: BaseStore) -> dict:
+    """Turn a picked ready-made case into the chat input and give its customer the notes the case says they have.
+
+    ``messages`` has the ``add_messages`` reducer, so a case's message is APPENDED to what the thread holds; "real input"
+    therefore means "the state already has messages" (a blank form on a thread with history must not inject a new
+    opening message, while a picked case always does). ``saved_notes`` is consumed here (reset to None) so that a later
+    turn on the same thread cannot write the notes again and bring back something the customer asked to forget.
+    """
+    picked = expand(state, CASES, has_input=lambda s: bool(s.get("messages")))
+    merged = {**state, **picked}
+    if merged.get("saved_notes"):
+        seed_notes(_store(store), ("memories", resolve_user_id(runtime, config, merged.get("as_user"))), merged["saved_notes"])
+        picked = {**picked, "saved_notes": None}
+    return picked
+
+
 def recall(state: ConciergeState, runtime: Runtime[Context], config: RunnableConfig, store: BaseStore) -> dict:
     """Semantic search of this user's namespace with the latest message as the query."""
-    user_id = resolve_user_id(runtime, config)
+    user_id = resolve_user_id(runtime, config, state.get("as_user"))
     query = _last_human(state["messages"])
     hits = _store(store).search(("memories", user_id), query=query, limit=MAX_RECALL) if query else []
     recalled = [
@@ -398,7 +486,7 @@ EXTRACT_PROMPT = (
 def remember(state: ConciergeState, runtime: Runtime[Context], config: RunnableConfig, store: BaseStore) -> dict:
     """Extract memory operations from the conversation (redacted), then let code apply them."""
     st = _store(store)
-    ns = ("memories", resolve_user_id(runtime, config))
+    ns = ("memories", resolve_user_id(runtime, config, state.get("as_user")))
     existing = sorted(st.search(ns, limit=MAX_MEMORIES), key=lambda it: it.value.get("created_at", ""), reverse=True)
     listing = "\n".join(f"[{it.key}] ({it.value.get('kind', 'other')}) {it.value['text']}" for it in existing[:LISTING_LIMIT]) or "(none)"
     transcript = "\n".join(f"{'Customer' if m.type == 'human' else 'Assistant'}: {redact(str(m.text))}" for m in state["messages"][-6:])
@@ -415,10 +503,12 @@ def remember(state: ConciergeState, runtime: Runtime[Context], config: RunnableC
 # --------------------------------------------------------------------------- graph
 def build_graph(**compile_kwargs):
     g = StateGraph(ConciergeState, input_schema=ConciergeIn, output_schema=ConciergeOut, context_schema=Context)
+    g.add_node("load_case", load_case)
     g.add_node("recall", recall)
     g.add_node("respond", respond)
     g.add_node("remember", remember)
-    g.add_edge(START, "recall")
+    g.add_edge(START, "load_case")
+    g.add_edge("load_case", "recall")
     g.add_edge("recall", "respond")
     g.add_edge("respond", "remember")
     g.add_edge("remember", END)

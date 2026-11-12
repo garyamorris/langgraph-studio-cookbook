@@ -75,17 +75,22 @@ is not meaningful; the fan-out, guardrail, single-call batching and tie-break lo
 
 ## Try it in Studio
 
-Input::
+Pick a ready-made brief from the "Ready-made case" dropdown and press Submit (a blank form on a new thread runs
+the first one). Each is a complete product + audience + goal; open `copywriter` to see the six drafts (one per
+angle), `guardrail` for who was rejected and why, `judge` for the raw probabilities, and the final `ranking`
+table. In the output compare `adjusted` with `p_best`; when `tie_break.applied` is true the choice
+probabilities decided it (the winner then has a lower `adjusted` than the runner-up, by less than `TIE_MARGIN`).
+  * Plug 4-pack, weekend sale: the standard run (the same brief as `EXAMPLE_INPUT` below).
+  * Therm, the real $159 to $149 price cut (`sales.csv`): see whether the urgency angle invents a deadline
+    the brief does not give.
+  * Cam Pro, firmware 3.0.2 notice (`kb/support`): a service email, not a sale, so hype reads worse here.
+  * Sensor Kit to Hub owners: a cross-sell, a different audience for the same six angles.
+  * Bulb 6-pack giveaway whose goal pushes towards spam ("FREE, urgent, a guaranteed winner"): a live model usually
+    obeys the prompt's own rules, but if any line gives in, `rejected` fills up with the reason.
+Or paste your own brief::
 
     {"product": "Lumen Plug 4-pack", "audience": "existing Lumen customers with at least one smart plug",
      "goal": "get opens for the weekend sale: 15% off the 4-pack until Sunday"}
-
-Open `copywriter` to see the six drafts (one per angle), `guardrail` for who was rejected and why, `judge` for
-the raw probabilities, and the final `ranking` table. In the output compare `adjusted` with `p_best`; when
-`tie_break.applied` is true the choice probabilities decided it (the winner then has a lower `adjusted` than the
-runner-up, by less than `TIE_MARGIN`). A live model usually obeys the prompt's own rules, so the guardrail rarely
-fires on well-behaved briefs; try a goal that pushes towards spam ("tell them it's FREE, urgent, a guaranteed
-winner") to see `rejected` fill up, and the tests for every rule.
 
 ## Extend it
 
@@ -126,6 +131,18 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | Lumen Plug 4-pack, weekend sale for plug owners -> the standard run: watch six angles, the guardrail, the ranking | `{"product": "Lumen Plug 4-pack", "audience": "existing Lumen customers with at least one smart plug", "goal": "get opens for the weekend sale: 15% off the 4-pack until Sunday"}` |
+| 2 | Lumen Therm, price cut from $159 to $149 -> watch for urgency lines that stay honest about the dates | `{"product": "Lumen Therm", "audience": "people who looked at the Lumen Therm thermostat but have not bought one", "goal": "get opens for the news that the Lumen Therm now costs $149, down from $159"}` |
+| 3 | Lumen Cam Pro, firmware 3.0.2 notice -> a service email, not a sale: watch whether any angle sounds like hype | `{"product": "Lumen Cam Pro", "audience": "Lumen Cam Pro owners", "goal": "get opens for the service notice: firmware 3.0.2 fixes the E-317 pairing timeout"}` |
+| 4 | Lumen Sensor Kit ($59), cross-sell to Hub owners -> same six angles, a different audience | `{"product": "Lumen Sensor Kit", "audience": "Lumen Hub owners who do not have a Sensor Kit yet", "goal": "get opens for the Sensor Kit: door sensors and early leak alerts for the Hub you already own"}` |
+| 5 | Lumen Bulb 6-pack giveaway pushed towards spam (FREE, urgent, winner) -> watch for 'rejected' to fill up | `{"product": "Lumen Bulb 6-pack", "audience": "newsletter subscribers", "goal": "get opens for a giveaway: tell them it is FREE, urgent, and that they are a guaranteed winner"}` |
+
 ## Example input
 
 ```json
@@ -136,4 +153,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `subject_line_tournament`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `subject_line_tournament`, pick a case from the **Ready-made case** dropdown, or paste the input above.

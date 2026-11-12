@@ -122,7 +122,8 @@ START -> cio_plan
 * parallel branches with an explicit join, `add_edge(["bull_case", "bear_case"], "arbiter")`.
 * `Send` from a conditional edge for selective re-dispatch, wired back into `risk_committee`: a cycle that
   re-runs only the breaching names, bounded by a counter in state (DESIGN 3).
-* `input_schema` / `output_schema`: Studio shows three input fields and a result without the internals.
+* `input_schema` / `output_schema`: Studio shows a ready-made-case dropdown, three input fields and a result
+  without the internals.
 * `RetryPolicy` on the two nodes that call the Decisions API: a transient network error is retried in place
   instead of failing the whole run.
 
@@ -137,8 +138,18 @@ placeholder. The result carries `mode`: "live" or "offline".
 
 ## Try it in Studio
 
-Input (this is `EXAMPLE_INPUT`; it names stocks with clear trends, because the setup gate rightly stands aside
-when the picture is mixed and a no-trade day shows none of the machinery):
+Pick a ready-made case from the "Ready-made case" dropdown and press Submit (a blank form on a new thread runs
+the first one). Which names trade, and whether the committee has anything to send back, depends on the models, so
+the labels say what to look at rather than what will happen:
+  * the standard run (the first case) and the revision-loop walkthrough: watch `risk_committee` send back only the
+    names that breach a limit;
+  * "technology": ACMR, CBLT and FTHM share one 35% sector-group cap, so if all three trade the whole group goes back;
+  * `max_revisions` 0: nothing is ever sent back (`resize_log` stays empty), and a breach is trimmed in place;
+  * a $2 billion mandate (hundreds of child orders, higher cost) and a $2 million one (a handful of orders);
+  * a hint naming TSLA and NVDA, which are not in `companies.csv`: they never reach research;
+  * no hint at all: the CIO model chooses the names (`mandate.source` says who chose).
+Or paste an input (this one is `EXAMPLE_INPUT`, the first case; it names stocks with clear trends, because the
+setup gate rightly stands aside when the picture is mixed and a no-trade day shows none of the machinery):
     {"focus_hint": "Look at ACMR, BORE, GRNT, HELO and CBLT today", "nav_usd": 10000000, "max_revisions": 2}
 With an API key, one development run of this input went as follows (model output varies from run to run). The gate
 rated ACMR, HELO and CBLT as AVOID and BORE as SHORT (72%, setup 78%). The debate ran and the bear case won, so the
@@ -230,6 +241,21 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | ACMR, BORE, GRNT, HELO, CBLT at $10M, 2 rounds -> the standard run: watch for names the risk committee sends back | `{"focus_hint": "Look at ACMR, BORE, GRNT, HELO and CBLT today", "nav_usd": 10000000, "max_revisions": 2}` |
+| 2 | GRNT, DLPH, ACMR, FTHM at $10M, 2 rounds -> revision loop: watch only a name over a limit go back (resize_log) | `{"focus_hint": "Look at GRNT, DLPH, ACMR and FTHM today", "nav_usd": 10000000, "max_revisions": 2}` |
+| 3 | Hint 'technology' (ACMR, CBLT, FTHM share one 35% cap) -> if all three trade, watch the whole group go back | `{"focus_hint": "technology", "nav_usd": 10000000, "max_revisions": 2}` |
+| 4 | GRNT, DLPH, ACMR, FTHM with max_revisions 0 -> nothing is sent back (resize_log empty); a breach is trimmed | `{"focus_hint": "Look at GRNT, DLPH, ACMR and FTHM today", "nav_usd": 10000000, "max_revisions": 0}` |
+| 5 | GRNT, DLPH, ACMR, FTHM at $2 billion -> watch for hundreds of child orders over several sessions, higher bps | `{"focus_hint": "Look at GRNT, DLPH, ACMR and FTHM today", "nav_usd": 2000000000, "max_revisions": 2}` |
+| 6 | Defensives (DLPH, EMBR) at $2M -> a small mandate: watch for few child orders and a lower cost in bps | `{"focus_hint": "defensive names: DLPH and EMBR", "nav_usd": 2000000, "max_revisions": 2}` |
+| 7 | TSLA, NVDA and ACMR, but only ACMR is in the data -> TSLA and NVDA never reach research (mandate) | `{"focus_hint": "Look at TSLA, NVDA and ACMR today", "nav_usd": 10000000, "max_revisions": 2}` |
+| 8 | No hint, $10M -> the CIO model picks the names from the table: watch mandate.source and rationale | `{"nav_usd": 10000000, "max_revisions": 2}` |
+
 ## Example input
 
 ```json
@@ -240,4 +266,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `portfolio_desk_lite`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `portfolio_desk_lite`, pick a case from the **Ready-made case** dropdown, or paste the input above.

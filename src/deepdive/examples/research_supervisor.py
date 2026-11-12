@@ -60,15 +60,19 @@ MODELS AND DATA
     fact sheet (the supervisor's route is arbitrary but stable).
 
 TRY IT IN STUDIO
-    Input ``{"ticker": "ACMR"}``: watch ``supervisor`` hand off market_team, news_team, writer, then end; open the
-    ``trail`` in the output to see each decision (and whether the model or a rule made it). Each team is invoked from a
-    wrapper node, so the static graph shows one node per team; their inner steps appear in the run trace and in
-    ``stream(..., subgraphs=True)`` under the namespaces ``market_team:<id>`` / ``news_team:<id>`` (not checked in Studio
-    itself; the tests print them). Then try:
-      * ``{"ticker": "CBLT", "question": "Is the recent price weakness explained by the news?"}``
-      * ``{"ticker": "HELO", "max_hops": 1}`` - the budget is spent after one team, so the writer is forced and the
-        brief says the other team was not consulted
-      * ``{"ticker": "NOPE"}`` - a clean ``error`` and no model call
+    Pick a case from the "Ready-made case" dropdown and press Submit (on a new thread a blank form runs the first one).
+    Watch ``supervisor`` hand off market_team, news_team, writer, then end; open the ``trail`` in the output to see each
+    decision (and whether the model or a rule made it). Each team is invoked from a wrapper node, so the static graph
+    shows one node per team; their inner steps appear in the run trace and in ``stream(..., subgraphs=True)`` under the
+    namespaces ``market_team:<id>`` / ``news_team:<id>`` (not checked in Studio itself; the tests print them). The cases:
+      * ACMR, the full brief (+9.5% over 5 days, 41.5% volatility): market_team, news_team, writer, FINISH.
+      * CBLT, "Is the recent price weakness explained by the news?": watch whether the supervisor consults both teams.
+      * HELO with ``max_hops`` 1: the budget is spent after one team, so the writer is forced and the brief says which
+        team was not consulted.
+      * BORE with a price-only question and DLPH with a news-only one: watch the supervisor skip the team the question
+        does not need (the model chooses; the brief lists the team it skipped).
+      * NOPE: not a listed ticker, so a clean ``error`` and no model call (the same as typing any unknown ticker).
+    The same by hand: ``{"ticker": "ACMR"}``, or add ``"question"`` and ``"max_hops"`` (default 5, at most 8).
     Tickers: ACMR BORE CBLT DLPH EMBR FTHM GRNT HELO.
 
 EXTEND IT
@@ -95,6 +99,7 @@ from deepdive.common.config import mode_label
 from deepdive.common.data import read_csv
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="research_supervisor",
@@ -118,6 +123,26 @@ META = ExampleMeta(
 
 EXAMPLE_INPUT = {"ticker": "ACMR", "question": "Give me a one-page brief: price action, risk and news."}
 
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios). The tickers are rows of data/companies.csv; the figures
+# in a label are what price_metrics() computes from data/prices.csv. The first (EXAMPLE_INPUT) runs on a blank form. Every case sets
+# all three fields (``None`` = leave to the default), so a pick fully replaces the previous run's question and budget. Which team
+# the supervisor consults is the MODEL's choice, so those labels say "watch"; only the unknown-ticker error is decided by code.
+CASES: dict[str, dict] = {
+    "ACMR +9.5% in 5 days, volatility 41.5% -> watch market_team, news_team, writer, then FINISH": {
+        "ticker": "ACMR", "question": EXAMPLE_INPUT["question"], "max_hops": None},
+    "CBLT 60-day return -9.1%, 17.9% below its high -> watch whether the supervisor consults both teams": {
+        "ticker": "CBLT", "question": "Is the recent price weakness explained by the news?", "max_hops": None},
+    "HELO with max_hops 1 -> watch the hop budget force the writer after one team": {
+        "ticker": "HELO", "question": None, "max_hops": 1},
+    "BORE price-only question (60-day return -30.9%) -> watch the supervisor skip news_team": {
+        "ticker": "BORE", "question": "Only the price action and risk, please. I do not need the news.", "max_hops": None},
+    "DLPH news-only question -> watch the supervisor skip market_team and catalysts cite headline ids": {
+        "ticker": "DLPH", "question": "What does the news say about Delphi Health, and what could move the stock?", "max_hops": None},
+    "NOPE (not a listed ticker) -> a clean error naming the 8 tickers, and no model call": {
+        "ticker": "NOPE", "question": None, "max_hops": None},
+}
+SCENARIO = scenario_field(CASES)
+
 TEAMS = ("market_team", "news_team")
 DEFAULT_QUESTION = "Give me a one-page brief covering price action, risk and news."
 DEFAULT_MAX_HOPS = 5  # the normal path needs 3 routing decisions (market, news, writer)
@@ -131,6 +156,7 @@ TRADING_DAYS = 252
 
 # --------------------------------------------------------------------------- schemas
 class BriefIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made case; replaces the three fields below
     ticker: str  # ACMR BORE CBLT DLPH EMBR FTHM GRNT HELO
     question: str  # what the analyst wants to know; the supervisor uses it to pick teams
     max_hops: int  # supervisor routing budget before the writer is forced (default 5, max 8)
@@ -480,7 +506,16 @@ def fresh_run() -> dict:
 
 
 def intake(state: BriefState) -> Command[Literal["supervisor", "__end__"]]:
-    """Reject an unknown ticker before any model is called; otherwise set up the run."""
+    """Reject an unknown ticker before any model is called; otherwise set up the run.
+
+    A picked ready-made case supplies ticker, question and max_hops (a blank form on a new thread picks the first), so the
+    only way to reach the unknown-ticker error is to type a ticker (or a question, or a budget) that is not on the list.
+    """
+    picked = expand(
+        state, CASES,
+        has_input=lambda s: bool((s.get("ticker") or "").strip() or (s.get("question") or "").strip() or s.get("max_hops")),
+    )
+    state = {**state, **picked}  # a picked case replaces the three input fields
     companies = read_csv("companies.csv")
     ticker = (state.get("ticker") or "").strip().upper()
     row = companies[companies["ticker"] == ticker]
@@ -488,7 +523,7 @@ def intake(state: BriefState) -> Command[Literal["supervisor", "__end__"]]:
         known = ", ".join(companies["ticker"])
         return Command(
             goto=END,
-            update={**fresh_run(), "ticker": ticker, "error": f"Unknown ticker {ticker!r}. Available tickers: {known}.",
+            update={**picked, **fresh_run(), "ticker": ticker, "error": f"Unknown ticker {ticker!r}. Available tickers: {known}.",
                     "disclaimer": DISCLAIMER, "mode": mode_label()},
         )
     r = row.iloc[0]
@@ -501,7 +536,7 @@ def intake(state: BriefState) -> Command[Literal["supervisor", "__end__"]]:
                "as_of": str(prices[prices["ticker"] == ticker]["date"].max())}
     return Command(
         goto="supervisor",
-        update={**fresh_run(), "ticker": ticker, "profile": profile, "company": profile["name"], "hops": 0,
+        update={**picked, **fresh_run(), "ticker": ticker, "profile": profile, "company": profile["name"], "hops": 0,
                 "max_hops": max(1, min(max_hops, MAX_HOPS_LIMIT)),
                 "question": (state.get("question") or "").strip() or DEFAULT_QUESTION},
     )

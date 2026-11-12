@@ -38,11 +38,34 @@ def test_loads_ticket_from_dataset_by_id():
     assert out["route"] and out["mode"] == "offline"
 
 
-def test_requires_an_id_or_text():
-    with pytest.raises(ValueError, match="ticket_id"):
-        ex.graph.invoke({})
+def test_a_blank_form_runs_the_first_ready_made_case_and_an_unknown_id_is_refused():
+    out = ex.graph.invoke({})  # Studio's Submit on an empty form: no dead end
+    assert out["route"] and out["mode"] == "offline"
     with pytest.raises(ValueError, match="Unknown ticket_id"):
         ex.graph.invoke({"ticket_id": "T-9999999"})
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
+
+
+def test_the_ready_made_cases_point_at_real_tickets_and_the_lexicon_agrees_with_their_labels():
+    df = read_csv("support_tickets.csv").set_index("ticket_id")
+    for label, fields in ex.CASES.items():
+        tid = fields["ticket_id"]
+        text = f"{fields['subject']} {fields['body']}" if tid is None else f"{df.loc[tid].subject} {df.loc[tid].body}"
+        assert tid is None or tid in df.index, f"{label}: {tid} is not in the dataset"
+        assert bool(ex.safety_hits(text)) == ("ESCALATE" in label), f"{label}: the label and the lexicon disagree"
+        assert label.startswith(tid or "Your own text"), f"{label}: the label must lead with its ticket id"
+
+
+def test_the_same_inline_text_can_be_submitted_twice_in_a_row_on_one_thread():
+    from langgraph.checkpoint.memory import InMemorySaver
+
+    g = ex.build_graph(checkpointer=InMemorySaver())
+    cfg = {"configurable": {"thread_id": "twice"}}
+    label = next(k for k in ex.CASES if k.startswith("Your own text"))
+    first = g.invoke({"scenario": label}, cfg)
+    second = g.invoke({"scenario": label}, cfg)
+    assert first["route"] == second["route"] == "escalate"
 
 
 # --------------------------------------------------------------------------- the safety path

@@ -80,16 +80,24 @@ offline run shows the shape of the output, not good answers; `mode` in the outpu
 
 ## Try it in Studio
 
-Input `{"question": "How do I pause a graph and wait for a human to approve?"}`. Open the `retrieve` output,
-then `grade`: compare the BM25 order with the probabilities (the interrupts article is retrieved 4th but is
-the one that should pass). Then try
-  * `{"question": "How can I let a person sign off before the workflow continues?"}` - weak vocabulary overlap,
-    so expect a `rewrite` and a second round;
-  * `{"question": "What is the capital of France?"}` - no article shares a word with it, so there is nothing to
-    grade; expect up to two rewrites and then `abstain` with no generation;
-  * `{"question": "How long do refunds take?", "corpus": "support"}`.
+Open the `Ready-made case` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+the first one). Each case sets the question and the knowledge base:
+  * `How do I pause a graph and wait for a human to approve?` - open the `retrieve` output, then `grade`:
+    compare the BM25 order with the probabilities (the interrupts article is retrieved 4th but is the one that
+    should pass).
+  * `How can I let a person sign off before the workflow continues?` - weak vocabulary overlap, so none of the
+    first four hits is the interrupts article; expect a `rewrite` and a second round.
+  * `How do I stream tokens to a UI?` - the easy case: one article matches, so there is nothing to rewrite.
+  * `What is the capital of France?` - no article shares a word with it, so there is nothing to grade; expect up
+    to two rewrites and then `abstain` with no generation.
+  * `How long do refunds take?` (support policies) - a cited answer from the `support` knowledge base.
+  * `What refund amount needs manager approval?` (support policies) - the answer exists only in an article marked
+    "(internal)", which the retriever never returns; expect the grader to reject what it does return and the run to
+    abstain instead of guessing.
 In the output, `grading` lists every round (query, articles, probabilities, kept or not), `sources` the
 articles the answer was allowed to use, and `dropped_citations` any citation that was removed.
+To ask your own, paste `{"question": "How do I pause a graph and wait for a human to approve?", "corpus":
+"langgraph"}` (`corpus` is `langgraph` or `support`).
 
 ## Extend it
 
@@ -135,6 +143,19 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | How do I pause a graph and wait for a human to approve? -> BM25 ranks the right article 4th: watch grade pick it | `{"question": "How do I pause a graph and wait for a human to approve?"}` |
+| 2 | How can I let a person sign off before the workflow continues? -> the right article misses the top 4: watch the rewrite | `{"question": "How can I let a person sign off before the workflow continues?"}` |
+| 3 | How do I stream tokens to a UI? -> BM25 finds only the streaming article: watch it pass grading with no rewrite | `{"question": "How do I stream tokens to a UI?"}` |
+| 4 | What is the capital of France? -> no article shares a word with it: watch the rewrites, then the abstain | `{"question": "What is the capital of France?"}` |
+| 5 | How long do refunds take? (support) -> returns-and-refunds says 5 to 7 business days: watch the cited answer | `{"question": "How long do refunds take?", "corpus": "support"}` |
+| 6 | What refund amount needs manager approval? (support) -> only the internal matrix says, and it is never retrieved: watch | `{"question": "What refund amount needs manager approval?", "corpus": "support"}` |
+
 ## Example input
 
 ```json
@@ -143,4 +164,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `corrective_rag`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `corrective_rag`, pick a case from the **Ready-made case** dropdown, or paste the input above.

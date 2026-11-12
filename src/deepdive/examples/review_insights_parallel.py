@@ -58,12 +58,17 @@ MODELS AND DATA
     keyword risks but no themes; run it live for themes.
 
 TRY IT IN STUDIO
-    Input ``{"product": "Lumen Plug 4-pack"}``. The burning-plug review R-0315 is flagged in ``keyword_risk_scan``
-    even if ``llm_risk_scan`` returns nothing, and the digest opens with a Risks section. Open the four parallel
-    nodes to compare their outputs, then ``write_digest`` to see them merged (``detected_by`` shows which detector
-    fired). Try ``{"product": "Lumen Therm", "max_reviews": 20}`` (a legal threat), ``"Lumen Cam Pro"`` (privacy)
-    or ``"Lumen Lock"`` (three flags: a jammed lock and two lock-outs). ``"Lumen Bell"`` has no risk language, so the Risks section
-    gives way to a one-line risk check at the end of the digest.
+    Pick a ready-made case from the "Ready-made case" dropdown and press Submit (a blank form on a new thread runs the
+    first one). Each case is a real product from the data; the label says which review to look for:
+      * Plug 4-pack: the burning-plug review R-0315 is flagged in ``keyword_risk_scan`` even if ``llm_risk_scan``
+        returns nothing, and the digest opens with a Risks section. Open the four parallel nodes to compare their
+        outputs, then ``write_digest`` to see them merged (``detected_by`` shows which detector fired).
+      * Lock: three flags (a jammed lock and two lock-outs). Therm (newest 20): a legal threat. Cam Pro (newest 8):
+        another household's camera feed. Hub: a counterfeit listing.
+      * Cam Pro (newest 5): the same product, but the privacy review is the 8th newest, so a window of 5 never sees it
+        and nothing is flagged: ``max_reviews`` decides what the scanners can see.
+      * Bell: no risk language, so the Risks section gives way to a one-line risk check at the end of the digest.
+    Or paste your own input, for example ``{"product": "Lumen Therm", "max_reviews": 20}``.
 
 EXTEND IT
     Add a fifth branch that compares this week's mean rating with the previous period. Send high-severity findings
@@ -89,6 +94,7 @@ from deepdive.common.config import mode_label
 from deepdive.common.data import read_csv
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="review_insights_parallel",
@@ -103,6 +109,27 @@ META = ExampleMeta(
 )
 
 EXAMPLE_INPUT = {"product": "Lumen Plug 4-pack"}
+
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios). Every product and review id is in
+# data/product_reviews.csv; the numbers in the labels and the "flagged" claims come from the deterministic keyword scan
+# (a test recomputes them), never from the model. ``max_reviews`` None means the default window of the newest 60.
+CASES: dict[str, dict] = {
+    "Lumen Plug 4-pack, all 53 reviews -> burning-plug review R-0315 opens the digest under Risks": {
+        "product": "Lumen Plug 4-pack", "max_reviews": None},
+    "Lumen Lock, all 22 reviews -> 3 keyword flags: R-0319 (jammed lock) and lock-outs R-0167, R-0262": {
+        "product": "Lumen Lock", "max_reviews": None},
+    "Lumen Therm, newest 20 of 40 -> R-0316 (overheating plus a lawyer) is flagged": {
+        "product": "Lumen Therm", "max_reviews": 20},
+    "Lumen Cam Pro, newest 8 of 57 -> R-0317 (another household's feed) is flagged as a privacy risk": {
+        "product": "Lumen Cam Pro", "max_reviews": 8},
+    "Lumen Cam Pro, newest 5 of 57 -> R-0317 is the 8th newest, so the keyword scan flags nothing": {
+        "product": "Lumen Cam Pro", "max_reviews": 5},
+    "Lumen Hub, all 44 reviews -> R-0320 (a counterfeit listing) is the only keyword flag": {
+        "product": "Lumen Hub", "max_reviews": None},
+    "Lumen Bell, all 33 reviews -> keyword scan flags nothing: watch for the one-line Risk check at the end": {
+        "product": "Lumen Bell", "max_reviews": None},
+}
+SCENARIO = scenario_field(CASES)
 
 DEFAULT_MAX_REVIEWS = 60
 MAX_REVIEWS_LIMIT = 200  # keeps the prompt bounded
@@ -159,6 +186,7 @@ class RiskScan(BaseModel):
 
 
 class DigestIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made case; replaces the two fields below
     product: str  # one of the eight Lumen Home products, e.g. "Lumen Plug 4-pack"
     max_reviews: int  # how many of the newest reviews to analyse (default 60, at most 200)
 
@@ -309,7 +337,11 @@ def format_reviews(reviews: list[dict]) -> str:
 
 # --------------------------------------------------------------------------- nodes
 def load_reviews(state: DigestState) -> dict:
-    """Validate the input and load the newest ``max_reviews`` reviews of the product."""
+    """Resolve a picked ready-made case, validate the input and load the newest ``max_reviews`` reviews of the product."""
+    picked = expand(
+        state, CASES, has_input=lambda s: bool((s.get("product") or "").strip()) or s.get("max_reviews") is not None
+    )
+    state = {**state, **picked}  # a picked case replaces both input fields (None means "default")
     df = read_csv("product_reviews.csv")
     products = sorted(df["product"].unique())
     wanted = (state.get("product") or "").strip()
@@ -322,6 +354,7 @@ def load_reviews(state: DigestState) -> dict:
         raise ValueError(f"max_reviews must be a whole number between 1 and {MAX_REVIEWS_LIMIT}; got {n!r}.")
     newest = df[df["product"] == match].sort_values(["date", "review_id"], ascending=[False, False]).head(n)
     return {
+        **picked,
         "product": match,
         "reviews": newest.to_dict("records"),
         "reviews_analyzed": len(newest),

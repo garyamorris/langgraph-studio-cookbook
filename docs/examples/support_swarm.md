@@ -52,9 +52,12 @@ Things a swarm gets wrong if you do not design for them, and what is done here:
 ## Graph
 
 ```text
-START --(route on active_agent)--> triage | billing | technical --> END
+START -> load_case --(route on active_agent)--> triage | billing | technical --> END
           each agent is a subgraph:  agent <-> tools   (ToolNode)
           a transfer tool returns Command(goto=<peer>, graph=Command.PARENT) and jumps across to the peer
+
+``load_case`` only turns a picked ready-made case (the ``scenario`` dropdown) into the chat input; it does nothing
+for a message you type. The routing edge reads ``active_agent`` AFTER it, so it can send a picked case to the front desk.
 ```
 
 ## LangGraph features
@@ -80,19 +83,29 @@ follow up, and a real system would need an `escalate_to_human` tool.
 
 ## Try it in Studio
 
-Open a new thread and send the message (in chat mode, or as input)::
-
-    {"messages": [{"role": "user", "content": "Hi, can I still return the Lumen Plug 4-pack from order 1828?"}]}
-
-Watch `triage` transfer to `billing` (open the `handoffs` and `active_agent` state), then billing call
-`lookup_order` and `check_refund_eligibility`. On the SAME thread send a second message::
+Pick a case from the **Ready-made case** dropdown and press Submit (a blank form on a new thread runs the first).
+The order ids, products and day counts in the labels come from `store.sqlite` and the fixed `AS_OF` date:
+  * "Order 1828 ... ELIGIBLE", "Order 1677 ... NOT eligible", "Order 1836 ... NOT eligible": triage should hand the
+    customer to billing, which calls `lookup_order` and `check_refund_eligibility`. That verdict is plain code,
+    so it is the same on every run (inside the window; 62 days, outside; already refunded).
+  * "Cam Pro offline": triage should hand to technical, which searches the knowledge base and cites article ids.
+  * "Return from order 1828 AND Cam Pro offline": one message, two specialists. Open `handoffs` and
+    `active_agent` in the state: triage -> billing -> technical, inside the cap of 3 transfers per message.
+  * "Order 1828 plug 'extremely hot', burning smell": technical should tell the customer to unplug and promise a human
+    follow-up. That is the prompt's job only (this example has no safety lexicon; compare `ticket_router`).
+Which agent and which tools the MODEL picks is not guaranteed, so the labels say "watch". A picked case is a new
+contact: it starts at triage even on a thread that already has a chat, and its message is added to that chat. Then
+type a follow-up in the chat view (or put it in `messages`) to see the swarm resume with whoever held the thread
+last, for example after the first case::
 
     {"messages": [{"role": "user", "content": "Thanks. Separately my Cam Pro keeps dropping offline after the update."}]}
 
 The run starts at `billing` (not triage), which transfers to `technical`; technical searches the knowledge base
-and cites article ids. A third message about the refund returns to billing. Other orders to ask about: 1677
-(outside the 30-day window), 1767 (delivered exactly 30 days ago: still eligible), 1836 (already refunded), 1840
-(cancelled).
+and cites article ids. A third message about the refund returns to billing. Other orders to ask about: 1767
+(delivered exactly 30 days ago: still eligible), 1840 (cancelled). To type a first message yourself, leave the
+dropdown empty and send::
+
+    {"messages": [{"role": "user", "content": "Hi, can I still return the Lumen Plug 4-pack from order 1828?"}]}
 
 ## Extend it
 
@@ -111,12 +124,14 @@ config:
 ---
 graph TD;
 	__start__([<p>__start__</p>]):::first
+	load_case(load_case)
 	__end__([<p>__end__</p>]):::last
-	__start__ -.-> billing\3a__start__;
-	__start__ -.-> technical\3a__start__;
-	__start__ -.-> triage\3a__start__;
+	__start__ --> load_case;
 	billing\3a__end__ -.-> __end__;
 	billing\3a__end__ -.-> technical\3a__start__;
+	load_case -.-> billing\3a__start__;
+	load_case -.-> technical\3a__start__;
+	load_case -.-> triage\3a__start__;
 	technical\3a__end__ -.-> __end__;
 	technical\3a__end__ -.-> billing\3a__start__;
 	triage\3a__end__ -.-> __end__;
@@ -158,6 +173,19 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | Order 1828 (Plug 4-pack, 7 days since delivery): return it? -> watch triage > billing; policy check: ELIGIBLE | `{"messages": [{"role": "user", "content": "Hi, can I still return the Lumen Plug 4-pack from order 1828?"}]}` |
+| 2 | Cam Pro drops off wifi, error E-102, no order given (T-2084's words) -> watch triage > technical and a KB citation | `{"messages": [{"role": "user", "content": "My Lumen Cam Pro drops off wifi every few hours. I rebooted the router twice and the app shows error E-102."}]}` |
+| 3 | Return from order 1828 AND Cam Pro offline in ONE message -> watch handoffs: triage > billing > technical | `{"messages": [{"role": "user", "content": "Can I return the Lumen Plug 4-pack from order 1828? Also, separately, my Lumen Cam Pro keeps dropping off wifi, error E-102."}]}` |
+| 4 | Order 1677 (Bell x3 + Plug, 62 days since delivery): 'changed my mind' -> watch billing; policy check: NOT eligible | `{"messages": [{"role": "user", "content": "Hello, I would like to send back the Lumen Bell and the plug from order 1677. I changed my mind. Is that still possible?"}]}` |
+| 5 | Order 1836 (Therm) is already refunded; customer asks again -> watch billing; policy check: NOT eligible | `{"messages": [{"role": "user", "content": "Hi, please refund my Lumen Therm from order 1836."}]}` |
+| 6 | Order 1828 plug 'extremely hot', burning smell (T-2301 words) -> watch: unplug + human follow-up (prompt only) | `{"messages": [{"role": "user", "content": "One of the plugs in my Lumen Plug 4-pack (order 1828) got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!"}]}` |
+
 ## Example input
 
 ```json
@@ -171,4 +199,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `support_swarm`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `support_swarm`, pick a case from the **Ready-made case** dropdown, or paste the input above.

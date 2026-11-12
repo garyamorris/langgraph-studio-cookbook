@@ -55,13 +55,23 @@ MODELS AND DATA
     read the plan, which is why it is a first-class state key.
 
 TRY IT IN STUDIO
-    Input ``{"question": "Did the Therm price cut on 2026-05-01 increase units enough to offset the lower price?"}``.
-    Open ``make_plan`` to read the plan, then step through ``execute_step`` / ``replan`` and watch ``steps`` fill. A
-    sound run compares equal windows either side of the cut (for example Feb-Apr with May-Jul) and finds units up about
-    47% and revenue up about 44%, with a caveat that summer demand may share the credit. Try
-    ``{"question": "Which region had the highest return rate for Cam Pro last quarter?", "max_steps": 3}``, or ask
-    something the data cannot answer ("What was customer satisfaction in Q2?") and check that the conclusion says so.
-    To see error handling, set ``max_steps`` to 2 and ask about a product that does not exist.
+    Open the ``Ready-made case`` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+    the first one). Open ``make_plan`` to read the plan, then step through ``execute_step`` / ``replan`` and watch
+    ``steps`` fill. Each case sets the question and the step budget:
+      * ``Did the Therm price cut on 2026-05-01 offset the lower price?`` - a sound run compares equal windows either
+        side of the cut (for example Feb-Apr with May-Jul) and finds units up about 47% (32 -> 47) and revenue up about
+        44%, with a caveat that summer demand may share the credit.
+      * ``Which region had the highest return rate for Cam Pro last quarter?`` (3 steps) - APAC leads at 20%, but on
+        only 10 order lines; a good conclusion says the sample is thin.
+      * ``Top 2 products by margin last quarter, and their share of total margin?`` - a ``top_n`` step feeds a
+        ``calculate`` step through named numbers (``s1.rank1``).
+      * ``What was customer satisfaction in Q2?`` - the sales data cannot answer it; check that the conclusion says so.
+      * ``How did the Lumen Doorbell sell last quarter?`` (2 steps) - there is no such product (it is ``Lumen Bell``):
+        the tool error becomes an observation, and the replanner can fix the step within the budget.
+      * ``Break down 2026 revenue by region, channel and product`` (2 steps) - needs more steps than the budget; watch
+        the plan being cut and ``stop_reason`` become ``max_steps``.
+    To ask your own, paste ``{"question": "Did the Therm price cut on 2026-05-01 increase units enough to offset the
+    lower price?", "max_steps": 6}``.
 
 EXTEND IT
     Add a tool that reads ``product_reviews.csv`` so the analyst can look at sentiment around the price cut. Add an
@@ -82,6 +92,7 @@ from typing_extensions import TypedDict
 from deepdive.common.config import mode_label
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm, structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 from deepdive.common.tools import safe_eval
 from deepdive.examples import _sales_tools as st
 
@@ -98,6 +109,31 @@ META = ExampleMeta(
 )
 
 EXAMPLE_INPUT = {"question": "Did the Therm price cut on 2026-05-01 increase units enough to offset the lower price?"}
+
+# Ready-made questions for Studio's dropdown (see deepdive.common.scenarios). The first one runs on a blank form. Every
+# case sets the same two keys (None = the default budget). The numbers in the labels come from data/sales.csv and are
+# pinned by tests/test_plan_execute_analyst.py; what the planner does with each question is only ever "watch for".
+CASES: dict[str, dict] = {
+    "Did the Therm price cut on 2026-05-01 offset the lower price? -> Feb-Apr vs May-Jul: units 32 -> 47, revenue +44%": {
+        "question": "Did the Therm price cut on 2026-05-01 increase units enough to offset the lower price?",
+        "max_steps": None},
+    "Which region had the highest return rate for Cam Pro last quarter? (3 steps) -> APAC 20% on just 10 lines: thin sample": {
+        "question": "Which region had the highest return rate for Cam Pro last quarter?",
+        "max_steps": 3},
+    "Top 2 products by margin last quarter, and their share of total margin? -> Therm and Hub: watch top_n feed calculate": {
+        "question": "Which two products had the highest margin last quarter, and what share of total margin do they make up?",
+        "max_steps": None},
+    "What was customer satisfaction in Q2? -> the sales data has no such field: does the conclusion say so?": {
+        "question": "What was customer satisfaction in Q2?",
+        "max_steps": None},
+    "How did the Lumen Doorbell sell last quarter? (2 steps) -> no such product ('Lumen Bell'): watch the error and replan": {
+        "question": "How did the Lumen Doorbell sell last quarter?",
+        "max_steps": 2},
+    "Break down 2026 revenue by region, channel and product (2 steps) -> needs 3 steps: watch the budget cut it short": {
+        "question": "Break down 2026 revenue by region, by channel and by product, and tell me which of the three is the weakest.",
+        "max_steps": 2},
+}
+SCENARIO = scenario_field(CASES)
 
 DEFAULT_MAX_STEPS = 6
 MAX_STEPS_LIMIT = 10
@@ -146,6 +182,7 @@ class Replan(BaseModel):
 
 
 class AnalystIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made question (and budget); replaces the two fields below
     question: str
     max_steps: int  # tool-call budget, default 6, at most 10
 
@@ -364,6 +401,12 @@ PLANNER_PROMPT = (
 
 
 def make_plan(state: AnalystState) -> dict:
+    # This is the entry node, so it first resolves a picked ready-made question (or runs the first one on a blank form).
+    # A typed ``max_steps`` with no question is real input too: it gets the "Provide a question" error, not a case.
+    picked = expand(
+        state, CASES, has_input=lambda s: bool((s.get("question") or "").strip()) or s.get("max_steps") is not None
+    )
+    state = {**state, **picked}
     question = (state.get("question") or "").strip()
     if not question:
         raise ValueError("Provide a question, e.g. 'Which region had the highest return rate for Cam Pro last quarter?'")
@@ -377,6 +420,7 @@ def make_plan(state: AnalystState) -> dict:
     )
     pending = to_queue(plan.steps)[:cap]
     return {
+        **picked,
         "question": question,
         "max_steps": cap,
         "pending": pending,

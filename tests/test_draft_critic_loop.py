@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import re
+
 import pytest
 from langchain_core.messages import AIMessage
 from langgraph.checkpoint.memory import InMemorySaver
 
+from deepdive.common.config import data_dir
+from deepdive.common.data import read_csv
 from deepdive.common.fakes import scripted, set_chat_handler, set_structured_handler
 from deepdive.common.testing import check_example
 from deepdive.examples import draft_critic_loop as ex
@@ -211,7 +215,9 @@ def test_history_does_not_carry_over_between_runs_on_the_same_thread():
 
 def test_inputs_are_validated():
     for bad, msg in (
-        ({}, "Provide a product"),
+        ({"max_words": 40}, "Provide a product"),  # limits with no product are a bad value, not a blank form
+        ({"required_facts": ["$149"]}, "Provide a product"),
+        ({"scenario": "not a case"}, "Unknown ready-made case"),
         ({"product": "Lumen Therm", "max_iterations": 0}, "max_iterations must be"),
         ({"product": "Lumen Therm", "max_iterations": 99}, "max_iterations must be"),
         ({"product": "Lumen Therm", "max_words": 3}, "max_words must be"),
@@ -239,3 +245,93 @@ def test_writer_prompt_lists_the_banned_claims_from_the_checker():
     run()
     system = ex.WRITER_PROMPT.format(max_words=120, banned=", ".join(ex.BANNED_CLAIMS))
     assert "revolutionary" in system and "#1 / number one" in system and "at most 120 words" in system
+
+
+# --------------------------------------------------------------------------- ready-made cases (Studio's dropdown)
+def case(start):
+    label = next(k for k in ex.CASES if k.startswith(start))
+    return label, ex.CASES[label]
+
+
+def test_a_blank_form_runs_the_first_ready_made_case():
+    source = draft_source(GOOD)
+    set_chat_handler(source)
+    set_structured_handler(ex.Critique, critiques((9, [])))
+    out = ex.graph.invoke({})  # Studio's Submit on an empty form: no dead end
+    assert out["status"] == "approved" and out["iterations"] == 1
+    assert "Product: Lumen Therm" in source.calls[0] and all(f"- {f}" in source.calls[0] for f in FACTS)
+
+
+def _kb(name):
+    return " ".join((data_dir() / "kb" / "support" / name).read_text().split())
+
+
+def test_the_ready_made_cases_use_the_real_prices_and_terms_from_the_data():
+    warranty, returns = _kb("warranty-and-repairs.md"), _kb("returns-and-refunds.md")
+    standard = int(re.search(r"carries a (\d+)-month limited warranty", warranty).group(1))
+    extended = int(re.search(r"Locks and thermostats carry (\d+) months", warranty).group(1))
+    days = int(re.search(r"within (\d+) days of delivery", returns).group(1))
+    sales = read_csv("sales.csv")
+    for label, c in ex.CASES.items():
+        product = c["product"]
+        assert label.startswith(f"{product}:"), f"{label}: lead with the product"
+        rows = sales[sales["product"] == product].sort_values("order_date")
+        assert not rows.empty, f"{product} is not in sales.csv"
+        for fact in c["required_facts"]:
+            if m := re.match(r"\$(\d+)", fact):
+                assert float(m.group(1)) == rows.iloc[-1]["unit_price"], f"{label}: {fact} is not the current price"
+            if m := re.match(r"(\d+)-month warranty", fact):
+                assert int(m.group(1)) == (extended if product in ("Lumen Lock", "Lumen Therm") else standard), label
+            if m := re.match(r"(\d+)-day returns", fact):
+                assert int(m.group(1)) == days, label
+        if all(len(f) <= 20 for f in c["required_facts"]) and "best-in-class" not in c["required_facts"]:
+            assert all(f in label for f in c["required_facts"]), f"{label}: the label must show the facts it uses"
+        if c["max_words"]:
+            assert f"{c['max_words']}-word limit" in label or f"max {c['max_words']} words" in label, label
+    therm = sales[sales["product"] == "Lumen Therm"]
+    assert therm[therm["unit_price"] == 149.0]["order_date"].min() == "2026-05-01", "'after the May price cut' is true"
+
+
+@pytest.mark.parametrize("start", ["Lumen Therm: required fact 'best-in-class'", "Lumen Therm: 16 words"])
+def test_the_two_cannot_pass_cases_really_cannot_and_end_best_effort_at_the_cap(start):
+    label, c = case(start)
+    facts, limit = c["required_facts"], c["max_words"] or ex.DEFAULT_MAX_WORDS
+    with_facts = f"{c['product']}: " + ". ".join(facts) + "."
+    without = f"{c['product']} keeps your home comfortable all year."
+    for draft in (with_facts, without):  # every draft either has the facts or does not: both break a rule
+        assert ex.check_draft(draft, facts, limit), f"{label}: a draft could pass"
+    assert sum(len(f.split()) for f in facts) > limit or any(ex.BANNED_CLAIMS["best"].search(f) for f in facts)
+    source = draft_source(with_facts, without, with_facts)
+    set_chat_handler(source)
+    set_structured_handler(ex.Critique, critiques((10, [])))  # even a delighted editor cannot save it
+    out = ex.graph.invoke({"scenario": label})
+    assert out["status"] == "best_effort" and out["iterations"] == len(source.calls) == len(out["history"]) == 3, label
+    assert out["unmet"], "the unresolved problems are listed"
+
+
+def test_the_one_draft_case_never_revises():
+    label, c = case("Lumen Lock")
+    assert c["max_iterations"] == 1 and "max 1 draft" in label
+    for drafts, status in ((["bad draft"], "best_effort"), ([f"Lock {', '.join(c['required_facts'])}."], "approved")):
+        source = draft_source(*drafts)
+        set_chat_handler(source)
+        set_structured_handler(ex.Critique, critiques((9, [])))
+        out = ex.graph.invoke({"scenario": label})
+        assert (out["status"], out["iterations"], len(source.calls), len(out["history"])) == (status, 1, 1, 1)
+
+
+def test_picking_a_case_after_another_resets_the_limits_on_the_same_thread():
+    g = ex.build_graph(checkpointer=InMemorySaver())
+    cfg = {"configurable": {"thread_id": "pick-twice"}}
+    set_chat_handler(draft_source(BAD))
+    set_structured_handler(ex.Critique, critiques((2, ["Everything."])))
+    lock, _ = case("Lumen Lock")
+    standard, _ = case("Lumen Therm: $149")
+    assert g.invoke({"scenario": lock}, cfg)["iterations"] == 1
+    out = g.invoke({"scenario": standard}, cfg)
+    assert out["iterations"] == ex.DEFAULT_MAX_ITERATIONS == len(out["history"]), "None means the default, not the last cap of 1"
+    tight, _ = case("Lumen Plug 4-pack")
+    assert g.invoke({"scenario": tight}, cfg)["iterations"] == 3
+    assert g.get_state(cfg).values["max_words"] == 30
+    g.invoke({"scenario": standard}, cfg)
+    assert g.get_state(cfg).values["max_words"] == ex.DEFAULT_MAX_WORDS, "the 30-word limit must not leak into the next pick"

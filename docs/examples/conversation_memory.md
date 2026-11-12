@@ -67,9 +67,12 @@ events (`memory_updated`, `summarized`) so a UI can show "remembered order #1042
 ## Graph
 
 ```text
-START -> respond -> remember -> maybe_summarize --(window > max_messages)--> summarize -> END
-                                       |
-                                       +--(otherwise)-----------------------------------> END
+START -> load_case -> respond -> remember -> maybe_summarize --(window > max_messages)--> summarize -> END
+                                                    |
+                                                    +--(otherwise)-----------------------------> END
+
+``load_case`` only turns a picked ready-made case (the ``scenario`` dropdown) into the chat input; it does nothing
+for a message you type. It is a separate node because the first real node, ``respond``, is already the model call.
 ```
 
 ## LangGraph features
@@ -92,6 +95,18 @@ ordering, isolation) are exactly the same and are what the tests check.
 
 ## Try it in Studio
 
+Pick a case from the **Ready-made case** dropdown and press Submit (a blank form on a new thread runs the first):
+  * "Pasted 5-message chat ... max_messages=4, keep_last=2": folds on this very run. Look at `summary`,
+    `folded_messages` (4) and `messages` (2 left), and at `facts` (the name, #1042 and the refund promise).
+  * "Priya + order #1042": the plain one-message start (default limits 12 / 6). Keep chatting in the chat view
+    ("can you refund it?", then a dozen or so unrelated questions) and watch the first fold happen on your 7th message.
+  * "Long message ... three orders": `facts.order_ids` holds all three; limits are 4 / 2, so send two more
+    short messages (any text) and the summary appears while the order numbers stay pinned.
+  * "Order-number spellings": three spellings, all pinned by the regex alone. "Nonsense settings": `max_messages=1,
+    keep_last=50` are clamped to 4 / 2 and it still folds.
+A picked case ADDS its message(s) to the thread and replaces `max_messages` / `keep_last`; the summary and facts
+of earlier turns stay (that is the point of the example). Start a New Thread for a clean slate.
+To use your own input instead, leave the dropdown empty and fill `messages` (or just type in the chat view):
 1. Open the graph in chat mode (or graph mode with a `messages` list) and send, as separate turns:
    "Hi, I'm Priya. My order #1042 arrived with a cracked case." / "Can you refund it?" / then ten or so
    unrelated questions ("how do I reset the hub?", "what is the warranty on the lock?", ...).
@@ -121,11 +136,13 @@ config:
 ---
 graph TD;
 	__start__([<p>__start__</p>]):::first
+	load_case(load_case)
 	respond(respond)
 	remember(remember)
 	summarize(summarize)
 	__end__([<p>__end__</p>]):::last
-	__start__ --> respond;
+	__start__ --> load_case;
+	load_case --> respond;
 	remember -.-> __end__;
 	remember -.-> summarize;
 	respond --> remember;
@@ -135,6 +152,18 @@ graph TD;
 	classDef last fill:#bfb6fc
 
 ```
+
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | Pasted 5-message chat, max_messages=4 keep_last=2 -> folds 4 into a summary on this run, #1042 stays pinned | `{"messages": [{"role": "user", "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case."}, {"role": "assistant", "content": "Sorry about that, Priya. I will submit a refund request for order #1042 and you will hear back within 2 business days."}, {"role": "user", "content": "Thanks. Separately, the light on my Hub has been solid red since this morning."}, {"role": "assistant", "content": "A solid red Hub light means no network. Power cycle the router, then the Hub, and wait two minutes."}, {"role": "user", "content": "Did that and it is still red. By the way, which order was my refund request for?"}], "max_messages": 4, "keep_last": 2}` |
+| 2 | Priya + order #1042 in one message, default limits -> facts pin #1042 (regex), no summary yet | `{"messages": [{"role": "user", "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case. Can you help?"}]}` |
+| 3 | Long message: Marcus, 3 orders (1042, 1828, 1838), limits 4/2 -> all 3 pinned; send 2 more to fold | `{"messages": [{"role": "user", "content": "Hi, I'm Marcus. I have three problems and I would like them all written down. First, order #1042: one of the two Lumen Cam Pro cameras arrived with a cracked case. Second, order 1828: the Lumen Plug 4-pack never connected to wifi. Third, order No. 1838: the Lumen Lock keeps saying low battery after a week. Please contact me by phone, not by email, and I need an answer before Friday because I am moving house."}], "max_messages": 4, "keep_last": 2}` |
+| 4 | Order-number spellings: 'order 1828', 'Order No. 1677', '#1767' -> the regex pins all three | `{"messages": [{"role": "user", "content": "Three parcels, one question: order 1828, Order No. 1677 and #1767 all arrived this month. Which of them can I still return?"}]}` |
+| 5 | Nonsense settings (max_messages=1, keep_last=50) on a pasted chat -> clamped to 4 / 2, still folds 4 | `{"messages": [{"role": "user", "content": "Hi, I'm Sam. My order #1767 has not been delivered yet."}, {"role": "assistant", "content": "Sorry to hear that, Sam. I will escalate order #1767 to the shipping team and you will hear back by tomorrow."}, {"role": "user", "content": "Ok. Can you also tell me how long the warranty is on the Lumen Lock?"}, {"role": "assistant", "content": "The Lumen Lock has a 24-month warranty."}, {"role": "user", "content": "Thanks. Remind me, what did you promise about my order?"}], "max_messages": 1, "keep_last": 50}` |
 
 ## Example input
 
@@ -149,4 +178,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `conversation_memory`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `conversation_memory`, pick a case from the **Ready-made case** dropdown, or paste the input above.

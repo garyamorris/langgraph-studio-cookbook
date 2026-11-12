@@ -49,12 +49,18 @@ MODELS AND DATA
     loop run to its cap and return a ``best_effort`` result: that is the cap behaviour working, not a failure.
 
 TRY IT IN STUDIO
-    Input ``{"product": "Lumen Therm", "required_facts": ["$149", "24-month warranty", "30-day returns"]}`` (add
-    ``"max_iterations": 2`` or ``"max_words": 40`` to make it harder). Open the ``history`` field of the output to read
-    every attempt with its rule violations and score. To watch the cap, give it a contradiction: use
-    ``"required_facts": ["$149", "best-in-class"]``. "best" is a banned claim, so no draft can satisfy both rules; the
-    loop stops after ``max_iterations`` attempts and returns the best one as ``status="best_effort"``, with ``unmet``
-    saying what is still wrong.
+    Pick a ready-made case from the "Ready-made case" dropdown and press Submit (a blank form on a new thread runs the
+    first one). Open the ``history`` field of the output to read every attempt with its rule violations and score:
+      * Therm ($149, 24-month warranty, 30-day returns): the standard run; watch whether the loop converges within
+        the default three drafts. The facts are real: $149 is the Therm price after the May cut (``sales.csv``), and
+        the 24-month warranty and 30-day returns are in ``kb/support``.
+      * Plug 4-pack with ``max_words`` 30: a tight limit, so look for a "Too long" violation and a shorter revision.
+      * Lock with ``max_iterations`` 1: exactly one draft, so no revision (approved, or best_effort at once).
+      * Therm with the required fact "best-in-class": "best" is a banned claim, so no draft can satisfy both rules; the
+        loop stops after ``max_iterations`` drafts and returns the best one as ``status="best_effort"``, with ``unmet``
+        saying what is still wrong. Therm with 16 words of required facts in a 10-word limit fails the same way.
+    Or paste your own input, for example ``{"product": "Lumen Therm", "required_facts": ["$149", "24-month warranty",
+    "30-day returns"], "max_iterations": 2}``.
 
 EXTEND IT
     Add a ``banned_phrases`` input that extends the built-in list. Replace the editor score with a Decisions API
@@ -77,6 +83,7 @@ from typing_extensions import TypedDict
 from deepdive.common.config import mode_label
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm, structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="draft_critic_loop",
@@ -91,6 +98,30 @@ META = ExampleMeta(
 )
 
 EXAMPLE_INPUT = {"product": "Lumen Therm", "required_facts": ["$149", "24-month warranty", "30-day returns"]}
+
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios). Prices come from data/sales.csv and the warranty
+# and return terms from data/kb/support (a test checks them). Outcomes that depend on the model's writing are promised
+# only as "watch for"; the two "can never pass" cases and the one-draft case are decided by code, and tested.
+# None means "use the default" (120 words, 3 drafts).
+CASES: dict[str, dict] = {
+    "Lumen Therm: $149, 24-month warranty, 30-day returns -> watch for it to converge within the default 3 drafts": {
+        "product": "Lumen Therm", "required_facts": ["$149", "24-month warranty", "30-day returns"],
+        "max_words": None, "max_iterations": None},
+    "Lumen Plug 4-pack: $39, 12-month warranty, 30-day returns, max 30 words -> watch for 'Too long', then a shorter draft": {
+        "product": "Lumen Plug 4-pack", "required_facts": ["$39", "12-month warranty", "30-day returns"],
+        "max_words": 30, "max_iterations": None},
+    "Lumen Lock: $179, 24-month warranty, 30-day returns, max 1 draft -> exactly one draft, never revised": {
+        "product": "Lumen Lock", "required_facts": ["$179", "24-month warranty", "30-day returns"],
+        "max_words": None, "max_iterations": 1},
+    "Lumen Therm: required fact 'best-in-class' is a banned claim -> can never pass: best_effort after 3 drafts": {
+        "product": "Lumen Therm", "required_facts": ["$149", "best-in-class"],
+        "max_words": None, "max_iterations": None},
+    "Lumen Therm: 16 words of required facts in a 10-word limit -> can never pass: best_effort after 3 drafts": {
+        "product": "Lumen Therm",
+        "required_facts": ["$149 after the May price cut", "24-month warranty on the thermostat", "30-day returns on unused units"],
+        "max_words": 10, "max_iterations": None},
+}
+SCENARIO = scenario_field(CASES)
 
 DEFAULT_MAX_WORDS = 120
 DEFAULT_MAX_ITERATIONS = 3
@@ -119,6 +150,7 @@ class Critique(BaseModel):
 
 
 class DraftIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made case; replaces the four fields below
     product: str
     required_facts: list[str]  # phrases that must appear word for word, e.g. "$149"
     max_words: int  # default 120
@@ -188,7 +220,16 @@ def pick_best(history: list[dict]) -> dict:
 
 # --------------------------------------------------------------------------- nodes
 def init(state: DraftState) -> dict:
-    """Validate and normalise the input; start the counter and the history."""
+    """Resolve a picked ready-made case, validate and normalise the input; start the counter and the history."""
+    picked = expand(
+        state,
+        CASES,
+        has_input=lambda s: bool((s.get("product") or "").strip())
+        or bool(s.get("required_facts"))
+        or s.get("max_words") is not None
+        or s.get("max_iterations") is not None,
+    )
+    state = {**state, **picked}  # a picked case replaces all four input fields (None means "default")
     product = (state.get("product") or "").strip()
     if not product:
         raise ValueError("Provide a product, e.g. 'Lumen Therm'.")
@@ -200,6 +241,7 @@ def init(state: DraftState) -> dict:
     if not isinstance(cap, int) or isinstance(cap, bool) or not 1 <= cap <= MAX_ITERATIONS_LIMIT:
         raise ValueError(f"max_iterations must be a whole number between 1 and {MAX_ITERATIONS_LIMIT}; got {cap!r}.")
     return {
+        **picked,
         "product": product,
         "required_facts": facts,
         "max_words": max_words,

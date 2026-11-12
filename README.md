@@ -22,8 +22,13 @@ uv run langgraph dev         # starts the local server on :2024
 ```
 
 Open Studio against it: <https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024>, pick a graph from the
-dropdown, paste the input from its page in `docs/examples/` (or from the `TRY IT IN STUDIO` section of its docstring),
-and run.
+dropdown, then pick a case from the **Ready-made case** dropdown at the top of its input form and press **Submit**. You
+do not need to know the data: each case says what it is ("T-2301 URGENT: plug smells of burning -> ESCALATE") and a blank
+form on a new thread runs the first one. To use your own input instead, leave the dropdown empty and fill the other
+fields, or paste JSON from the example's page in `docs/examples/`.
+
+> Studio keeps submitting on the same thread, so a blank form after a run repeats that run's input. Pick a case, or start
+> a **New Thread**, for a clean run.
 
 > Always start the server with `uv run langgraph dev`. A globally installed `langgraph` binary runs in a different
 > Python that cannot import this project and fails with `No module named 'deepdive'`.

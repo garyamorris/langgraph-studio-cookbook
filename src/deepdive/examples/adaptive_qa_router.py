@@ -55,17 +55,21 @@ MODELS AND DATA
     disappears (a test fails when it does).
 
 TRY IT IN STUDIO
-    1. ``{"question": "what about last month, then?"}`` - the run pauses at ``clarify`` and shows the question it
-       wants answered. Resume with a value such as ``"Total orders placed"`` (a JSON string). Watch ``classify`` run
-       again and send the combined text ("what about last month, then? Total orders placed") to ``database``.
-    2. ``{"question": "How do I pause a graph and wait for a human to approve?"}`` -> ``handbook``. Open the
-       ``handbook`` node to see the subgraph's grading and citations in ``details``.
-    3. ``{"question": "Which region had the most returned orders in the last 6 months?"}`` -> ``database``;
-       ``details`` carries the SQL, the rows and the repair history.
-    4. ``{"question": "thanks, that helped!"}`` -> ``small_talk`` (neither specialist runs).
-    5. ``{"question": "How long do refunds take?"}`` -> ``handbook`` with the ``support`` knowledge base.
-    To see the cap, answer each clarification with something equally vague; after two, the classifier can no longer ask
-    and must pick a route.
+    Open the ``Ready-made case`` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+    the first one). Which route a question takes is the classifier's call, so watch ``classify`` for the ``route``
+    and its ``reason``:
+    1. ``what about last month, then?`` - the run pauses at ``clarify`` and shows the question it wants answered.
+       Resume with a value such as ``"Total orders placed"`` (a JSON string). Watch ``classify`` run again and send the
+       combined text ("what about last month, then? Total orders placed") to ``database``.
+    2. ``How do I pause a graph and wait for a human to approve?`` -> ``handbook``. Open the ``handbook`` node to see the
+       subgraph's grading and citations in ``details``.
+    3. ``How long do refunds take?`` -> ``handbook`` with the ``support`` knowledge base.
+    4. ``Which region had the most returned orders in the last 6 months?`` -> ``database``; ``details`` carries the SQL,
+       the rows and the repair history.
+    5. ``thanks, that helped!`` -> ``small_talk`` (neither specialist runs).
+    6. ``and the other one?`` - to see the cap, answer each clarification with something equally vague; after two, the
+       classifier can no longer ask and must pick a route.
+    To ask your own, paste ``{"question": "what about last month, then?"}`` (any question works).
 
 EXTEND IT
     * Add a ``tools`` route (an agent with a calculator) and let the classifier choose it.
@@ -88,6 +92,7 @@ from typing_extensions import TypedDict
 from deepdive.common.config import mode_label
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm, structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 from deepdive.examples import corrective_rag, sql_analyst
 
 META = ExampleMeta(
@@ -113,6 +118,25 @@ META = ExampleMeta(
 # routes come from hashing the prompt). test_default_smoke_run_exercises_the_interrupt fails if a prompt edit changes that.
 EXAMPLE_INPUT = {"question": "what about last month, then?"}
 EXAMPLE_RESUMES = ["Total orders placed", "How many orders were placed?"]
+
+# Ready-made questions for Studio's dropdown (see deepdive.common.scenarios). The first one runs on a blank form. The
+# route each question takes is the classifier's decision, so every label says "watch for"; the one number in a label (the
+# clarification cap) is the constant below and is pinned by tests/test_adaptive_qa_router.py.
+CASES: dict[str, dict] = {
+    "what about last month, then? -> no subject: watch for a clarifying question, then type an answer in the Resume box": {
+        "question": "what about last month, then?"},
+    "How do I pause a graph and wait for a human to approve? -> watch for the handbook route (LangGraph) with citations": {
+        "question": "How do I pause a graph and wait for a human to approve?"},
+    "How long do refunds take? -> watch for the handbook route on the support policies, not the LangGraph docs": {
+        "question": "How long do refunds take?"},
+    "Which region had the most returned orders in the last 6 months? -> watch for the database route: SQL and rows in details": {
+        "question": "Which region had the most returned orders in the last 6 months?"},
+    "thanks, that helped! -> watch for small_talk: neither the handbook nor the database runs": {
+        "question": "thanks, that helped!"},
+    "and the other one? -> a dangling reference: keep answering vaguely and see the 2-question cap force a route": {
+        "question": "and the other one?"},
+}
+SCENARIO = scenario_field(CASES)
 
 MAX_CLARIFICATIONS = 2
 DB_ROWS_IN_DETAILS = 20
@@ -142,7 +166,8 @@ class RouteGuess(BaseModel):
     reason: str = Field(description="One short sentence on why this is the best guess")
 
 
-class RouterIn(TypedDict):
+class RouterIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made question; replaces `question`
     question: str
 
 
@@ -212,8 +237,15 @@ def start_run(state: RouterState) -> dict:
     """Forget the clarifications of an earlier run on this thread (Studio keeps submitting runs on the same thread).
 
     ``classify`` is also where ``clarify`` loops back to, so it cannot do this itself; without this node the next
-    question would be glued to the old answers ("Hello there" + "revenue") and start with its budget partly spent."""
-    return {"clarifications": Overwrite([])}
+    question would be glued to the old answers ("Hello there" + "revenue") and start with its budget partly spent.
+
+    It also empties the three result fields. A run that pauses at ``clarify`` finishes none of them, so without this
+    the paused thread would show the PREVIOUS question's answer, details and effective question next to the new one.
+
+    This is the entry node, so it also resolves a picked ready-made question (or runs the first one on a blank form).
+    """
+    picked = expand(state, CASES, has_input=lambda s: bool((s.get("question") or "").strip()))
+    return {**picked, "clarifications": Overwrite([]), "effective_question": "", "answer": "", "details": {}}
 
 
 def classify(state: RouterState) -> dict:

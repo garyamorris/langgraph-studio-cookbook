@@ -58,11 +58,19 @@ MODELS AND DATA
     ignores years and whole numbers up to 10. Spelled-out numbers are not checked.
 
 TRY IT IN STUDIO
-    Input ``{"quarter": "2026Q2"}``. Open ``gather_facts`` to see the fact catalog: ``anomaly.lumen_cam_pro.return_rate``
-    and ``pricing.lumen_therm`` are the two stories. Open ``plan_sections`` to see which sections the planner chose,
-    then watch the graph fan out to one ``write_section`` run per section. Compare with ``{"quarter": "2026Q3"}``
-    (no anomaly, a quieter plan) or ``{"quarter": "2026Q4"}`` (October only: compared with July, labelled partial).
-    Check ``verification`` in the output for numbers that did not come from the facts.
+    Pick a quarter from the "Ready-made case" dropdown and press Submit (on a new thread a blank form runs the first one).
+    The data covers 2025-11-01 to 2026-10-31, so these five quarters are all there is. Open ``gather_facts`` to see the
+    fact catalog, ``plan_sections`` to see which sections the planner chose, then watch the graph fan out to one
+    ``write_section`` run per section. Check ``verification`` in the output for numbers that did not come from the facts.
+      * ``2026Q2``: the two stories. ``anomaly.lumen_cam_pro.return_rate`` (the recall) and ``pricing.lumen_therm`` (the
+        $159 -> $149 price cut) are in the catalog; the recall always gets a section, whatever the planner chose.
+      * ``2026Q3``: no anomaly facts, so a quieter plan; the Therm price cut is already in force for the whole quarter.
+      * ``2026Q4``: October only, labelled partial and compared with July (the same days), not with all of Q3.
+      * ``2026Q1``: a full quarter, but the dataset does not fully cover 2025Q4, so the report says there is no
+        like-for-like previous quarter instead of inventing a change.
+      * ``2025Q4``: November and December only; no previous quarter, and the holiday peak shows up as a flag on Lock revenue.
+    The same by hand: ``{"quarter": "2026Q2"}``. A quarter the data does not cover (``2024Q1``) or that is not written
+    like ``2026Q2`` is refused with a clear message.
 
 EXTEND IT
     Let a worker call ``_sales_tools.query_sales`` for a drill-down the facts do not contain (and add those results to
@@ -88,6 +96,7 @@ from typing_extensions import TypedDict
 from deepdive.common.config import mode_label
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm, structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 from deepdive.examples import _sales_tools as st
 from deepdive.examples._sales_tools import money, pct
 
@@ -104,6 +113,18 @@ META = ExampleMeta(
 )
 
 EXAMPLE_INPUT = {"quarter": "2026Q2"}
+
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios). The data runs 2025-11-01 to 2026-10-31, so these five are
+# the only quarters it covers; the figures in a label are what build_facts() computes. The first (EXAMPLE_INPUT) runs on a blank
+# form. What a label promises (an anomaly flag, a partial quarter, no like-for-like comparison) is computed in code, never by the planner.
+CASES: dict[str, dict] = {
+    "2026Q2 revenue $33,848.40, return rate 7.9% -> Cam Pro return spike is flagged and always gets a section": {"quarter": "2026Q2"},
+    "2026Q3 revenue $44,808.20, no anomaly flags -> a quieter plan; Therm's $149 price is already in force": {"quarter": "2026Q3"},
+    "2026Q4 October only, 31 of 92 days -> labelled partial, compared with July rather than all of Q3": {"quarter": "2026Q4"},
+    "2026Q1 full quarter, no like-for-like previous quarter -> the report says there is nothing to compare with": {"quarter": "2026Q1"},
+    "2025Q4 Nov-Dec only, 61 of 92 days -> no previous quarter; Lock revenue flagged (holiday peak)": {"quarter": "2025Q4"},
+}
+SCENARIO = scenario_field(CASES)
 
 MIN_SECTIONS, MAX_SECTIONS = 3, 6
 Z_THRESHOLD = 2.0  # |z| at or above this flags a product-month pattern as unusual
@@ -126,6 +147,7 @@ class ReportPlan(BaseModel):
 
 
 class ReportIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made quarter; replaces the field below
     quarter: str  # e.g. "2026Q2"
 
 
@@ -396,10 +418,12 @@ def unsupported_numbers(narrative: str, supporting_texts: list[str]) -> list[str
 
 # --------------------------------------------------------------------------- nodes
 def gather_facts(state: ReportState) -> dict:
-    quarter = (state.get("quarter") or "").strip()
+    picked = expand(state, CASES, has_input=lambda s: bool((s.get("quarter") or "").strip()))
+    quarter = ({**state, **picked}.get("quarter") or "").strip()  # a picked case supplies the quarter; a blank form runs the first
     q = st.parse_quarter(quarter)  # ValueError for "2026-X", "Q5 2026" ...
     facts = build_facts(q.label)
     return {
+        **picked,
         "quarter": q.label,
         "facts": facts,
         "flags": [f["text"] for f in facts.values() if f["kind"] == "anomaly"],

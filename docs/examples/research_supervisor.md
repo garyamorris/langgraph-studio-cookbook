@@ -82,15 +82,19 @@ fact sheet (the supervisor's route is arbitrary but stable).
 
 ## Try it in Studio
 
-Input `{"ticker": "ACMR"}`: watch `supervisor` hand off market_team, news_team, writer, then end; open the
-`trail` in the output to see each decision (and whether the model or a rule made it). Each team is invoked from a
-wrapper node, so the static graph shows one node per team; their inner steps appear in the run trace and in
-`stream(..., subgraphs=True)` under the namespaces `market_team:<id>` / `news_team:<id>` (not checked in Studio
-itself; the tests print them). Then try:
-  * `{"ticker": "CBLT", "question": "Is the recent price weakness explained by the news?"}`
-  * `{"ticker": "HELO", "max_hops": 1}` - the budget is spent after one team, so the writer is forced and the
-    brief says the other team was not consulted
-  * `{"ticker": "NOPE"}` - a clean `error` and no model call
+Pick a case from the "Ready-made case" dropdown and press Submit (on a new thread a blank form runs the first one).
+Watch `supervisor` hand off market_team, news_team, writer, then end; open the `trail` in the output to see each
+decision (and whether the model or a rule made it). Each team is invoked from a wrapper node, so the static graph
+shows one node per team; their inner steps appear in the run trace and in `stream(..., subgraphs=True)` under the
+namespaces `market_team:<id>` / `news_team:<id>` (not checked in Studio itself; the tests print them). The cases:
+  * ACMR, the full brief (+9.5% over 5 days, 41.5% volatility): market_team, news_team, writer, FINISH.
+  * CBLT, "Is the recent price weakness explained by the news?": watch whether the supervisor consults both teams.
+  * HELO with `max_hops` 1: the budget is spent after one team, so the writer is forced and the brief says which
+    team was not consulted.
+  * BORE with a price-only question and DLPH with a news-only one: watch the supervisor skip the team the question
+    does not need (the model chooses; the brief lists the team it skipped).
+  * NOPE: not a listed ticker, so a clean `error` and no model call (the same as typing any unknown ticker).
+The same by hand: `{"ticker": "ACMR"}`, or add `"question"` and `"max_hops"` (default 5, at most 8).
 Tickers: ACMR BORE CBLT DLPH EMBR FTHM GRNT HELO.
 
 ## Extend it
@@ -145,6 +149,19 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | ACMR +9.5% in 5 days, volatility 41.5% -> watch market_team, news_team, writer, then FINISH | `{"ticker": "ACMR", "question": "Give me a one-page brief: price action, risk and news."}` |
+| 2 | CBLT 60-day return -9.1%, 17.9% below its high -> watch whether the supervisor consults both teams | `{"ticker": "CBLT", "question": "Is the recent price weakness explained by the news?"}` |
+| 3 | HELO with max_hops 1 -> watch the hop budget force the writer after one team | `{"ticker": "HELO", "max_hops": 1}` |
+| 4 | BORE price-only question (60-day return -30.9%) -> watch the supervisor skip news_team | `{"ticker": "BORE", "question": "Only the price action and risk, please. I do not need the news."}` |
+| 5 | DLPH news-only question -> watch the supervisor skip market_team and catalysts cite headline ids | `{"ticker": "DLPH", "question": "What does the news say about Delphi Health, and what could move the stock?"}` |
+| 6 | NOPE (not a listed ticker) -> a clean error naming the 8 tickers, and no model call | `{"ticker": "NOPE"}` |
+
 ## Example input
 
 ```json
@@ -154,4 +171,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `research_supervisor`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `research_supervisor`, pick a case from the **Ready-made case** dropdown, or paste the input above.

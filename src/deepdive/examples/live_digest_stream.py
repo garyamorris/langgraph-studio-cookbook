@@ -74,10 +74,18 @@ MODELS AND DATA
     returns instantly, so ``pace_s`` (sleep per stage) exists purely to make the progress visible in a demo.
 
 TRY IT IN STUDIO
-    Input ``{"product": "Lumen Plug 4-pack", "max_reviews": 40, "pace_s": 0.5}``. Watch ``load``, then the ``analysis``
-    subgraph (expand it for its three steps), ``write_digest`` and ``finish``; open ``risk_scan`` to see the burning
-    plug review (R-0315) flagged. Try ``"Lumen Lock"`` for lock-out risks and ``"Nope"`` for the clean error.
-    To see the event stream itself, run in a terminal (add ``--pace 0.3`` to slow it down)::
+    Pick a ready-made case from the "Ready-made case" dropdown and press Submit (a blank form on a new thread runs the
+    first one). Watch ``load``, then the ``analysis`` subgraph (expand it for its three steps), ``write_digest`` and
+    ``finish``; open ``risk_scan`` to see which reviews were flagged. ``pace_s`` makes each stage take visibly long:
+      * Plug 4-pack (newest 40, 0.5 s per stage, about 3 s in all): the standard demo; the burning plug review R-0315
+        is flagged.
+      * Lock (all 22): three flags, a jammed lock and two lock-outs. Cam Pro (all 57): the largest run, with a
+        privacy flag on R-0317.
+      * Hub (newest 30): a counterfeit listing is flagged. Bell (newest 5, the minimum): the shortest run, and no risk
+        language, so ``risk_scan`` reports nothing flagged. These four add no pause; give them a ``pace_s`` to slow any of them.
+    Or paste your own input, for example ``{"product": "Lumen Plug 4-pack", "max_reviews": 40, "pace_s": 0.5}``; try
+    ``"Nope"`` for the clean error. To see the event stream itself, run in a terminal (add ``--pace 0.3`` to slow it
+    down)::
 
         .venv/bin/python -m deepdive.examples.live_digest_stream "Lumen Plug 4-pack"
 
@@ -107,6 +115,7 @@ from deepdive.common.config import mode_label
 from deepdive.common.data import read_csv
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm, structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="live_digest_stream",
@@ -128,6 +137,25 @@ META = ExampleMeta(
 
 EXAMPLE_INPUT = {"product": "Lumen Plug 4-pack", "max_reviews": 40}
 
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios). Every product is in data/product_reviews.csv.
+# The counts and the risk flags in the labels come from the deterministic code (``scan_risks``, the newest-N window),
+# never from the model, and a test recomputes them. ``pace_s`` None means no pause. The first case is EXAMPLE_INPUT plus a
+# half-second pause per stage, so the first thing a person sees is a progress bar they can watch. Only this case pauses:
+# every pause is real sleep, also in the tests that run each case.
+CASES: dict[str, dict] = {
+    "Lumen Plug 4-pack, newest 40, 0.5 s per stage -> watch the stages tick; burning plug R-0315 flagged": {
+        "product": "Lumen Plug 4-pack", "max_reviews": 40, "pace_s": 0.5},
+    "Lumen Lock, all 22 reviews -> risk_scan flags 3: jammed lock R-0319 and lock-outs R-0167, R-0262": {
+        "product": "Lumen Lock", "max_reviews": None, "pace_s": None},
+    "Lumen Cam Pro, newest 200 (all 57) -> the largest run; R-0317 flagged for privacy": {
+        "product": "Lumen Cam Pro", "max_reviews": 200, "pace_s": None},
+    "Lumen Hub, newest 30 -> counterfeit review R-0320 (12th newest) is flagged; no demo pause": {
+        "product": "Lumen Hub", "max_reviews": 30, "pace_s": None},
+    "Lumen Bell, newest 5 (the minimum) -> the shortest run; risk_scan flags nothing": {
+        "product": "Lumen Bell", "max_reviews": 5, "pace_s": None},
+}
+SCENARIO = scenario_field(CASES)
+
 DEFAULT_MAX_REVIEWS = 40
 MAX_REVIEWS_LIMIT = 200
 MIN_REVIEWS = 5
@@ -141,6 +169,7 @@ STREAM_MODES = ["updates", "messages", "custom"]
 
 # --------------------------------------------------------------------------- schemas
 class DigestIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made case; replaces the three fields below
     product: str  # exact product name, e.g. "Lumen Plug 4-pack" (case-insensitive)
     max_reviews: int  # newest N reviews to analyse (5-200, default 40)
     pace_s: float  # demo knob: sleep this long inside each stage (0-2 s, default 0)
@@ -213,8 +242,16 @@ def _pace(state: dict) -> None:
 
 # --------------------------------------------------------------------------- nodes: load
 def load(state: DigestState) -> dict:
-    """Validate the product and load its newest reviews as plain dicts (JSON-safe state)."""
+    """Resolve a picked ready-made case, validate the product and load its newest reviews as plain dicts (JSON-safe state)."""
     progress("load", 5, "Loading reviews")
+    picked = expand(
+        state,
+        CASES,
+        has_input=lambda s: bool((s.get("product") or "").strip())
+        or s.get("max_reviews") is not None
+        or s.get("pace_s") is not None,
+    )
+    state = {**state, **picked}  # a picked case replaces all three input fields (None means "default")
     _pace(state)
     df = read_csv("product_reviews.csv")
     products = sorted(df["product"].unique())
@@ -241,7 +278,7 @@ def load(state: DigestState) -> dict:
         for r in rows.itertuples()
     ]
     progress("load", 15, f"Loaded {len(reviews)} reviews ({reviews[-1]['date']} to {reviews[0]['date']})")
-    return {"product": match[0], "reviews": reviews}
+    return {**picked, "product": match[0], "reviews": reviews}
 
 
 # --------------------------------------------------------------------------- nodes: analysis subgraph

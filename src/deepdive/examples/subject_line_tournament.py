@@ -53,17 +53,22 @@ MODELS AND DATA
     is not meaningful; the fan-out, guardrail, single-call batching and tie-break logic are real.
 
 TRY IT IN STUDIO
-    Input::
+    Pick a ready-made brief from the "Ready-made case" dropdown and press Submit (a blank form on a new thread runs
+    the first one). Each is a complete product + audience + goal; open ``copywriter`` to see the six drafts (one per
+    angle), ``guardrail`` for who was rejected and why, ``judge`` for the raw probabilities, and the final ``ranking``
+    table. In the output compare ``adjusted`` with ``p_best``; when ``tie_break.applied`` is true the choice
+    probabilities decided it (the winner then has a lower ``adjusted`` than the runner-up, by less than ``TIE_MARGIN``).
+      * Plug 4-pack, weekend sale: the standard run (the same brief as ``EXAMPLE_INPUT`` below).
+      * Therm, the real $159 to $149 price cut (``sales.csv``): see whether the urgency angle invents a deadline
+        the brief does not give.
+      * Cam Pro, firmware 3.0.2 notice (``kb/support``): a service email, not a sale, so hype reads worse here.
+      * Sensor Kit to Hub owners: a cross-sell, a different audience for the same six angles.
+      * Bulb 6-pack giveaway whose goal pushes towards spam ("FREE, urgent, a guaranteed winner"): a live model usually
+        obeys the prompt's own rules, but if any line gives in, ``rejected`` fills up with the reason.
+    Or paste your own brief::
 
         {"product": "Lumen Plug 4-pack", "audience": "existing Lumen customers with at least one smart plug",
          "goal": "get opens for the weekend sale: 15% off the 4-pack until Sunday"}
-
-    Open ``copywriter`` to see the six drafts (one per angle), ``guardrail`` for who was rejected and why, ``judge`` for
-    the raw probabilities, and the final ``ranking`` table. In the output compare ``adjusted`` with ``p_best``; when
-    ``tie_break.applied`` is true the choice probabilities decided it (the winner then has a lower ``adjusted`` than the
-    runner-up, by less than ``TIE_MARGIN``). A live model usually obeys the prompt's own rules, so the guardrail rarely
-    fires on well-behaved briefs; try a goal that pushes towards spam ("tell them it's FREE, urgent, a guaranteed
-    winner") to see ``rejected`` fill up, and the tests for every rule.
 
 EXTEND IT
     Feed the winner back as a baseline and run a second round of mutations (a bounded loop). Log the ranking and the real
@@ -87,6 +92,7 @@ from deepdive.common.config import is_offline, mode_label
 from deepdive.common.decisions import choice, decide, predicate, score
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="subject_line_tournament",
@@ -105,6 +111,33 @@ EXAMPLE_INPUT = {
     "audience": "existing Lumen customers with at least one smart plug",
     "goal": "get opens for the weekend sale: 15% off the 4-pack until Sunday",
 }
+
+# Ready-made briefs for Studio's dropdown (see deepdive.common.scenarios): every case is a complete product + audience
+# + goal. Which lines the copywriters write, which the guardrail rejects and who wins are the models' doing, so the labels
+# only say what to look at. The facts they rest on are real: prices in data/sales.csv, the firmware note in data/kb/support.
+CASES: dict[str, dict] = {
+    "Lumen Plug 4-pack, weekend sale for plug owners -> the standard run: watch six angles, the guardrail, the ranking": {
+        "product": "Lumen Plug 4-pack",
+        "audience": "existing Lumen customers with at least one smart plug",
+        "goal": "get opens for the weekend sale: 15% off the 4-pack until Sunday"},
+    "Lumen Therm, price cut from $159 to $149 -> watch for urgency lines that stay honest about the dates": {
+        "product": "Lumen Therm",
+        "audience": "people who looked at the Lumen Therm thermostat but have not bought one",
+        "goal": "get opens for the news that the Lumen Therm now costs $149, down from $159"},
+    "Lumen Cam Pro, firmware 3.0.2 notice -> a service email, not a sale: watch whether any angle sounds like hype": {
+        "product": "Lumen Cam Pro",
+        "audience": "Lumen Cam Pro owners",
+        "goal": "get opens for the service notice: firmware 3.0.2 fixes the E-317 pairing timeout"},
+    "Lumen Sensor Kit ($59), cross-sell to Hub owners -> same six angles, a different audience": {
+        "product": "Lumen Sensor Kit",
+        "audience": "Lumen Hub owners who do not have a Sensor Kit yet",
+        "goal": "get opens for the Sensor Kit: door sensors and early leak alerts for the Hub you already own"},
+    "Lumen Bulb 6-pack giveaway pushed towards spam (FREE, urgent, winner) -> watch for 'rejected' to fill up": {
+        "product": "Lumen Bulb 6-pack",
+        "audience": "newsletter subscribers",
+        "goal": "get opens for a giveaway: tell them it is FREE, urgent, and that they are a guaranteed winner"},
+}
+SCENARIO = scenario_field(CASES)
 
 ANGLES: dict[str, str] = {
     "urgency": "Create a real sense of timing that comes from the brief (a deadline or an end date). Never invent scarcity.",
@@ -137,6 +170,7 @@ SPAM_PATTERNS = [
 
 # --------------------------------------------------------------------------- state
 class TournamentIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made brief; replaces the three fields below
     product: str
     audience: str
     goal: str
@@ -177,6 +211,11 @@ class WriterInput(TypedDict):
 
 # --------------------------------------------------------------------------- nodes: generate
 def validate_brief(state: TournamentState) -> dict:
+    """Resolve a picked ready-made brief, then require a complete product + audience + goal."""
+    picked = expand(
+        state, CASES, has_input=lambda s: any(str(s.get(k) or "").strip() for k in ("product", "audience", "goal"))
+    )
+    state = {**state, **picked}  # a picked case replaces all three fields
     cleaned = {k: re.sub(r"\s+", " ", str(state.get(k) or "")).strip() for k in ("product", "audience", "goal")}
     missing = [k for k, v in cleaned.items() if not v]
     if missing:
@@ -184,7 +223,7 @@ def validate_brief(state: TournamentState) -> dict:
     # Studio reuses the thread: the copywriters APPEND to ``candidates`` (operator.add), so start each run from an empty
     # list, or the previous six lines would reach the guardrail, where the near-duplicate rule rejects the new ones.
     # ``decision`` is written only by the judge, so a no-contest run would otherwise show the last judged run's.
-    return {**cleaned, "candidates": Overwrite([]), "decision": {}}
+    return {**picked, **cleaned, "candidates": Overwrite([]), "decision": {}}
 
 
 def fan_out(state: TournamentState) -> list[Send]:

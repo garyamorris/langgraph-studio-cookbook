@@ -112,6 +112,74 @@ def test_other_products_and_unknown_products():
         ex.graph.invoke({"product": "Lumen Toaster"})
 
 
+# --------------------------------------------------------------------------- ready-made cases (the Studio dropdown)
+def case(prefix: str) -> str:
+    return next(label for label in ex.CASES if label.startswith(prefix))
+
+
+def test_a_blank_form_runs_the_first_ready_made_case():
+    blank = ex.graph.invoke({})  # Studio's Submit on an empty form
+    assert blank["product"] == "Lumen Therm" == ex.EXAMPLE_INPUT["product"]
+    assert blank["recommendation"]["price"] == 145.0 and blank["assumptions"]["margin_target"] == ex.DEFAULT_MARGIN_TARGET
+    assert next(iter(ex.CASES.values())) == {**ex.EXAMPLE_INPUT, "margin_target": None}
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
+
+
+def test_every_case_sets_both_fields_and_names_a_product_in_the_data():
+    from deepdive.common.data import read_csv
+
+    products = set(read_csv("sales.csv")["product"])
+    for label, fields in ex.CASES.items():
+        assert set(fields) == {"product", "margin_target"} and fields["product"] in products, label
+        assert label.startswith(fields["product"]), label
+
+
+def test_every_number_a_case_label_promises_is_what_the_code_computes_for_that_case():
+    for label, fields in ex.CASES.items():
+        out = ex.graph.invoke({"scenario": label})
+        rec, e, a = out["recommendation"], out["elasticity"], out["assumptions"]
+        floor = fields["margin_target"] or ex.DEFAULT_MARGIN_TARGET
+        if found := re.search(r"(\d+)% margin floor", label):
+            assert int(found.group(1)) == round(floor * 100), label
+        if found := re.search(r"recommends \$(\d+)", label):
+            assert rec["status"] == "recommended" and rec["price"] == float(found.group(1)), label
+        if found := re.search(r"-> \$(\d+)", label):
+            assert rec["status"] == "recommended" and rec["price"] == float(found.group(1)), label
+        if "no feasible price" in label:
+            assert rec["status"] == "no_feasible_price" and rec["price"] is None, label
+        if "extrapolation" in label:
+            assert any("extrapolation" in w for w in rec["warnings"]), label
+        else:
+            assert not any("extrapolation" in w for w in rec["warnings"]), f"{label}: the run warns of an extrapolation the label does not mention"
+        if found := re.search(r"elasticity (-[\d.]+)", label):
+            assert float(found.group(1)) == pytest.approx(e["point"], abs=0.005), label
+        if found := re.search(r"R-squared ([\d.]+)", label):
+            assert float(found.group(1)) == pytest.approx(e["r2"], abs=0.005), label
+        if found := re.search(r"no week ever averaged above \$(\d+)", label):
+            assert float(found.group(1)) == round(e["price_max"]), label
+        if found := re.search(r"unit cost \$(\d+)", label):
+            assert float(found.group(1)) == a["unit_cost"], label
+        if found := re.search(r"list price (?:is now )?\$(\d+)", label):
+            assert float(found.group(1)) == ex.load_history({"product": fields["product"]})["current_list_price"], label
+
+
+def test_a_case_without_a_margin_target_gets_the_default_not_the_previous_runs():
+    g, c = ex.build_graph(checkpointer=InMemorySaver()), cfg("picks")
+    high = g.invoke({"scenario": case("Lumen Therm, 35%")}, c)
+    assert high["assumptions"]["margin_target"] == 0.35 and g.get_state(c).values["scenario"] is None
+    back = g.invoke({"scenario": case("Lumen Therm, default")}, c)
+    assert back["assumptions"]["margin_target"] == ex.DEFAULT_MARGIN_TARGET, "None means the default, not the 35% left by the last pick"
+    assert back["recommendation"]["price"] == 145.0
+    other = g.invoke({"scenario": case("Lumen Cam Pro")}, c)
+    assert other["product"] == "Lumen Cam Pro" and other["assumptions"]["unit_cost"] == 38.0
+
+
+def test_a_margin_target_typed_by_hand_is_not_replaced_by_the_first_case():
+    out = ex.graph.invoke({"margin_target": 0.35})  # no product: the default product, but the typed margin
+    assert out["product"] == "Lumen Therm" and out["assumptions"]["margin_target"] == 0.35 and out["recommendation"]["price"] == 170.0
+
+
 # --------------------------------------------------------------------------- assumptions, simulation, recommendation
 def test_assumptions_hold_everything_downstream_needs():
     a = ex.graph.invoke({"product": "Lumen Therm", "margin_target": 0.33})["assumptions"]

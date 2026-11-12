@@ -67,6 +67,17 @@ graph = build_graph()          # what langgraph.json points at
   contract test in `tests/test_all_examples.py` runs `EXAMPLE_INPUT` twice on one thread and compares the second result
   with a fresh thread's; an example that keeps state across runs on purpose (a chat, a ledger) goes in its
   `EXEMPT_FROM_REUSE` with a one-line reason. Optional input fields the caller leaves out are still inherited.
+* **Nobody opening the graph has read your dataset, so give the form ready-made cases.** An example keyed by something in
+  `data/` (an id, a ticker, a product, a question about sales) declares `CASES = {label: input_dict}` and a `scenario`
+  input field (`scenario_field(CASES)` in `deepdive.common.scenarios`), which Studio draws as a **Ready-made case**
+  dropdown. The entry node calls `expand(state, CASES, has_input=...)`: a picked case wins, real input typed in the other
+  fields is left alone, and a blank form on a new thread runs the FIRST case, so put the best first-time demo first.
+  Rules: nothing in the input schema is required; every case sets the same keys (`None` for an unused one) so a later
+  pick fully replaces the previous run's input; the entry node treats `None` as missing; a label leads with the concrete
+  thing from the data and says `->` what to watch, and may promise an outcome only if code (not the model) decides it and
+  a test pins it. `tests/test_scenarios.py` enforces the structure for every example that has `CASES` (the name
+  `SCENARIOS` was taken by `resilient_enrichment`'s vendor behaviours), and `gen_docs.py` lists the cases on the
+  example's page. Examples that need no data (a count, a seed) do not need them.
 
 ## Rules that keep it working in Studio and with a real OpenAI key
 

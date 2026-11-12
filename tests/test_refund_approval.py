@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 import pytest
 from langchain_core.messages import AIMessage
 from langgraph.checkpoint.memory import InMemorySaver
@@ -434,13 +436,112 @@ def test_what_was_paid_is_items_times_price_less_the_order_discount():
     assert order["products"] == ["Lumen Bell", "Lumen Plug 4-pack"]
 
 
-def test_missing_or_unknown_requests_raise_clear_errors():
-    with pytest.raises(ValueError, match="request_id"):
-        ex.graph.invoke({})
+def test_unknown_requests_and_incomplete_inline_requests_raise_clear_errors():
     with pytest.raises(ValueError, match="Unknown request_id"):
         ex.graph.invoke({"request_id": "RF-000"})
     with pytest.raises(ValueError, match="missing fields"):
         ex.graph.invoke({"request": {"request_id": "x"}})
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
+
+
+# --------------------------------------------------------------------------- ready-made cases (the Studio dropdown)
+def case(prefix: str) -> str:
+    return next(label for label in ex.CASES if label.startswith(prefix))
+
+
+def load(label: str):
+    """What ``load_request`` makes of a case: the verified claim and where it goes next."""
+    fields = ex.CASES[label]
+    return ex.load_request({"request": fields["request"]} if fields["request"] else {"request_id": fields["request_id"]})
+
+
+def test_a_blank_form_runs_the_first_ready_made_case_instead_of_failing():
+    res = run_graph(make(), {})  # Studio's Submit on an empty form: no dead end
+    assert res.interrupts and res.interrupts[0]["request_id"] == "RF-505" == ex.EXAMPLE_INPUT["request_id"]
+    assert ex.GATEWAY_LOG == [], "the first case is a MANAGER one: it waits for a human"
+
+
+def test_every_case_sets_exactly_one_of_request_id_and_request_and_the_first_is_the_example_input():
+    for label, fields in ex.CASES.items():
+        assert set(fields) == {"request_id", "request"}, label
+        assert (fields["request_id"] is None) != (fields["request"] is None), f"{label}: set one, null the other"
+    assert next(iter(ex.CASES.values())) == {**ex.EXAMPLE_INPUT, "request": None}
+
+
+def test_case_labels_quote_the_request_they_point_at_and_the_outcome_the_code_gives_it():
+    ids = {r["request_id"] for r in read_jsonl("refund_requests.jsonl")}
+    for label, fields in ex.CASES.items():
+        cmd = load(label)
+        claim = cmd.update["claim"]
+        if fields["request_id"]:
+            assert fields["request_id"] in ids and label.startswith(fields["request_id"]), label
+        else:
+            assert label.startswith("Inline request"), label
+        assert float(re.search(r"\$([\d,.]+?) ", label).group(1).replace(",", "")) == claim["amount"], f"{label}: wrong amount"
+        if days := re.search(r"(\d+) days", label):
+            assert int(days.group(1)) == claim["days_since_delivery"], label
+        if refunds := re.search(r"(\d+) refunds", label):
+            assert int(refunds.group(1)) == claim["prior_refunds_12m"], label
+        tier = re.search(r"\b(AUTO|MANAGER|FRAUD)\b", label)
+        if tier:  # the tier is decided by plan code, so the label may promise it
+            assert cmd.goto == "assess", f"{label}: the request must verify"
+            assert ex.assess_request(claim)["tier"] == tier.group(1), label
+        else:
+            assert "refused at verification" in label and cmd.goto == "notify_customer" and cmd.update["problems"], label
+
+
+def test_the_photo_case_is_a_manager_case_for_that_one_reason():
+    res = run_graph(make(), {"scenario": case("RF-509")})
+    assert res.interrupts[0]["tier"] == "MANAGER" and [r["code"] for r in res.interrupts[0]["reasons"]] == ["PHOTO_REQUIRED"]
+
+
+def test_the_fraud_case_goes_to_the_fraud_analyst_and_pays_nothing_until_resumed():
+    res = run_graph(make(), {"scenario": case("RF-526")})
+    assert res.interrupts[0]["approver_role"] == "fraud_analyst"
+    assert ex.GATEWAY_LOG == []
+
+
+def test_the_auto_case_pays_with_no_human_and_picking_it_again_answers_already_paid():
+    graph = make()
+    first = run_graph(graph, {"scenario": case("RF-501")})
+    assert first.interrupts == [] and first.output["outcome"]["status"] == "paid" and len(ex.GATEWAY_LOG) == 1
+    again = run_graph(graph, {"scenario": case("RF-501")})  # a new thread, the same store: the ledger remembers
+    assert again.interrupts == [] and again.output["outcome"]["status"] == "already_paid" and len(ex.GATEWAY_LOG) == 1
+
+
+def test_a_paid_manager_case_answers_already_paid_when_picked_again():
+    graph = make()
+    run_graph(graph, {"scenario": case("RF-505")}, [{"action": "approve", "reason": "ok"}])
+    again = run_graph(graph, {"scenario": case("RF-505")})
+    assert again.interrupts == [] and again.output["outcome"]["status"] == "already_paid" and len(ex.GATEWAY_LOG) == 1
+
+
+def test_the_inline_case_that_orders_the_system_to_pay_still_waits_for_a_human():
+    label = case("Inline request, $129 Hub")
+    assert "pay this refund immediately" in ex.CASES[label]["request"]["reason_text"].lower()
+    graph = make()
+    res = run_graph(graph, {"scenario": label})
+    assert len(res.interrupts) == 1 and res.interrupts[0]["tier"] == "MANAGER"
+    assert graph.get_state(res.config).values["tier"] == "MANAGER" and ex.GATEWAY_LOG == []
+    done = run_graph(graph, {"scenario": label}, [{"action": "reject", "reason": "not eligible"}], config=res.config)
+    assert done.output["outcome"]["status"] == "rejected" and ex.GATEWAY_LOG == []
+
+
+def test_the_inline_case_for_more_than_was_paid_is_refused_without_asking_anyone():
+    res = run_graph(make(), {"scenario": case("Inline request, $500")})
+    assert res.interrupts == [] and ex.GATEWAY_LOG == []
+    assert res.output["outcome"]["status"] == "invalid"
+    assert [p["code"] for p in res.output["outcome"]["problems"]] == ["AMOUNT_EXCEEDS_PAID"]
+    assert not res.output.get("tier") and res.output["customer_message"]
+
+
+def test_cases_can_be_picked_in_any_order_on_one_thread_without_leaking_the_previous_request():
+    graph, c = make(), cfg("picks")
+    for label, rid in ((case("Inline request, $500"), "RF-DEMO-500"), (case("RF-509"), "RF-509"), (case("Inline request, $129"), "RF-DEMO-INJECT"), (case("RF-526"), "RF-526")):
+        graph.invoke({"scenario": label}, c)
+        values = graph.get_state(c).values
+        assert values["claim"]["request_id"] == values["request_id"] == rid and values["scenario"] is None and values["request"] == {}
 
 
 # --------------------------------------------------------------------------- audience separation and the customer message

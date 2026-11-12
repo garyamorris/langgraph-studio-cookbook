@@ -226,7 +226,92 @@ def test_unknown_ticker_is_a_clean_error_and_no_model_runs():
     assert "Unknown ticker 'ZZZZ'" in out["error"] and "ACMR" in out["error"]
     assert out["brief"] == "" and out["route"] == [] and out["facts"] == []
     assert out["disclaimer"] == ex.DISCLAIMER
-    assert run({"ticker": ""})["error"].startswith("Unknown ticker ''")
+    assert run({"question": "How is it doing?"})["error"].startswith("Unknown ticker ''"), "a question with no ticker is real input, not a blank form"
+    assert run({"ticker": "  zzzz "})["error"].startswith("Unknown ticker 'ZZZZ'"), "a typed ticker is normalised, then refused"
+
+
+# --------------------------------------------------------------------------- ready-made cases (the Studio dropdown)
+def case(prefix: str) -> str:
+    return next(label for label in ex.CASES if label.startswith(prefix))
+
+
+def test_a_blank_form_runs_the_first_ready_made_case_instead_of_an_empty_brief():
+    Script()
+    for blank in ({}, {"ticker": ""}, {"ticker": "   "}, {"ticker": None, "question": None, "max_hops": None}):
+        out = run(blank)
+        assert out["ticker"] == "ACMR" and out["brief"].startswith("# Acme Robotics (ACMR)") and not out["error"], blank
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        run({"scenario": "not a case"})
+
+
+def test_every_case_sets_all_three_fields_and_the_first_is_the_example_input():
+    for label, fields in ex.CASES.items():
+        assert set(fields) == {"ticker", "question", "max_hops"}, label
+    first = next(iter(ex.CASES.values()))
+    assert first == {**ex.EXAMPLE_INPUT, "max_hops": None}
+
+
+def test_case_labels_quote_the_figures_the_price_analytics_compute_for_their_ticker():
+    tickers = set(read_csv("companies.csv")["ticker"])
+    for label, fields in ex.CASES.items():
+        assert label.startswith(fields["ticker"]), label
+        if fields["ticker"] not in tickers:
+            continue
+        m = ex.price_metrics(fields["ticker"])
+        for pattern, expected in (
+            (r"([+-]\d+\.\d)% in 5 days", m["ret_5d"] * 100),
+            (r"volatility (\d+\.\d)%", m["vol_20d"] * 100),
+            (r"60-day return ([+-]\d+\.\d)%", m["ret_60d"] * 100),
+            (r"(\d+\.\d)% below its high", -m["drawdown_60d"] * 100),
+        ):
+            if found := re.search(pattern, label):
+                assert float(found.group(1)) == pytest.approx(expected, abs=0.05), f"{label}: {pattern}"
+        if "max_hops" in label:
+            assert str(fields["max_hops"]) in label
+
+
+def test_the_unknown_ticker_case_is_a_clean_error_and_no_model_runs():
+    forbid_models()
+    label = case("NOPE")
+    assert ex.CASES[label]["ticker"] not in set(read_csv("companies.csv")["ticker"])
+    out = run({"scenario": label})
+    assert "Unknown ticker 'NOPE'" in out["error"] and all(t in out["error"] for t in read_csv("companies.csv")["ticker"])
+    assert out["brief"] == "" and out["route"] == [] and out["facts"] == []
+
+
+def test_the_hop_budget_case_forces_the_writer_after_one_team_whichever_team_the_supervisor_picks():
+    for team, skipped in (("market_team", "news_team"), ("news_team", "market_team")):
+        Script(decisions=(team,))  # the supervisor would keep asking for the same team
+        out = run({"scenario": case("HELO")})
+        assert out["route"] == [team, "writer", "FINISH"], team
+        assert f"Not consulted for this brief: {skipped}." in out["brief"]
+        assert out["trail"][1]["why"].startswith("rule: hop budget spent")
+
+
+def test_each_cases_question_reaches_the_supervisor_and_a_missing_one_gets_the_default():
+    for label, fields in ex.CASES.items():
+        if fields["ticker"] == "NOPE":
+            continue
+        s = Script(ticker=fields["ticker"], decisions=("market_team", "writer", "FINISH"))
+        out = run({"scenario": label})
+        assert f"Analyst's question: {fields['question'] or ex.DEFAULT_QUESTION}" in s.prompts["Decision"][0], label
+        assert f"Question: {fields['question'] or ex.DEFAULT_QUESTION}" in out["brief"], label
+
+
+def test_picking_cases_one_after_another_on_a_thread_keeps_neither_the_old_budget_nor_the_old_question():
+    set_structured_handler(ex.Decision, route_by_progress)
+    graph = ex.build_graph(checkpointer=InMemorySaver())
+    cfg = {"configurable": {"thread_id": "picks"}}
+    graph.invoke({"scenario": case("HELO")}, cfg)  # budget 1, no question
+    assert graph.get_state(cfg).values["max_hops"] == 1
+    out = graph.invoke({"scenario": case("ACMR")}, cfg)  # no budget: the default again, not 1
+    state = graph.get_state(cfg).values
+    assert state["max_hops"] == ex.DEFAULT_MAX_HOPS and state["scenario"] is None
+    assert out["route"] == ["market_team", "news_team", "writer", "FINISH"] and "Not consulted" not in out["brief"]
+    out = graph.invoke({"scenario": case("NOPE")}, cfg)
+    assert out["error"] and out["brief"] == ""
+    out = graph.invoke({"scenario": case("HELO")}, cfg)
+    assert not out["error"] and out["route"][-1] == "FINISH" and len(out["route"]) == 3
 
 
 def test_writer_drops_untraceable_bullets_and_flags_unverified_numbers():

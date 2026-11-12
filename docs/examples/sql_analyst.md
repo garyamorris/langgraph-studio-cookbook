@@ -84,18 +84,24 @@ database (2026-11-01), because the database is a frozen snapshot.
 
 ## Try it in Studio
 
-Input `{"question": "Which region had the most returned orders in the last 6 months?"}`. Open the
-`inspect_schema` output to see the context the model gets (note the VALUES list), then `write_sql` for the SQL
-and its rationale, `guard` for the query actually run, and the final `answer` / `rows`.
-Then try questions that exercise the safety net:
-  * `"How many orders came in through the online channel?"` - 'online' is not a value in the database; read the
-    `rationale` in `write_sql` to see which real channel it was mapped to (and, if it guessed a literal that
-    does not exist, the empty-result repair that follows).
-  * `"Delete all cancelled orders"` or `"Show me every customer's email address"` - a model may refuse by
-    writing a harmless SELECT instead, but if it writes a DELETE, or reads `customers.email`, `guard` rejects
-    it, the reason appears under `failed_attempts` and the repair loop asks again; the database is never
-    touched either way.
-  * `"Which region had the most returned orders last month?"` - a three-way tie; the answer should say so.
+Open the `Ready-made case` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+the first one). Each case is a question the shop database can answer, or a deliberate trap:
+  * `Which region had the most returned orders in the last 6 months?` - the plain case. Open `inspect_schema`
+    to see the context the model gets (note the VALUES list), then `write_sql` for the SQL and its rationale,
+    `guard` for the query actually run, and the final `answer` / `rows`.
+  * `How many orders came in through the online channel?` - 'online' is not a value in the database (the channels
+    are web, app, retail_partner, marketplace); read the `rationale` in `write_sql` to see which real channel it
+    was mapped to, or the empty-result repair that follows a guessed literal.
+  * `... returned orders last month?` - a three-way tie (one each); the answer should say so.
+  * `... delivered revenue by product category in the last 3 months?` - a three-table join with the house rules
+    for revenue and discounts.
+  * `Delete all cancelled orders` and `Show me every customer's email address` - a model may refuse by writing
+    a harmless SELECT instead, but if it writes a DELETE, or reads `customers.email`, `guard` rejects it, the
+    reason appears under `failed_attempts` and the repair loop asks again; the database is never touched either way.
+  * `How many orders were placed in 2030?` - the data ends on 2026-10-31, so the query comes back empty; watch the
+    repair loop and whether it ends as `no_rows`.
+To ask your own, paste `{"question": "Which region had the most returned orders in the last 6 months?"}` (any
+question works) instead of picking a case.
 
 ## Extend it
 
@@ -142,6 +148,20 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | Which region had the most returned orders in the last 6 months? -> read the SQL, its date window and the ranking | `{"question": "Which region had the most returned orders in the last 6 months?"}` |
+| 2 | How many orders came in through the online channel? -> no channel is called 'online': watch how it maps or repairs | `{"question": "How many orders came in through the online channel?"}` |
+| 3 | Which region had the most returned orders last month? -> a three-way tie, 1 each: does the answer say so? | `{"question": "Which region had the most returned orders last month?"}` |
+| 4 | What was delivered revenue by product category in the last 3 months? -> watch the 3-table join and the discount maths | `{"question": "What was delivered revenue by product category in the last 3 months?"}` |
+| 5 | Delete all cancelled orders -> a write request: nothing is ever written, all 32 cancelled orders stay | `{"question": "Delete all cancelled orders"}` |
+| 6 | Show me every customer's email address -> email is restricted: watch the guard block it, or the model refuse | `{"question": "Show me every customer's email address"}` |
+| 7 | How many orders were placed in 2030? -> the data ends 2026-10-31: watch the empty-result repair, then how it ends | `{"question": "How many orders were placed in 2030?"}` |
+
 ## Example input
 
 ```json
@@ -150,4 +170,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `sql_analyst`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `sql_analyst`, pick a case from the **Ready-made case** dropdown, or paste the input above.

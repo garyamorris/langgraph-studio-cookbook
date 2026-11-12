@@ -105,7 +105,8 @@ LANGGRAPH FEATURES
     * parallel branches with an explicit join, ``add_edge(["bull_case", "bear_case"], "arbiter")``.
     * ``Send`` from a conditional edge for selective re-dispatch, wired back into ``risk_committee``: a cycle that
       re-runs only the breaching names, bounded by a counter in state (DESIGN 3).
-    * ``input_schema`` / ``output_schema``: Studio shows three input fields and a result without the internals.
+    * ``input_schema`` / ``output_schema``: Studio shows a ready-made-case dropdown, three input fields and a result
+      without the internals.
     * ``RetryPolicy`` on the two nodes that call the Decisions API: a transient network error is retried in place
       instead of failing the whole run.
 
@@ -118,8 +119,18 @@ MODELS AND DATA
     placeholder. The result carries ``mode``: "live" or "offline".
 
 TRY IT IN STUDIO
-    Input (this is ``EXAMPLE_INPUT``; it names stocks with clear trends, because the setup gate rightly stands aside
-    when the picture is mixed and a no-trade day shows none of the machinery):
+    Pick a ready-made case from the "Ready-made case" dropdown and press Submit (a blank form on a new thread runs
+    the first one). Which names trade, and whether the committee has anything to send back, depends on the models, so
+    the labels say what to look at rather than what will happen:
+      * the standard run (the first case) and the revision-loop walkthrough: watch ``risk_committee`` send back only the
+        names that breach a limit;
+      * "technology": ACMR, CBLT and FTHM share one 35% sector-group cap, so if all three trade the whole group goes back;
+      * ``max_revisions`` 0: nothing is ever sent back (``resize_log`` stays empty), and a breach is trimmed in place;
+      * a $2 billion mandate (hundreds of child orders, higher cost) and a $2 million one (a handful of orders);
+      * a hint naming TSLA and NVDA, which are not in ``companies.csv``: they never reach research;
+      * no hint at all: the CIO model chooses the names (``mandate.source`` says who chose).
+    Or paste an input (this one is ``EXAMPLE_INPUT``, the first case; it names stocks with clear trends, because the
+    setup gate rightly stands aside when the picture is mixed and a no-trade day shows none of the machinery):
         {"focus_hint": "Look at ACMR, BORE, GRNT, HELO and CBLT today", "nav_usd": 10000000, "max_revisions": 2}
     With an API key, one development run of this input went as follows (model output varies from run to run). The gate
     rated ACMR, HELO and CBLT as AVOID and BORE as SHORT (72%, setup 78%). The debate ran and the bear case won, so the
@@ -182,6 +193,7 @@ from deepdive.common.data import read_csv
 from deepdive.common.decisions import choice, decide, predicate, score
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm, structured_llm
+from deepdive.common.scenarios import expand, scenario_field
 from deepdive.examples import _desk_math as dm
 
 META = ExampleMeta(
@@ -212,6 +224,29 @@ EXAMPLE_INPUT = {"focus_hint": "Look at ACMR, BORE, GRNT, HELO and CBLT today", 
 # The input the offline walkthrough in the docstring (and its test) is written against: with the offline stand-ins two
 # names are actionable and exactly one of them breaches a limit, which shows the selective re-dispatch.
 OFFLINE_WALKTHROUGH_INPUT = {"focus_hint": "Look at GRNT, DLPH, ACMR and FTHM today", "nav_usd": 10_000_000, "max_revisions": 2}
+
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios). Every ticker is in data/companies.csv except the
+# two the "not in the data" case adds on purpose. What trades depends on the models, so most labels say "watch for"; the
+# claims that code decides (group membership, max_revisions 0, unknown tickers never researched) are tested.
+CASES: dict[str, dict] = {
+    "ACMR, BORE, GRNT, HELO, CBLT at $10M, 2 rounds -> the standard run: watch for names the risk committee sends back": {
+        "focus_hint": "Look at ACMR, BORE, GRNT, HELO and CBLT today", "nav_usd": 10_000_000, "max_revisions": 2},
+    "GRNT, DLPH, ACMR, FTHM at $10M, 2 rounds -> revision loop: watch only a name over a limit go back (resize_log)": {
+        "focus_hint": "Look at GRNT, DLPH, ACMR and FTHM today", "nav_usd": 10_000_000, "max_revisions": 2},
+    "Hint 'technology' (ACMR, CBLT, FTHM share one 35% cap) -> if all three trade, watch the whole group go back": {
+        "focus_hint": "technology", "nav_usd": 10_000_000, "max_revisions": 2},
+    "GRNT, DLPH, ACMR, FTHM with max_revisions 0 -> nothing is sent back (resize_log empty); a breach is trimmed": {
+        "focus_hint": "Look at GRNT, DLPH, ACMR and FTHM today", "nav_usd": 10_000_000, "max_revisions": 0},
+    "GRNT, DLPH, ACMR, FTHM at $2 billion -> watch for hundreds of child orders over several sessions, higher bps": {
+        "focus_hint": "Look at GRNT, DLPH, ACMR and FTHM today", "nav_usd": 2_000_000_000, "max_revisions": 2},
+    "Defensives (DLPH, EMBR) at $2M -> a small mandate: watch for few child orders and a lower cost in bps": {
+        "focus_hint": "defensive names: DLPH and EMBR", "nav_usd": 2_000_000, "max_revisions": 2},
+    "TSLA, NVDA and ACMR, but only ACMR is in the data -> TSLA and NVDA never reach research (mandate)": {
+        "focus_hint": "Look at TSLA, NVDA and ACMR today", "nav_usd": 10_000_000, "max_revisions": 2},
+    "No hint, $10M -> the CIO model picks the names from the table: watch mandate.source and rationale": {
+        "focus_hint": None, "nav_usd": 10_000_000, "max_revisions": 2},
+}
+SCENARIO = scenario_field(CASES)
 
 DEFAULT_NAV = 10_000_000.0
 DEFAULT_MAX_REVISIONS = 2
@@ -285,6 +320,7 @@ class ResizeProposal(BaseModel):
 
 # --------------------------------------------------------------------------- state
 class DeskIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made case; replaces the three fields below
     focus_hint: str  # e.g. "semiconductors and software"; optional
     nav_usd: float  # default 10,000,000
     max_revisions: int  # risk-committee resize rounds before it trims by itself; default 2, clamped to 0..5
@@ -385,7 +421,15 @@ CIO_PROMPT = (
 
 
 def cio_plan(state: DeskState) -> dict:
-    """Normalise the inputs, let the CIO model pick names and a budget, and validate what it says."""
+    """Resolve a picked ready-made case, normalise the inputs, let the CIO model pick names and a budget, and validate it."""
+    picked = expand(
+        state,
+        CASES,
+        has_input=lambda s: bool(str(s.get("focus_hint") or "").strip())
+        or s.get("nav_usd") is not None
+        or s.get("max_revisions") is not None,
+    )
+    state = {**state, **picked}  # a picked case replaces all three input fields (None means "default" / "no hint")
     nav = state.get("nav_usd")
     nav = DEFAULT_NAV if nav is None else float(nav)
     if not nav > 0:
@@ -424,6 +468,7 @@ def cio_plan(state: DeskState) -> dict:
         "model_error": error,
     }
     return {
+        **picked,
         "nav_usd": nav,
         "max_revisions": max_rev,
         "revision_count": 0,

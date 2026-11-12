@@ -73,11 +73,21 @@ check you could add after the `agent` node).
 
 ## Try it in Studio
 
-Open the graph in chat mode and ask "Which region had the highest return rate for Lumen Cam Pro last quarter?"
-(the tool result also shows how many order lines each rate rests on). Then follow up in the same thread with "And
-in the quarter before?" to see history and the quarter arithmetic at work. Or paste the input
-`{"messages": [{"role": "user", "content": "Compare Europe's October revenue with July's"}], "max_tool_rounds": 3}`.
-Ask "What did customers say about the Therm price?": the sales data has no such field, so a good run says so.
+Open the `Ready-made case` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+the first one). Each case is an opening question plus a tool-round limit; the tool results show how many order lines
+each figure rests on:
+  * `Which region had the highest return rate for Lumen Cam Pro last quarter?` - APAC leads at 20%, on only 10
+    order lines; a good answer says the rate is shaky. Then follow up in the same thread (type in the chat) with
+    "And in the quarter before?" to see history and the quarter arithmetic at work.
+  * `Compare Europe's October revenue with July's` (3 rounds) - two figures, then the calculator for the change.
+  * `What did customers say about the Therm price?` - the sales data has no such field, so a good run says so.
+  * `How many Lumen Doorbells did we sell last quarter?` - the product is called `Lumen Bell`; a wrong name
+    comes back as an error `ToolMessage` listing the valid ones, and the model corrects itself.
+  * `What products and regions does the data cover, and what is 'last quarter'?` - the `describe_dataset` tool.
+  * `How did each product's revenue change from Q2 to Q3?` (1 tool round) - more work than one round allows; watch
+    the next model call be made without tools and answer from what it has.
+To ask your own, paste `{"messages": [{"role": "user", "content": "Compare Europe's October revenue with July's"}],
+"max_tool_rounds": 3}`.
 
 ## Extend it
 
@@ -112,6 +122,19 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | Which region had the highest return rate for Lumen Cam Pro last quarter? -> APAC 20% on just 10 lines: watch the caveat | `{"messages": [{"role": "user", "content": "Which region had the highest return rate for Lumen Cam Pro last quarter?"}]}` |
+| 2 | Compare Europe's October revenue with July's (3 rounds) -> gross $5,254.70 vs $3,446.30: watch the calculator | `{"messages": [{"role": "user", "content": "Compare Europe's October revenue with July's"}], "max_tool_rounds": 3}` |
+| 3 | What did customers say about the Therm price? -> the sales data has no review text: does a good run say so? | `{"messages": [{"role": "user", "content": "What did customers say about the Therm price?"}]}` |
+| 4 | How many Lumen Doorbells did we sell last quarter? -> no such product ('Lumen Bell'): watch for an error, then a retry | `{"messages": [{"role": "user", "content": "How many Lumen Doorbells did we sell last quarter?"}]}` |
+| 5 | What products and regions does the data cover, and what is 'last quarter'? -> watch describe_dataset: it says 2026Q3 | `{"messages": [{"role": "user", "content": "What products and regions does the data cover, and what is 'last quarter'?"}]}` |
+| 6 | How did each product's revenue change from Q2 to Q3, in percent? (1 tool round) -> watch the cap stop the loop | `{"messages": [{"role": "user", "content": "How did each product's revenue change from Q2 to Q3, in percent?"}], "max_tool_rounds": 1}` |
+
 ## Example input
 
 ```json
@@ -125,4 +148,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `sales_react_agent`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `sales_react_agent`, pick a case from the **Ready-made case** dropdown, or paste the input above.

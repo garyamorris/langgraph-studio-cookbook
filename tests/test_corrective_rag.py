@@ -248,9 +248,60 @@ def test_support_corpus_never_retrieves_internal_articles():
 
 def test_bad_inputs_are_rejected_clearly():
     with pytest.raises(ValueError, match="question"):
-        ex.graph.invoke({"question": "  "})
+        ex.graph.invoke({"corpus": "support"})  # a knowledge base with no question is real input that cannot run
     with pytest.raises(ValueError, match="Unknown corpus"):
         ex.graph.invoke({"question": "hi", "corpus": "wiki"})
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
+
+
+def test_a_blank_form_runs_the_first_ready_made_question():
+    first = next(iter(ex.CASES.values()))
+    for blank in ({}, {"question": "  "}):  # Studio's Submit on an empty form: no dead end
+        out = ex.graph.invoke(blank)
+        assert out["question"] == first["question"] and out["corpus"] == "langgraph" and out["status"]
+
+
+# --------------------------------------------------------------------------- the ready-made questions
+def label_for(start: str) -> str:
+    return next(k for k in ex.CASES if k.startswith(start))
+
+
+def ranked(question: str, corpus: str = "langgraph") -> list[str]:
+    return [h.doc.id for h in get_retriever(corpus).search(question, k=ex.TOP_K)]
+
+
+def test_the_retrieval_facts_in_the_ready_made_labels_are_true():
+    # the right article is retrieved 4th for the pause question, and not at all in the first four for the sign-off one
+    assert ranked(PAUSE_Q).index(HITL) == 3 and "ranks the right article 4th" in label_for("How do I pause a graph")
+    assert HITL not in ranked(SIGN_OFF_Q) and "misses the top 4" in label_for("How can I let a person")
+    assert ranked("How do I stream tokens to a UI?") == ["streaming"] and "only the streaming article" in label_for("How do I stream tokens")
+    assert ranked(CAPITAL_Q) == [] and "no article shares a word" in label_for("What is the capital")
+    # support: the public refund article says 5 to 7 business days; the manager threshold lives only in the internal matrix
+    refunds = next(d for d in kb_docs("support") if d.id == "returns-and-refunds")
+    assert "5 to 7 business days" in refunds.text and "5 to 7 business days" in label_for("How long do refunds take")
+    matrix = next(d for d in kb_docs("support") if d.id == "refund-approval-matrix")
+    assert matrix.audience == "internal" and "MANAGER APPROVAL REQUIRED" in matrix.text
+    public = [d for d in kb_docs("support") if d.audience == "public"]
+    assert not any("manager" in d.text.lower() for d in public), "no public article answers the manager question"
+    assert "refund-approval-matrix" not in ranked("What refund amount needs manager approval?", "support")
+
+
+def test_each_ready_made_case_names_its_knowledge_base_and_the_labels_agree():
+    for label, fields in ex.CASES.items():
+        assert fields["corpus"] in (None, *ex.CORPORA), label
+        assert ("(support)" in label) == (fields["corpus"] == "support"), f"{label}: the label must say which knowledge base it asks"
+
+
+def test_picking_the_internal_only_question_abstains_without_generating_and_never_cites_the_internal_article():
+    pin({}, corpus="support")  # the grader finds nothing relevant among the public articles
+    rewrites("refund authority levels", "manager sign-off limit")
+    prompts = chat("SHOULD NEVER BE CALLED")
+    out = ex.graph.invoke({"scenario": label_for("What refund amount needs manager approval")})
+    assert out["corpus"] == "support" and out["status"] == "abstained" and prompts == []
+    seen = {a["id"] for rd in out["grading"] for a in rd["articles"]}
+    assert "refund-approval-matrix" not in seen, "internal-only articles must never reach a customer-facing answer"
+    assert "$100" not in out["answer"]
 
 
 # --------------------------------------------------------------------------- a reused thread behaves like a fresh one

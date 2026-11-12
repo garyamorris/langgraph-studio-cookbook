@@ -71,16 +71,26 @@ MODELS AND DATA
     not a pricing engine.
 
 TRY IT IN STUDIO
-    1. Run ``{"product": "Lumen Therm"}`` (optionally ``"margin_target": 0.28``). Read ``assumptions`` and the
-       ``recommendation`` (about $145 at a 28% floor).
+    1. Pick a case from the "Ready-made case" dropdown and press Submit (on a new thread a blank form runs the first
+       one). Each case is a product from ``sales.csv`` and, for some, a margin floor; the recommendation is chosen in
+       code from seeded numbers, so these results repeat exactly:
+         * Lumen Therm, default 28% floor: about $145 (its list price is now $149).
+         * Lumen Therm, 35% floor: $170 with an extrapolation warning, because no week ever averaged above $159.
+         * Lumen Therm, 45% floor: "no feasible price".
+         * Lumen Cam Pro, default 28% floor: $80.
+         * Lumen Sensor Kit, default floor: price barely moves its demand (elasticity -0.24, R-squared 0.00), so the
+           analysis pushes the price up to $60, an extrapolation: a fit with no signal gives a weak recommendation.
+       Read ``assumptions`` and the ``recommendation`` of the run.
     2. Open the thread's history, select the ``set_assumptions`` step (the last checkpoint before ``simulate``),
        edit the ``assumptions`` value in the state panel - set ``"margin_target": 0.35`` - and fork / re-run from that
        step. (Button names differ a little between Studio versions; what matters is that you edit state at that
-       checkpoint and continue from it.) Only ``simulate`` and ``recommend`` run again; the new recommendation is
-       about $170 and carries an extrapolation warning, because no week ever averaged above $159.
+       checkpoint and continue from it.) Only ``simulate`` and ``recommend`` run again; for Lumen Therm the new
+       recommendation is about $170 and carries an extrapolation warning, as in the second case above.
     3. Select the original run's final step: it is unchanged. Try ``"elasticity": -3`` for a less price-sensitive
        market, or ``"margin_target": 0.45`` to see the "no feasible price" answer.
-    4. Same thing in code: ``.venv/bin/python scripts/time_travel_demo.py`` (add ``--margin 0.30`` for another what-if).
+    4. By hand: ``{"product": "Lumen Therm", "margin_target": 0.28}`` (both fields are optional), or any of the eight
+       products. Same thing in code: ``.venv/bin/python scripts/time_travel_demo.py`` (add ``--margin 0.30`` for
+       another what-if).
 
 EXTEND IT
     Fork twice from the same checkpoint (two scenarios) and diff them. Add a second fork point after
@@ -103,6 +113,7 @@ from deepdive.common.config import mode_label
 from deepdive.common.data import read_csv
 from deepdive.common.meta import ExampleMeta
 from deepdive.common.models import get_llm
+from deepdive.common.scenarios import expand, scenario_field
 
 META = ExampleMeta(
     id="pricing_whatif",
@@ -124,6 +135,24 @@ META = ExampleMeta(
 
 EXAMPLE_INPUT = {"product": "Lumen Therm"}
 
+# Ready-made cases for Studio's dropdown (see deepdive.common.scenarios). Each is a product of data/sales.csv and, optionally, a
+# margin floor (``None`` = the default, 28%). The first (EXAMPLE_INPUT) runs on a blank form. The recommended price, the "no
+# feasible price" answer and the extrapolation warning are computed in code from a seeded fit, so the labels may promise them
+# (tests/test_pricing_whatif.py re-checks every number in a label); only the paragraph that explains them is written by a model.
+CASES: dict[str, dict] = {
+    "Lumen Therm, default 28% margin floor -> recommends $145 (its list price is now $149)": {
+        "product": "Lumen Therm", "margin_target": None},
+    "Lumen Therm, 35% margin floor -> recommends $170, an extrapolation (no week ever averaged above $159)": {
+        "product": "Lumen Therm", "margin_target": 0.35},
+    "Lumen Therm, 45% margin floor -> no feasible price: nothing in the supported range meets it": {
+        "product": "Lumen Therm", "margin_target": 0.45},
+    "Lumen Cam Pro (unit cost $38, list price $89), default 28% margin floor -> recommends $80": {
+        "product": "Lumen Cam Pro", "margin_target": None},
+    "Lumen Sensor Kit, price barely moves demand (elasticity -0.24, R-squared 0.00) -> $60, an extrapolation": {
+        "product": "Lumen Sensor Kit", "margin_target": None},
+}
+SCENARIO = scenario_field(CASES)
+
 # --------------------------------------------------------------------------- constants
 DEFAULT_PRODUCT = "Lumen Therm"
 DEFAULT_MARGIN_TARGET = 0.28
@@ -142,6 +171,7 @@ ELASTICITY_CEILING = -0.2  # a fitted elasticity above this (wrong sign / no sig
 
 # --------------------------------------------------------------------------- state
 class PriceIn(TypedDict, total=False):
+    scenario: SCENARIO  # a ready-made case; replaces the two fields below
     product: str  # default "Lumen Therm"
     margin_target: float  # contribution-margin floor, default 0.28
 
@@ -266,7 +296,13 @@ def template_narrative(rec: dict, a: dict) -> str:
 
 # --------------------------------------------------------------------------- nodes
 def load_history(state: PriceState) -> dict:
-    """Weekly units and average selling price for one product, plus its unit cost and list price, from sales.csv."""
+    """Weekly units and average selling price for one product, plus its unit cost and list price, from sales.csv.
+
+    A picked ready-made case sets BOTH ``product`` and ``margin_target`` (``None`` = the default), so it replaces whatever
+    an earlier run on this thread left in them; ``set_assumptions`` reads the margin from the state this node writes.
+    """
+    picked = expand(state, CASES, has_input=lambda s: bool(s.get("product") or s.get("margin_target")))
+    state = {**state, **picked}
     product = state.get("product") or DEFAULT_PRODUCT
     df = read_csv("sales.csv")
     known = sorted(df["product"].unique())
@@ -281,6 +317,7 @@ def load_history(state: PriceState) -> dict:
         raise ValueError(f"{product} has only {len(weekly)} weeks with sales; need at least {MIN_WEEKS}.")
     latest = df.sort_values(["order_date", "order_id"]).iloc[-1]
     return {
+        **picked,
         "product": product,
         "history": [
             {"week": r.week.strftime("%Y-%m-%d"), "units": int(r.units), "revenue": round(float(r.revenue), 2), "avg_price": round(float(r.avg_price), 4)}

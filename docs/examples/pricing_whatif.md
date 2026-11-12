@@ -93,16 +93,26 @@ not a pricing engine.
 
 ## Try it in Studio
 
-1. Run `{"product": "Lumen Therm"}` (optionally `"margin_target": 0.28`). Read `assumptions` and the
-   `recommendation` (about $145 at a 28% floor).
+1. Pick a case from the "Ready-made case" dropdown and press Submit (on a new thread a blank form runs the first
+   one). Each case is a product from `sales.csv` and, for some, a margin floor; the recommendation is chosen in
+   code from seeded numbers, so these results repeat exactly:
+     * Lumen Therm, default 28% floor: about $145 (its list price is now $149).
+     * Lumen Therm, 35% floor: $170 with an extrapolation warning, because no week ever averaged above $159.
+     * Lumen Therm, 45% floor: "no feasible price".
+     * Lumen Cam Pro, default 28% floor: $80.
+     * Lumen Sensor Kit, default floor: price barely moves its demand (elasticity -0.24, R-squared 0.00), so the
+       analysis pushes the price up to $60, an extrapolation: a fit with no signal gives a weak recommendation.
+   Read `assumptions` and the `recommendation` of the run.
 2. Open the thread's history, select the `set_assumptions` step (the last checkpoint before `simulate`),
    edit the `assumptions` value in the state panel - set `"margin_target": 0.35` - and fork / re-run from that
    step. (Button names differ a little between Studio versions; what matters is that you edit state at that
-   checkpoint and continue from it.) Only `simulate` and `recommend` run again; the new recommendation is
-   about $170 and carries an extrapolation warning, because no week ever averaged above $159.
+   checkpoint and continue from it.) Only `simulate` and `recommend` run again; for Lumen Therm the new
+   recommendation is about $170 and carries an extrapolation warning, as in the second case above.
 3. Select the original run's final step: it is unchanged. Try `"elasticity": -3` for a less price-sensitive
    market, or `"margin_target": 0.45` to see the "no feasible price" answer.
-4. Same thing in code: `.venv/bin/python scripts/time_travel_demo.py` (add `--margin 0.30` for another what-if).
+4. By hand: `{"product": "Lumen Therm", "margin_target": 0.28}` (both fields are optional), or any of the eight
+   products. Same thing in code: `.venv/bin/python scripts/time_travel_demo.py` (add `--margin 0.30` for
+   another what-if).
 
 ## Extend it
 
@@ -142,6 +152,18 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | Lumen Therm, default 28% margin floor -> recommends $145 (its list price is now $149) | `{"product": "Lumen Therm"}` |
+| 2 | Lumen Therm, 35% margin floor -> recommends $170, an extrapolation (no week ever averaged above $159) | `{"product": "Lumen Therm", "margin_target": 0.35}` |
+| 3 | Lumen Therm, 45% margin floor -> no feasible price: nothing in the supported range meets it | `{"product": "Lumen Therm", "margin_target": 0.45}` |
+| 4 | Lumen Cam Pro (unit cost $38, list price $89), default 28% margin floor -> recommends $80 | `{"product": "Lumen Cam Pro"}` |
+| 5 | Lumen Sensor Kit, price barely moves demand (elasticity -0.24, R-squared 0.00) -> $60, an extrapolation | `{"product": "Lumen Sensor Kit"}` |
+
 ## Example input
 
 ```json
@@ -150,4 +172,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `pricing_whatif`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `pricing_whatif`, pick a case from the **Ready-made case** dropdown, or paste the input above.

@@ -181,13 +181,75 @@ def test_findings_do_not_pile_up_when_the_same_thread_runs_twice():
 def test_inputs_are_validated():
     with pytest.raises(ValueError, match="Unknown product 'Lumen Toaster'"):
         ex.graph.invoke({"product": "Lumen Toaster"})
-    with pytest.raises(ValueError, match="Unknown product"):
-        ex.graph.invoke({})
+    with pytest.raises(ValueError, match="Unknown product ''"):
+        ex.graph.invoke({"max_reviews": 5})  # a window with no product is still a bad value, not a blank form
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        ex.graph.invoke({"scenario": "not a case"})
     with pytest.raises(ValueError, match="max_reviews must be"):
         ex.graph.invoke({"product": PLUG, "max_reviews": 0})
     with pytest.raises(ValueError, match="max_reviews must be"):
         ex.graph.invoke({"product": PLUG, "max_reviews": 5000})
     assert ex.graph.invoke({"product": "lumen plug 4-PACK"})["product"] == PLUG, "product match ignores case"
+
+
+# --------------------------------------------------------------------------- ready-made cases (Studio's dropdown)
+def test_a_blank_form_runs_the_first_ready_made_case():
+    set_structured_handler(ex.RiskScan, scripted([no_risks()]))
+    out = ex.graph.invoke({})  # Studio's Submit on an empty form: no dead end
+    assert out["product"] == PLUG and out["reviews_analyzed"] == 53 and BURNING_PLUG in {r["review_id"] for r in out["risks"]}
+
+
+# label start -> (reviews of the product, reviews analysed, review ids the keyword scan must flag in that window)
+CASE_FACTS = {
+    "Lumen Plug 4-pack, all 53": (53, 53, {"R-0315"}),
+    "Lumen Lock, all 22": (22, 22, {"R-0319", "R-0167", "R-0262"}),
+    "Lumen Therm, newest 20 of 40": (40, 20, {"R-0316"}),
+    "Lumen Cam Pro, newest 8 of 57": (57, 8, {"R-0317"}),
+    "Lumen Cam Pro, newest 5 of 57": (57, 5, set()),
+    "Lumen Hub, all 44": (44, 44, {"R-0320"}),
+    "Lumen Bell, all 33": (33, 33, set()),
+}
+
+
+def test_every_ready_made_case_agrees_with_its_label_and_the_keyword_scan_alone_proves_it():
+    """The labels claim which reviews get flagged. Only the keyword scan can promise that (the model may add more)."""
+    assert [k for k in ex.CASES if not any(k.startswith(start) for start in CASE_FACTS)] == [], "a case has no facts row"
+    df = read_csv("product_reviews.csv")
+    for label, fields in ex.CASES.items():
+        start = next(s for s in CASE_FACTS if label.startswith(s))
+        total, analysed, flagged = CASE_FACTS[start]
+        product = fields["product"]
+        assert label.startswith(product), f"{label}: the label must lead with its product"
+        assert (df["product"] == product).sum() == total, f"{label}: the product has {(df['product'] == product).sum()} reviews"
+        set_structured_handler(ex.RiskScan, scripted([no_risks()]))
+        out = ex.graph.invoke(dict(fields))
+        assert out["reviews_analyzed"] == analysed, label
+        assert {r["review_id"] for r in out["risks"]} == flagged, f"{label}: the keyword scan disagrees with the label"
+        assert all(i in label for i in flagged), f"{label}: name the flagged reviews"
+        assert all(r["detected_by"] == ["keyword"] for r in out["risks"]), "with a silent model only the keywords flag"
+
+
+def test_a_case_with_no_flags_ends_with_the_risk_check_and_a_case_with_flags_opens_with_risks():
+    set_structured_handler(ex.RiskScan, scripted([no_risks()]))
+    quiet = next(k for k in ex.CASES if k.startswith("Lumen Bell"))
+    loud = next(k for k in ex.CASES if k.startswith("Lumen Lock"))
+    assert "## Risk check" in ex.graph.invoke({"scenario": quiet})["digest"]
+    sections = [line for line in ex.graph.invoke({"scenario": loud})["digest"].splitlines() if line.startswith("## ")]
+    assert sections[0] == "## Risks needing attention (3)"
+
+
+def test_picking_a_case_after_another_starts_from_a_clean_slate_on_the_same_thread():
+    g = ex.build_graph(checkpointer=InMemorySaver())
+    cfg = {"configurable": {"thread_id": "pick-twice"}}
+    set_structured_handler(ex.RiskScan, scripted([no_risks()]))
+    lock = next(k for k in ex.CASES if k.startswith("Lumen Lock"))
+    cam5 = next(k for k in ex.CASES if k.startswith("Lumen Cam Pro, newest 5"))
+    cam8 = next(k for k in ex.CASES if k.startswith("Lumen Cam Pro, newest 8"))
+    assert len(g.invoke({"scenario": lock}, cfg)["risks"]) == 3
+    assert g.invoke({"scenario": cam5}, cfg)["risks"] == [], "the Lock's findings must not leak into the next pick"
+    assert g.invoke({"scenario": cam8}, cfg)["reviews_analyzed"] == 8
+    assert g.invoke({"scenario": cam5}, cfg)["reviews_analyzed"] == 5, "a case with a window replaces the previous window"
+    assert g.invoke({"scenario": lock}, cfg)["reviews_analyzed"] == 22, "None means the default window, not the previous 5"
 
 
 def test_several_model_findings_for_one_review_keep_the_worst_severity():

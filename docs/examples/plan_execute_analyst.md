@@ -77,13 +77,23 @@ read the plan, which is why it is a first-class state key.
 
 ## Try it in Studio
 
-Input `{"question": "Did the Therm price cut on 2026-05-01 increase units enough to offset the lower price?"}`.
-Open `make_plan` to read the plan, then step through `execute_step` / `replan` and watch `steps` fill. A
-sound run compares equal windows either side of the cut (for example Feb-Apr with May-Jul) and finds units up about
-47% and revenue up about 44%, with a caveat that summer demand may share the credit. Try
-`{"question": "Which region had the highest return rate for Cam Pro last quarter?", "max_steps": 3}`, or ask
-something the data cannot answer ("What was customer satisfaction in Q2?") and check that the conclusion says so.
-To see error handling, set `max_steps` to 2 and ask about a product that does not exist.
+Open the `Ready-made case` dropdown, pick one and press Submit (or leave the form blank on a new thread: that runs
+the first one). Open `make_plan` to read the plan, then step through `execute_step` / `replan` and watch
+`steps` fill. Each case sets the question and the step budget:
+  * `Did the Therm price cut on 2026-05-01 offset the lower price?` - a sound run compares equal windows either
+    side of the cut (for example Feb-Apr with May-Jul) and finds units up about 47% (32 -> 47) and revenue up about
+    44%, with a caveat that summer demand may share the credit.
+  * `Which region had the highest return rate for Cam Pro last quarter?` (3 steps) - APAC leads at 20%, but on
+    only 10 order lines; a good conclusion says the sample is thin.
+  * `Top 2 products by margin last quarter, and their share of total margin?` - a `top_n` step feeds a
+    `calculate` step through named numbers (`s1.rank1`).
+  * `What was customer satisfaction in Q2?` - the sales data cannot answer it; check that the conclusion says so.
+  * `How did the Lumen Doorbell sell last quarter?` (2 steps) - there is no such product (it is `Lumen Bell`):
+    the tool error becomes an observation, and the replanner can fix the step within the budget.
+  * `Break down 2026 revenue by region, channel and product` (2 steps) - needs more steps than the budget; watch
+    the plan being cut and `stop_reason` become `max_steps`.
+To ask your own, paste `{"question": "Did the Therm price cut on 2026-05-01 increase units enough to offset the
+lower price?", "max_steps": 6}`.
 
 ## Extend it
 
@@ -121,6 +131,19 @@ graph TD;
 
 ```
 
+## Ready-made cases in Studio
+
+The input form has a **Ready-made case** dropdown, so you do not need to know the data. Pick one and press Submit; a blank form on a new thread runs the first.
+
+| # | Case (as shown in the dropdown) | Input it stands for |
+|---|---|---|
+| 1 | Did the Therm price cut on 2026-05-01 offset the lower price? -> Feb-Apr vs May-Jul: units 32 -> 47, revenue +44% | `{"question": "Did the Therm price cut on 2026-05-01 increase units enough to offset the lower price?"}` |
+| 2 | Which region had the highest return rate for Cam Pro last quarter? (3 steps) -> APAC 20% on just 10 lines: thin sample | `{"question": "Which region had the highest return rate for Cam Pro last quarter?", "max_steps": 3}` |
+| 3 | Top 2 products by margin last quarter, and their share of total margin? -> Therm and Hub: watch top_n feed calculate | `{"question": "Which two products had the highest margin last quarter, and what share of total margin do they make up?"}` |
+| 4 | What was customer satisfaction in Q2? -> the sales data has no such field: does the conclusion say so? | `{"question": "What was customer satisfaction in Q2?"}` |
+| 5 | How did the Lumen Doorbell sell last quarter? (2 steps) -> no such product ('Lumen Bell'): watch the error and replan | `{"question": "How did the Lumen Doorbell sell last quarter?", "max_steps": 2}` |
+| 6 | Break down 2026 revenue by region, channel and product (2 steps) -> needs 3 steps: watch the budget cut it short | `{"question": "Break down 2026 revenue by region, by channel and by product, and tell me which of the three is the weakest.", "max_steps": 2}` |
+
 ## Example input
 
 ```json
@@ -129,4 +152,4 @@ graph TD;
 }
 ```
 
-Run it: `uv run langgraph dev`, open Studio, choose `plan_execute_analyst`, paste the input above.
+Run it: `uv run langgraph dev`, open Studio, choose `plan_execute_analyst`, pick a case from the **Ready-made case** dropdown, or paste the input above.

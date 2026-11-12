@@ -378,3 +378,75 @@ def test_the_environment_persists_across_turns_and_is_isolated_between_threads()
     other = graph.invoke(user("status?"), thread("bob"))
     assert '"replicas": 3' in tool_messages(other["messages"])["r1"].content, "another thread has its own environment"
     assert replicas(other) == 3
+
+
+# --------------------------------------------------------------------------- ready-made cases (the Studio dropdown)
+def case(prefix: str) -> str:
+    return next(k for k in ex.CASES if k.startswith(prefix))
+
+
+def test_a_blank_form_runs_the_first_case_and_never_injects_a_message_into_a_thread_with_history():
+    script(ai(call("scale_service", {"service": "api", "replicas": 10, "reason": "cpu 93%"}, "w1")), AIMessage("done"))
+    graph, cfg = make(), thread("blank")
+    paused = graph.invoke({}, cfg)  # Studio's Submit on an empty form
+    ask = paused["__interrupt__"][0].value
+    assert ask["tool"] == "scale_service" and graph.get_state(cfg).values["messages"][0].content == ex.EXAMPLE_INPUT["messages"][0]["content"]
+    graph.invoke(Command(resume={"action": "approve"}), cfg)
+    humans = lambda: [m.content for m in graph.get_state(cfg).values["messages"] if m.type == "human"]  # noqa: E731
+    before = humans()
+    script(AIMessage("anything else?"))
+    graph.invoke({}, cfg)  # the thread already has a chat: nothing may be typed on the user's behalf
+    assert humans() == before and len(before) == 1
+    with pytest.raises(ValueError, match="Unknown ready-made case"):
+        graph.invoke({"scenario": "not a case"}, cfg)
+
+
+def test_the_numbers_and_names_in_the_case_labels_match_the_simulated_environment():
+    env = ex.initial_env()
+    svc = env["services"]
+    assert (svc["api"]["replicas"], svc["api"]["cpu"], svc["db"]["status"]) == (3, 93, "healthy")
+    deploy = next(d for d in env["deploys"] if d["id"] == "D-7731")
+    assert (deploy["service"], deploy["version"], deploy["previous_version"]) == ("worker", "2026.11.4", "2026.11.2")
+    for fragment in ("3 replicas at 93% cpu", "D-7731 (2026.11.4)", "2026.11.2", "(limit is 20)", "max_steps=1"):
+        assert any(fragment in label for label in ex.CASES), fragment
+    assert ex.MAX_REPLICAS == 20 and "db" in ex.NOT_SCALABLE
+    [one] = [f for k, f in ex.CASES.items() if "max_steps=1" in k]
+    assert one["max_steps"] == 1 and all(f["max_steps"] is None for f in ex.CASES.values() if f is not one)
+
+
+def test_the_50_replicas_case_is_refused_by_code_even_when_the_operator_approves():
+    script(ai(call("scale_service", {"service": "api", "replicas": 50, "reason": "503s"}, "w1")), AIMessage("ok"))
+    res = run_graph(make(), {"scenario": case("'Scale the api to 50")}, [{"action": "approve"}])
+    assert res.interrupts[0]["limit_check_preview"]["ok"] is False
+    assert "REFUSED by safety limits" in tool_messages(res.output["messages"])["w1"].content
+    assert res.output["env"] == ex.initial_env()
+
+
+def test_the_db_scaling_case_never_runs_whatever_the_model_proposes_and_the_operator_approves():
+    script(ai(call("scale_service", {"service": "db", "replicas": 3, "reason": "load"}, "w1")), AIMessage("ok"))
+    res = run_graph(make(), {"scenario": case("'Scale the db")}, [{"action": "approve"}])
+    assert res.interrupts[0]["limit_check_preview"]["ok"] is False
+    assert res.output["audit"][0]["outcome"] == "refused_by_limits" and res.output["env"] == ex.initial_env()
+
+    prompts = script(AIMessage("The database cannot be scaled from chat."))  # or the model declines before any call
+    res = run_graph(make(), {"scenario": case("'Scale the db")})
+    assert res.interrupts == [] and res.output["env"] == ex.initial_env() and len(prompts) == 1
+
+
+def test_the_max_steps_case_stops_the_loop_with_the_fixed_message_after_one_model_call():
+    prompts = script(ai(call("get_service_status", {"service": "api"}, "r1")), AIMessage("never reached"))
+    res = run_graph(make(), {"scenario": case("max_steps=1")})
+    assert len(prompts) == 1 and res.output["agent_steps"] == 1 and res.interrupts == []
+    assert "1 reasoning steps" in res.output["messages"][-1].content
+    assert_valid_history(res.output["messages"])
+
+
+def test_the_read_plus_restart_case_runs_the_read_first_and_gates_only_the_restart():
+    script(
+        ai(call("get_error_logs", {"service": "worker", "limit": 2}, "r1"), call("restart_service", {"service": "cache", "reason": "stale"}, "w1")),
+        AIMessage("Logs shown; cache restarted."),
+    )
+    graph, cfg = make(), thread("split")
+    graph.invoke({"scenario": case("'Show the worker logs")}, cfg)
+    paused = graph.get_state(cfg)
+    assert set(tool_messages(paused.values["messages"])) == {"r1"} and paused.tasks[0].interrupts[0].value["tool"] == "restart_service"

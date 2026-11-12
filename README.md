@@ -1,4 +1,4 @@
-# langgraph-deepdive
+# langgraph-studio-cookbook
 
 A playground of **problem-driven LangGraph examples** for exploring architecture patterns in **LangGraph Studio**.
 

@@ -1,4 +1,4 @@
-# How the Deep Dive walkthrough was made
+# How the walkthrough video was made
 
 `../docs/demo/langgraph-deepdive-walkthrough.mp4` (1080p, 4:07, 55 MB; **not in git**, it is ignored because of its size, re-make it with the commands below) and `-720p.mp4` (26 MB, in git). Both carry an English caption track
 (toggle it in QuickTime / VLC / iOS); the same cues are beside them as `.srt`, `.vtt` and a readable `.transcript.md`. It explains how LangGraph executes, using **real runs of this repo's examples**, not mock-ups.

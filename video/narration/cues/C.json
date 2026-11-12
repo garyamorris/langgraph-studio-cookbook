@@ -1,0 +1,41 @@
+{
+ "scene": "C",
+ "duration": 24.2,
+ "cues": [
+  {
+   "start": 0.02,
+   "end": 2.7,
+   "text": "Here is a real run, calling a real model."
+  },
+  {
+   "start": 3.18,
+   "end": 6.02,
+   "text": "A support ticket says the\nplug smells of burning."
+  },
+  {
+   "start": 6.56,
+   "end": 10.95,
+   "text": "The load ticket node reads it, and\ntriage asks the model to classify it."
+  },
+  {
+   "start": 11.61,
+   "end": 15.14,
+   "text": "Then a conditional edge picks\nexactly one of six next steps,"
+  },
+  {
+   "start": 15.36,
+   "end": 18.29,
+   "text": "and this one is escalate,\nnot a specialist."
+  },
+  {
+   "start": 18.9,
+   "end": 20.49,
+   "text": "Every step wrote a checkpoint,"
+  },
+  {
+   "start": 20.75,
+   "end": 24.2,
+   "text": "so the whole run can be\ninspected, or replayed, later."
+  }
+ ]
+}

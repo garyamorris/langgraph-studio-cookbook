@@ -1,0 +1,317 @@
+1
+00:00:03,910 --> 00:00:08,720
+LangGraph Deep Dive is a workbench
+of twenty-three LangGraph examples.
+
+2
+00:00:09,170 --> 00:00:11,160
+Each one solves a concrete problem,
+
+3
+00:00:11,410 --> 00:00:14,270
+from routing support
+tickets to approving loans,
+
+4
+00:00:14,580 --> 00:00:17,110
+and all of them load
+into one local server.
+
+5
+00:00:17,870 --> 00:00:20,100
+This video shows how they actually run.
+
+6
+00:00:21,110 --> 00:00:24,340
+Every example is built
+from the same four ideas.
+
+7
+00:00:24,570 --> 00:00:28,130
+State is a set of typed fields
+that every step can read.
+
+8
+00:00:28,510 --> 00:00:33,020
+A node is a plain function that reads
+that state and returns an update.
+
+9
+00:00:33,370 --> 00:00:35,360
+An edge says what runs next,
+
+10
+00:00:35,580 --> 00:00:39,150
+and a conditional edge lets the
+program decide at run time.
+
+11
+00:00:39,580 --> 00:00:43,280
+Open any example in Studio,
+press Submit on a blank form,
+
+12
+00:00:43,470 --> 00:00:47,458
+and a ready-made case runs, so you
+never need to know the data first.
+
+13
+00:00:48,487 --> 00:00:51,167
+Here is a real run, calling a real model.
+
+14
+00:00:51,647 --> 00:00:54,487
+A support ticket says the
+plug smells of burning.
+
+15
+00:00:55,027 --> 00:00:59,417
+The load ticket node reads it, and
+triage asks the model to classify it.
+
+16
+00:01:00,077 --> 00:01:03,607
+Then a conditional edge picks
+exactly one of six next steps,
+
+17
+00:01:03,827 --> 00:01:06,757
+and this one is escalate,
+not a specialist.
+
+18
+00:01:07,367 --> 00:01:08,957
+Every step wrote a checkpoint,
+
+19
+00:01:09,217 --> 00:01:12,667
+so the whole run can be
+inspected, or replayed, later.
+
+20
+00:01:13,677 --> 00:01:15,577
+Some work should run in parallel,
+
+21
+00:01:15,987 --> 00:01:18,517
+but you only know how much
+once you have planned it.
+
+22
+00:01:18,977 --> 00:01:24,107
+In the report orchestrator, one node
+plans the sections, and the Send API
+
+23
+00:01:24,147 --> 00:01:28,067
+launches a separate write section task
+for each of them at the same time.
+
+24
+00:01:28,627 --> 00:01:31,847
+A reducer then merges the
+drafts into one list,
+
+25
+00:01:32,277 --> 00:01:34,467
+and the graph carries on
+to write the summary,
+
+26
+00:01:34,767 --> 00:01:36,992
+and check every number against the data.
+
+27
+00:01:38,020 --> 00:01:40,560
+Loops are simply edges
+that point backwards.
+
+28
+00:01:40,810 --> 00:01:42,980
+Here a writer drafts a
+product announcement.
+
+29
+00:01:43,320 --> 00:01:47,650
+A rule checker written in code, and a
+critic model, review it side by side,
+
+30
+00:01:48,090 --> 00:01:51,660
+and a judge decides whether
+to pass, or go round again.
+
+31
+00:01:52,160 --> 00:01:54,370
+This brief is impossible on purpose:
+
+32
+00:01:54,640 --> 00:01:57,920
+sixteen words of required
+facts, in a ten word limit.
+
+33
+00:01:58,300 --> 00:02:00,760
+So the loop runs to its
+cap of three drafts,
+
+34
+00:02:01,050 --> 00:02:03,900
+and stops, honestly labelled best effort.
+
+35
+00:02:04,910 --> 00:02:06,700
+Some decisions need a person.
+
+36
+00:02:07,410 --> 00:02:10,620
+This loan screener asks
+the OpenAI Decisions API
+
+37
+00:02:10,660 --> 00:02:14,560
+for calibrated probabilities, then
+applies policy in plain code.
+
+38
+00:02:15,060 --> 00:02:18,290
+For a borderline file, the
+underwriter node calls interrupt.
+
+39
+00:02:18,750 --> 00:02:21,720
+The whole state is saved in a
+checkpoint under the thread I D,
+
+40
+00:02:22,070 --> 00:02:24,080
+and nothing runs until someone answers.
+
+41
+00:02:24,600 --> 00:02:27,900
+A Command carrying a resume value
+wakes the same thread exactly
+
+42
+00:02:27,940 --> 00:02:30,800
+where it stopped, and the
+decision flows on to the letter.
+
+43
+00:02:31,880 --> 00:02:34,380
+Streaming lets you watch, instead of wait.
+
+44
+00:02:34,740 --> 00:02:36,760
+The review digest loads the reviews,
+
+45
+00:02:36,990 --> 00:02:41,470
+runs three analysis stages inside a
+subgraph, and then writes the summary.
+
+46
+00:02:41,700 --> 00:02:46,270
+While it works, the server streams every
+event as it happens: tasks starting,
+
+47
+00:02:46,390 --> 00:02:50,130
+checkpoints saved, custom progress
+messages from inside the nodes,
+
+48
+00:02:50,360 --> 00:02:53,190
+and the digest itself, token by token.
+
+49
+00:02:53,560 --> 00:02:56,344
+Everything on this screen is
+drawn from that one stream.
+
+50
+00:02:57,343 --> 00:02:59,333
+Memory comes in two kinds.
+
+51
+00:02:59,573 --> 00:03:03,483
+Short term memory is the thread: the
+checkpointer keeps the conversation,
+
+52
+00:03:03,793 --> 00:03:08,213
+and when it grows too long, the graph
+folds the old messages into a summary,
+
+53
+00:03:08,513 --> 00:03:10,463
+while pinning facts like an order number.
+
+54
+00:03:11,143 --> 00:03:12,963
+Long term memory is the Store.
+
+55
+00:03:13,493 --> 00:03:17,743
+The memory concierge saves notes about
+a customer, and a later conversation,
+
+56
+00:03:17,903 --> 00:03:20,883
+on a different thread, recalls
+them with semantic search.
+
+57
+00:03:21,877 --> 00:03:24,157
+LangGraph Studio shows all of this.
+
+58
+00:03:24,507 --> 00:03:28,417
+Point it at the local server, and
+every example appears as a graph.
+
+59
+00:03:29,117 --> 00:03:31,087
+Choose a ready-made
+case from the dropdown,
+
+60
+00:03:31,247 --> 00:03:35,117
+press Submit, and the graph
+follows each step as it runs.
+
+61
+00:03:35,977 --> 00:03:38,837
+Then click any step to
+inspect exactly what it read
+
+62
+00:03:38,877 --> 00:03:41,217
+and wrote, including
+what the model returned.
+
+63
+00:03:41,777 --> 00:03:44,547
+Or go back to any checkpoint,
+re-run from there,
+
+64
+00:03:44,797 --> 00:03:47,067
+and fork the thread to
+take a different turn.
+
+65
+00:03:48,137 --> 00:03:52,277
+Twenty-three graphs, ready-made cases
+for everything that needs data,
+
+66
+00:03:52,587 --> 00:03:56,327
+and an offline mode, so the whole
+test suite runs without a key.
+
+67
+00:03:56,927 --> 00:04:02,507
+Start the server with U V run langgraph
+dev, pick a case, and watch it run.
+

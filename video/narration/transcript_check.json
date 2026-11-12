@@ -1,0 +1,341 @@
+{
+ "tool": "captions.py check",
+ "alias_table": {
+  "langgraph": [
+   "lang graph",
+   "langraph"
+  ],
+  "uv": [
+   "u v"
+  ],
+  "id": [
+   "i d"
+  ],
+  "readymade": [
+   "ready made"
+  ],
+  "longterm": [
+   "long term"
+  ],
+  "shortterm": [
+   "short term"
+  ],
+  "openai": [
+   "open ai"
+  ],
+  "subgraph": [
+   "sub graph"
+  ],
+  "checkpoint": [
+   "check point"
+  ],
+  "labeled": [
+   "labelled"
+  ],
+  "color": [
+   "colour"
+  ],
+  "behavior": [
+   "behaviour"
+  ],
+  "favorite": [
+   "favourite"
+  ],
+  "center": [
+   "centre"
+  ],
+  "gray": [
+   "grey"
+  ],
+  "program": [
+   "programme"
+  ],
+  "catalog": [
+   "catalogue"
+  ],
+  "canceled": [
+   "cancelled"
+  ],
+  "modeling": [
+   "modelling"
+  ],
+  "analyze": [
+   "analyse"
+  ],
+  "summarize": [
+   "summarise"
+  ],
+  "organize": [
+   "organise"
+  ],
+  "optimize": [
+   "optimise"
+  ],
+  "recognize": [
+   "recognise"
+  ],
+  "license": [
+   "licence"
+  ],
+  "defense": [
+   "defence"
+  ],
+  "traveled": [
+   "travelled"
+  ]
+ },
+ "scenes": {
+  "A": {
+   "status": "CLEAN",
+   "duration": 16.2,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 40,
+   "heard_words": 40,
+   "matched_words": 40,
+   "counts": {
+    "substitution": 0,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [
+    "LangGraph ~ LanGraph",
+    "LangGraph ~ LanGraph"
+   ],
+   "differences": [],
+   "heard_text": "LanGraph Deep Dive is a workbench of 23 LanGraph examples Each one solves a concrete problem from routing support tickets to approving loans and all of them load into one local server This video shows how they actually run",
+   "script_text": "LangGraph Deep Dive is a workbench of twenty-three LangGraph examples. Each one solves a concrete problem, from routing support tickets to approving loans, and all of them load into one local server. This video shows how they actually run."
+  },
+  "B": {
+   "status": "CLEAN",
+   "duration": 26.358,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 77,
+   "heard_words": 76,
+   "matched_words": 77,
+   "counts": {
+    "substitution": 0,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [
+    "run time ~ runtime",
+    "ready-made ~ ready made"
+   ],
+   "differences": [],
+   "heard_text": "Every example is built from the same four ideas State is a set of typed fields that every step can read A node is a plain function that reads that state and returns an update An edge says what runs next and a conditional edge lets the program decide at runtime Open any example in Studio press Submit on a blank form and a ready made case runs so you never need to know the data first",
+   "script_text": "Every example is built from the same four ideas. State is a set of typed fields that every step can read. A node is a plain function that reads that state and returns an update. An edge says what runs next, and a conditional edge lets the program decide at run time. Open any example in Studio, press Submit on a blank form, and a ready-made case runs, so you never need to know the data first."
+  },
+  "C": {
+   "status": "CLEAN",
+   "duration": 24.2,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 66,
+   "heard_words": 66,
+   "matched_words": 66,
+   "counts": {
+    "substitution": 0,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [],
+   "differences": [],
+   "heard_text": "Here is a real run calling a real model A support ticket says the plug smells of burning The load ticket node reads it and triage asks the model to classify it Then a conditional edge picks exactly one of six next steps and this one is Escalate not a specialist Every step wrote a checkpoint so the whole run can be inspected or replayed later",
+   "script_text": "Here is a real run, calling a real model. A support ticket says the plug smells of burning. The load ticket node reads it, and triage asks the model to classify it. Then a conditional edge picks exactly one of six next steps, and this one is escalate, not a specialist. Every step wrote a checkpoint, so the whole run can be inspected, or replayed, later."
+  },
+  "D": {
+   "status": "CLEAN",
+   "duration": 23.325,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 69,
+   "heard_words": 69,
+   "matched_words": 69,
+   "counts": {
+    "substitution": 0,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [],
+   "differences": [],
+   "heard_text": "Some work should run in parallel but you only know how much once you have planned it In the report orchestrator one node plans the sections and the send API launches a separate write section task for each of them at the same time A reducer then merges the drafts into one list and the graph carries on to write the summary and check every number against the data",
+   "script_text": "Some work should run in parallel, but you only know how much once you have planned it. In the report orchestrator, one node plans the sections, and the Send API launches a separate write section task for each of them at the same time. A reducer then merges the drafts into one list, and the graph carries on to write the summary, and check every number against the data."
+  },
+  "E": {
+   "status": "CLEAN",
+   "duration": 25.9,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 72,
+   "heard_words": 72,
+   "matched_words": 72,
+   "counts": {
+    "substitution": 0,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [
+    "labelled ~ labeled"
+   ],
+   "differences": [],
+   "heard_text": "Loops are simply edges that point backwards Here a writer drafts a product announcement A rule checker written in code and a critic model review it side by side And a judge decides whether to pass or go round again This brief is impossible on purpose 16 words of required facts in a 10 word limit So the loop runs to its cap of three drafts and stops honestly labeled best effort",
+   "script_text": "Loops are simply edges that point backwards. Here a writer drafts a product announcement. A rule checker written in code, and a critic model, review it side by side, and a judge decides whether to pass, or go round again. This brief is impossible on purpose: sixteen words of required facts, in a ten word limit. So the loop runs to its cap of three drafts, and stops, honestly labelled best effort."
+  },
+  "F": {
+   "status": "CLEAN",
+   "duration": 25.9,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 71,
+   "heard_words": 71,
+   "matched_words": 71,
+   "counts": {
+    "substitution": 0,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [
+    "I D, ~ ID"
+   ],
+   "differences": [],
+   "heard_text": "Some decisions need a person This loan screener asks the OpenAI Decisions API for calibrated probabilities then applies policy in plain code For a borderline file the underwriter node calls interrupt The whole state is saved in a checkpoint under the thread ID and nothing runs until someone answers A command carrying a resume value wakes the same thread exactly where it stopped and the decision flows on to the letter",
+   "script_text": "Some decisions need a person. This loan screener asks the OpenAI Decisions API for calibrated probabilities, then applies policy in plain code. For a borderline file, the underwriter node calls interrupt. The whole state is saved in a checkpoint under the thread I D, and nothing runs until someone answers. A Command carrying a resume value wakes the same thread exactly where it stopped, and the decision flows on to the letter."
+  },
+  "G": {
+   "status": "CLEAN",
+   "duration": 24.544,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 64,
+   "heard_words": 64,
+   "matched_words": 64,
+   "counts": {
+    "substitution": 0,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [],
+   "differences": [],
+   "heard_text": "Streaming lets you watch instead of wait The Review Digest loads the reviews runs three analysis stages inside a subgraph and then writes the summary While it works the server streams every event as it happens\u2014tasks starting checkpoints saved custom progress messages from inside the nodes and the digest itself token by token Everything on this screen is drawn from that one stream",
+   "script_text": "Streaming lets you watch, instead of wait. The review digest loads the reviews, runs three analysis stages inside a subgraph, and then writes the summary. While it works, the server streams every event as it happens: tasks starting, checkpoints saved, custom progress messages from inside the nodes, and the digest itself, token by token. Everything on this screen is drawn from that one stream."
+  },
+  "H": {
+   "status": "CLEAN",
+   "duration": 23.55,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 63,
+   "heard_words": 64,
+   "matched_words": 63,
+   "counts": {
+    "substitution": 0,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [
+    "Short term ~ Short term",
+    "checkpointer ~ check pointer",
+    "Long term ~ Long term"
+   ],
+   "differences": [],
+   "heard_text": "Memory comes in two kinds Short term memory is the thread The check pointer keeps the conversation And when it grows too long the graph folds the old messages into a summary while pinning facts like an order number Long term memory is the store The memory concierge saves notes about a customer and a later conversation on a different thread recalls them with semantic search",
+   "script_text": "Memory comes in two kinds. Short term memory is the thread: the checkpointer keeps the conversation, and when it grows too long, the graph folds the old messages into a summary, while pinning facts like an order number. Long term memory is the Store. The memory concierge saves notes about a customer, and a later conversation, on a different thread, recalls them with semantic search."
+  },
+  "I": {
+   "status": "DIFFERENCES",
+   "duration": 25.2,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 73,
+   "heard_words": 71,
+   "matched_words": 70,
+   "counts": {
+    "substitution": 2,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [
+    "ready-made ~ ready made",
+    "re run ~ rerun"
+   ],
+   "differences": [
+    {
+     "kind": "substitution",
+     "position": 1,
+     "script_words": [
+      "langgraph"
+     ],
+     "heard_words": [
+      "landgraph"
+     ],
+     "script_surface": "LangGraph",
+     "heard_surface": "LandGraph",
+     "time": [
+      0.0,
+      0.54
+     ],
+     "char": [
+      0,
+      9
+     ],
+     "sentence": "LangGraph Studio shows all of this.",
+     "marked": "[[LangGraph -> LandGraph]] Studio shows all of this."
+    },
+    {
+     "kind": "substitution",
+     "position": 7,
+     "script_words": [
+      "point",
+      "it"
+     ],
+     "heard_words": [
+      "pointed"
+     ],
+     "script_surface": "Point it",
+     "heard_surface": "pointed",
+     "time": [
+      2.72,
+      2.94
+     ],
+     "char": [
+      36,
+      44
+     ],
+     "sentence": "Point it at the local server, and every example appears as a graph.",
+     "marked": "[[Point it -> pointed]] at the local server, and every example appears as a graph."
+    }
+   ],
+   "heard_text": "LandGraph Studio shows all of this pointed at the local server and every example appears as a graph Choose a ready made case from the dropdown press submit and the graph follows each step as it runs Then click any step to inspect exactly what it read and wrote including what the model returned Or go back to any checkpoint rerun from there and fork the thread to take a different turn",
+   "script_text": "LangGraph Studio shows all of this. Point it at the local server, and every example appears as a graph. Choose a ready-made case from the dropdown, press Submit, and the graph follows each step as it runs. Then click any step to inspect exactly what it read and wrote, including what the model returned. Or go back to any checkpoint, re-run from there, and fork the thread to take a different turn."
+  },
+  "J": {
+   "status": "CLEAN",
+   "duration": 14.444,
+   "model": "whisper-1",
+   "word_times": "native",
+   "script_words": 38,
+   "heard_words": 37,
+   "matched_words": 38,
+   "counts": {
+    "substitution": 0,
+    "omission": 0,
+    "insertion": 0
+   },
+   "accepted_variants": [
+    "ready-made ~ ready made",
+    "uv run ~ uvrun",
+    "langgraph ~ lang graph"
+   ],
+   "differences": [],
+   "heard_text": "23 graphs ready made cases for everything that needs data and an offline mode so the whole test suite runs without a key Start the server with uvrun lang graph dev pick a case and watch it run",
+   "script_text": "Twenty-three graphs, ready-made cases for everything that needs data, and an offline mode, so the whole test suite runs without a key. Start the server with U V run langgraph dev, pick a case, and watch it run."
+  }
+ },
+ "summary": {
+  "scenes": 10,
+  "clean": 9,
+  "with_differences": 1
+ }
+}

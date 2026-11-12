@@ -16,3 +16,8 @@ dist/
 build/
 # live transcripts: `scripts/live_smoke.py --go --all --save out/` (README) writes one JSON per example here
 out/
+
+# local tool config and generated/heavy video outputs (reproducible: see video/README.md)
+.claude/
+docs/demo/*.plan.json
+docs/demo/langgraph-deepdive-walkthrough.mp4

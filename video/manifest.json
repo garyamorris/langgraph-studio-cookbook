@@ -1,0 +1,276 @@
+{
+ "width": 1920,
+ "height": 1080,
+ "fps": 30,
+ "narration_dir": "narration/audio",
+ "preset": "Match Source – Adaptive Low Bitrate",
+ "max_mb": 60,
+ "audio_kbps": 128,
+ "small": {
+  "width": 1280,
+  "height": 720,
+  "max_mb": 28,
+  "audio_kbps": 96
+ },
+ "xfade": 0.35,
+ "narration_db": -3.0,
+ "title": {
+  "text": "LangGraph Deep Dive",
+  "sub": "how 23 LangGraph examples actually run",
+  "seconds": 3.5,
+  "bg": {
+   "type": "video",
+   "path": "viz_out/overview.mp4",
+   "in": 10.5,
+   "freeze": true
+  },
+  "dim": -90
+ },
+ "outro": {
+  "text": "Run it yourself",
+  "sub": "uv run langgraph dev  ·  pick a Ready-made case  ·  Submit",
+  "seconds": 3.5,
+  "bg": {
+   "type": "video",
+   "path": "viz_out/live_loop.mp4",
+   "in": 29.5,
+   "freeze": true
+  },
+  "dim": -90
+ },
+ "scenes": [
+  {
+   "id": "A",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "viz_out/overview.mp4",
+     "speed": "fit",
+     "in": 0
+    }
+   ],
+   "callouts": [],
+   "voiceover_wav": "narration/audio/A.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  },
+  {
+   "id": "B",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "viz_out/concept_ticket.mp4",
+     "speed": 0.85,
+     "in": 0,
+     "weight": 18.58
+    },
+    {
+     "type": "video",
+     "path": "raw/studio_run.mp4",
+     "speed": "fit",
+     "in": 2.4,
+     "out": 11.0,
+     "weight": 7.778
+    }
+   ],
+   "callouts": [
+    {
+     "at": 21.75,
+     "dur": 5.0,
+     "text": "Ready-made case dropdown · blank form runs the first",
+     "style": "tech",
+     "anchor": "bl"
+    }
+   ],
+   "voiceover_wav": "narration/audio/B.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  },
+  {
+   "id": "C",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "viz_out/live_ticket.mp4",
+     "speed": "fit",
+     "in": 0
+    }
+   ],
+   "callouts": [],
+   "voiceover_wav": "narration/audio/C.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  },
+  {
+   "id": "D",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "viz_out/live_orchestrator.mp4",
+     "speed": "fit",
+     "in": 0
+    }
+   ],
+   "callouts": [],
+   "voiceover_wav": "narration/audio/D.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  },
+  {
+   "id": "E",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "viz_out/live_loop.mp4",
+     "speed": "fit",
+     "in": 0
+    }
+   ],
+   "callouts": [],
+   "voiceover_wav": "narration/audio/E.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  },
+  {
+   "id": "F",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "viz_out/live_gate.mp4",
+     "speed": "fit",
+     "in": 0
+    }
+   ],
+   "callouts": [],
+   "voiceover_wav": "narration/audio/F.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  },
+  {
+   "id": "G",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "viz_out/live_stream.mp4",
+     "speed": "fit",
+     "in": 0
+    }
+   ],
+   "callouts": [],
+   "voiceover_wav": "narration/audio/G.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  },
+  {
+   "id": "H",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "viz_out/live_memory_short.mp4",
+     "speed": "fit",
+     "in": 0,
+     "weight": 14.08
+    },
+    {
+     "type": "video",
+     "path": "viz_out/live_memory_long.mp4",
+     "speed": "fit",
+     "in": 0,
+     "weight": 9.47
+    }
+   ],
+   "callouts": [],
+   "voiceover_wav": "narration/audio/H.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  },
+  {
+   "id": "I",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "raw/studio_run.mp4",
+     "speed": "fit",
+     "in": 0.7,
+     "out": 5.2,
+     "weight": 7.42
+    },
+    {
+     "type": "video",
+     "path": "raw/studio_run.mp4",
+     "speed": "fit",
+     "in": 12.0,
+     "out": 21.5,
+     "weight": 6.68
+    },
+    {
+     "type": "video",
+     "path": "raw/studio_inspect.mp4",
+     "speed": "fit",
+     "in": 3.3,
+     "out": 12.5,
+     "weight": 5.7
+    },
+    {
+     "type": "video",
+     "path": "raw/studio_timetravel.mp4",
+     "speed": "fit",
+     "in": 3.3,
+     "out": 17.5,
+     "weight": 5.4
+    }
+   ],
+   "callouts": [
+    {
+     "at": 4.53,
+     "dur": 3.8,
+     "text": "Studio · every example is a graph",
+     "style": "tech",
+     "anchor": "bl"
+    },
+    {
+     "at": 14.55,
+     "dur": 4.5,
+     "text": "Inspect any step's state",
+     "style": "tech",
+     "anchor": "bl"
+    },
+    {
+     "at": 20.21,
+     "dur": 5.5,
+     "text": "Re-run from a checkpoint · fork the thread",
+     "style": "tech",
+     "anchor": "bl"
+    }
+   ],
+   "voiceover_wav": "narration/audio/I.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  },
+  {
+   "id": "J",
+   "tag": null,
+   "segments": [
+    {
+     "type": "video",
+     "path": "viz_out/overview.mp4",
+     "speed": "fit",
+     "in": 0
+    }
+   ],
+   "callouts": [],
+   "voiceover_wav": "narration/audio/J.wav",
+   "pad_before": 0.4,
+   "pad_after": 0.6
+  }
+ ]
+}

@@ -1,0 +1,2023 @@
+{
+ "graph": "conversation_memory",
+ "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+ "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+ "input": {
+  "scenario": "Pasted 5-message chat, max_messages=4 keep_last=2 -> folds 4 into a summary on this run, #1042 stays pinned"
+ },
+ "recorded_at": "2026-11-08T22:33:43+0000",
+ "events": [
+  {
+   "t": 0.788,
+   "round": 0,
+   "mode": "metadata",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 0.788,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-4ba7-6658-bfff-d0170b134a34"
+     }
+    },
+    "parent_config": null,
+    "values": {
+     "messages": [],
+     "facts": {}
+    },
+    "metadata": {
+     "source": "input",
+     "step": -1,
+     "parents": {}
+    },
+    "next": [
+     "__start__"
+    ],
+    "tasks": [
+     {
+      "id": "c945b216-10d1-5be8-8e42-aa95af09808a",
+      "name": "__start__",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 0.789,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-4ba9-612e-8000-fda9aef3f721"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-4ba7-6658-bfff-d0170b134a34"
+     }
+    },
+    "values": {
+     "scenario": "Pasted 5-message chat, max_messages=4 keep_last=2 -> folds 4 into a summary on this run, #1042 stays pinned",
+     "messages": [],
+     "facts": {}
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 0,
+     "parents": {}
+    },
+    "next": [
+     "load_case"
+    ],
+    "tasks": [
+     {
+      "id": "7b1f3d86-d187-ca2c-cef8-775d5b3df4ea",
+      "name": "load_case",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 0.789,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "7b1f3d86-d187-ca2c-cef8-775d5b3df4ea",
+    "name": "load_case",
+    "input": {
+     "scenario": "Pasted 5-message chat, max_messages=4 keep_last=2 -> folds 4 into a summary on this run, #1042 stays pinned",
+     "messages": [],
+     "facts": {}
+    },
+    "triggers": [
+     "branch:to:load_case"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "conversation_memory",
+     "source": "record_run",
+     "graph_id": "conversation_memory",
+     "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064"
+    }
+   }
+  },
+  {
+   "t": 0.79,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "load_case": {
+     "messages": [
+      {
+       "role": "user",
+       "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case."
+      },
+      {
+       "role": "assistant",
+       "content": "Sorry about that, Priya. I will submit a refund request for order #1042 and you will hear back within 2 business days."
+      },
+      {
+       "role": "user",
+       "content": "Thanks. Separately, the light on my Hub has been solid red since this morning."
+      },
+      {
+       "role": "assistant",
+       "content": "A solid red Hub light means no network. Power cycle the router, then the Hub, and wait two minutes."
+      },
+      {
+       "role": "user",
+       "content": "Did that and it is still red. By the way, which order was my refund request for?"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "t": 0.79,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "7b1f3d86-d187-ca2c-cef8-775d5b3df4ea",
+    "name": "load_case",
+    "error": null,
+    "result": {
+     "messages": [
+      {
+       "role": "user",
+       "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case."
+      },
+      {
+       "role": "assistant",
+       "content": "Sorry about that, Priya. I will submit a refund request for order #1042 and you will hear back within 2 business days."
+      },
+      {
+       "role": "user",
+       "content": "Thanks. Separately, the light on my Hub has been solid red since this morning."
+      },
+      {
+       "role": "assistant",
+       "content": "A solid red Hub light means no network. Power cycle the router, then the Hub, and wait two minutes."
+      },
+      {
+       "role": "user",
+       "content": "Did that and it is still red. By the way, which order was my refund request for?"
+      }
+     ],
+     "max_messages": 4,
+     "keep_last": 2,
+     "scenario": null
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 0.791,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 0.791,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-4bad-6c2e-8001-e71c27f77ac4"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-4ba9-612e-8000-fda9aef3f721"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "5a6a907d-7b61-44ec-bcd5-fe6c00e6bfdc"
+      },
+      {
+       "content": "Sorry about that, Priya. I will submit a refund request for order #1042 and you will hear back within 2 business days.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "2ef9dec2-a0c7-4beb-9fd7-38e77d835d7a",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Thanks. Separately, the light on my Hub has been solid red since this morning.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "d73dff29-8ee8-4a3a-8212-baec4a6a7a67"
+      },
+      {
+       "content": "A solid red Hub light means no network. Power cycle the router, then the Hub, and wait two minutes.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "b56ca3d5-705e-411c-8748-0ce97df50009",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Did that and it is still red. By the way, which order was my refund request for?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "9a7c4a99-ef4f-4b30-8b75-7eb0d2bcd837"
+      }
+     ],
+     "max_messages": 4,
+     "keep_last": 2,
+     "facts": {}
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 1,
+     "parents": {}
+    },
+    "next": [
+     "respond"
+    ],
+    "tasks": [
+     {
+      "id": "7873b40b-37c6-b25f-03a1-c4e4a198c86e",
+      "name": "respond",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 0.791,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "7873b40b-37c6-b25f-03a1-c4e4a198c86e",
+    "name": "respond",
+    "input": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "5a6a907d-7b61-44ec-bcd5-fe6c00e6bfdc"
+      },
+      {
+       "content": "Sorry about that, Priya. I will submit a refund request for order #1042 and you will hear back within 2 business days.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "2ef9dec2-a0c7-4beb-9fd7-38e77d835d7a",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Thanks. Separately, the light on my Hub has been solid red since this morning.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "d73dff29-8ee8-4a3a-8212-baec4a6a7a67"
+      },
+      {
+       "content": "A solid red Hub light means no network. Power cycle the router, then the Hub, and wait two minutes.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "b56ca3d5-705e-411c-8748-0ce97df50009",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Did that and it is still red. By the way, which order was my refund request for?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "9a7c4a99-ef4f-4b30-8b75-7eb0d2bcd837"
+      }
+     ],
+     "max_messages": 4,
+     "keep_last": 2,
+     "facts": {}
+    },
+    "triggers": [
+     "branch:to:respond"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "conversation_memory",
+     "source": "record_run",
+     "graph_id": "conversation_memory",
+     "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064"
+    }
+   }
+  },
+  {
+   "t": 5.496,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.501,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.502,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.518,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.518,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.547,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.547,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.549,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.549,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.572,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.572,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.593,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.594,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.628,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.628,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.632,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.633,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.652,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.653,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.655,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.655,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.674,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.674,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.688,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.689,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.701,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.701,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.713,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.713,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.725,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.725,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.736,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.736,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.748,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.749,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.762,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.762,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.774,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.775,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.797,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.797,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.8,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.801,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.838,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.838,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.863,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.864,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.899,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.899,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.901,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.902,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.939,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.939,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.963,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.963,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.975,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.975,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.986,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.986,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.04,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.041,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.052,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.052,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.082,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.082,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.084,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.084,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.085,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "respond": {
+     "messages": [
+      {
+       "content": "The refund request was for order #1042. I can\u2019t verify that it was submitted earlier, so I\u2019ll submit it to the team now; you\u2019ll hear back within 2 business days. Since the Hub is still solid red after restarting, I can also escalate the connection issue to a human for troubleshooting.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 351,
+        "output_tokens": 456,
+        "total_tokens": 807,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 384
+        }
+       }
+      }
+     ],
+     "turn": 1,
+     "mode": "live"
+    }
+   }
+  },
+  {
+   "t": 6.085,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "7873b40b-37c6-b25f-03a1-c4e4a198c86e",
+    "name": "respond",
+    "error": null,
+    "result": {
+     "messages": [
+      {
+       "content": "The refund request was for order #1042. I can\u2019t verify that it was submitted earlier, so I\u2019ll submit it to the team now; you\u2019ll hear back within 2 business days. Since the Hub is still solid red after restarting, I can also escalate the connection issue to a human for troubleshooting.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 351,
+        "output_tokens": 456,
+        "total_tokens": 807,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 384
+        }
+       }
+      }
+     ],
+     "turn": 1,
+     "mode": "live"
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 6.085,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 6.086,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-7e2b-67fa-8002-8d7ae97c1db1"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-4bad-6c2e-8001-e71c27f77ac4"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "5a6a907d-7b61-44ec-bcd5-fe6c00e6bfdc"
+      },
+      {
+       "content": "Sorry about that, Priya. I will submit a refund request for order #1042 and you will hear back within 2 business days.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "2ef9dec2-a0c7-4beb-9fd7-38e77d835d7a",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Thanks. Separately, the light on my Hub has been solid red since this morning.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "d73dff29-8ee8-4a3a-8212-baec4a6a7a67"
+      },
+      {
+       "content": "A solid red Hub light means no network. Power cycle the router, then the Hub, and wait two minutes.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "b56ca3d5-705e-411c-8748-0ce97df50009",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Did that and it is still red. By the way, which order was my refund request for?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "9a7c4a99-ef4f-4b30-8b75-7eb0d2bcd837"
+      },
+      {
+       "content": "The refund request was for order #1042. I can\u2019t verify that it was submitted earlier, so I\u2019ll submit it to the team now; you\u2019ll hear back within 2 business days. Since the Hub is still solid red after restarting, I can also escalate the connection issue to a human for troubleshooting.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 351,
+        "output_tokens": 456,
+        "total_tokens": 807,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 384
+        }
+       }
+      }
+     ],
+     "max_messages": 4,
+     "keep_last": 2,
+     "facts": {},
+     "turn": 1,
+     "mode": "live"
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 2,
+     "parents": {}
+    },
+    "next": [
+     "remember"
+    ],
+    "tasks": [
+     {
+      "id": "016d84dd-79ce-0885-c312-b2b4c6c35caa",
+      "name": "remember",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 6.086,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "016d84dd-79ce-0885-c312-b2b4c6c35caa",
+    "name": "remember",
+    "input": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "5a6a907d-7b61-44ec-bcd5-fe6c00e6bfdc"
+      },
+      {
+       "content": "Sorry about that, Priya. I will submit a refund request for order #1042 and you will hear back within 2 business days.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "2ef9dec2-a0c7-4beb-9fd7-38e77d835d7a",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Thanks. Separately, the light on my Hub has been solid red since this morning.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "d73dff29-8ee8-4a3a-8212-baec4a6a7a67"
+      },
+      {
+       "content": "A solid red Hub light means no network. Power cycle the router, then the Hub, and wait two minutes.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "b56ca3d5-705e-411c-8748-0ce97df50009",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Did that and it is still red. By the way, which order was my refund request for?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "9a7c4a99-ef4f-4b30-8b75-7eb0d2bcd837"
+      },
+      {
+       "content": "The refund request was for order #1042. I can\u2019t verify that it was submitted earlier, so I\u2019ll submit it to the team now; you\u2019ll hear back within 2 business days. Since the Hub is still solid red after restarting, I can also escalate the connection issue to a human for troubleshooting.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 351,
+        "output_tokens": 456,
+        "total_tokens": 807,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 384
+        }
+       }
+      }
+     ],
+     "max_messages": 4,
+     "keep_last": 2,
+     "facts": {},
+     "turn": 1,
+     "mode": "live"
+    },
+    "triggers": [
+     "branch:to:remember"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "conversation_memory",
+     "source": "record_run",
+     "graph_id": "conversation_memory",
+     "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064"
+    }
+   }
+  },
+  {
+   "t": 7.81,
+   "round": 0,
+   "mode": "custom",
+   "ns": [],
+   "data": {
+    "event": "memory_updated",
+    "added": {
+     "order_ids": [
+      "#1042",
+      "#1042"
+     ],
+     "commitments": [
+      "I will submit a refund request to the team for order #1042, and you\u2019ll hear back within 2 business days."
+     ],
+     "customer_name": "Priya"
+    }
+   }
+  },
+  {
+   "t": 7.811,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "remember": {
+     "facts": {
+      "customer_name": "Priya",
+      "order_ids": [
+       "#1042",
+       "#1042"
+      ],
+      "commitments": [
+       "I will submit a refund request to the team for order #1042, and you\u2019ll hear back within 2 business days."
+      ]
+     }
+    }
+   }
+  },
+  {
+   "t": 7.811,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "016d84dd-79ce-0885-c312-b2b4c6c35caa",
+    "name": "remember",
+    "error": null,
+    "result": {
+     "facts": {
+      "customer_name": "Priya",
+      "order_ids": [
+       "#1042",
+       "#1042"
+      ],
+      "commitments": [
+       "I will submit a refund request to the team for order #1042, and you\u2019ll hear back within 2 business days."
+      ]
+     },
+     "facts_cursor": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca"
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 7.812,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 7.812,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-8ea1-6fb2-8003-fc3ef4e864ce"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-7e2b-67fa-8002-8d7ae97c1db1"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "5a6a907d-7b61-44ec-bcd5-fe6c00e6bfdc"
+      },
+      {
+       "content": "Sorry about that, Priya. I will submit a refund request for order #1042 and you will hear back within 2 business days.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "2ef9dec2-a0c7-4beb-9fd7-38e77d835d7a",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Thanks. Separately, the light on my Hub has been solid red since this morning.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "d73dff29-8ee8-4a3a-8212-baec4a6a7a67"
+      },
+      {
+       "content": "A solid red Hub light means no network. Power cycle the router, then the Hub, and wait two minutes.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "b56ca3d5-705e-411c-8748-0ce97df50009",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Did that and it is still red. By the way, which order was my refund request for?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "9a7c4a99-ef4f-4b30-8b75-7eb0d2bcd837"
+      },
+      {
+       "content": "The refund request was for order #1042. I can\u2019t verify that it was submitted earlier, so I\u2019ll submit it to the team now; you\u2019ll hear back within 2 business days. Since the Hub is still solid red after restarting, I can also escalate the connection issue to a human for troubleshooting.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 351,
+        "output_tokens": 456,
+        "total_tokens": 807,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 384
+        }
+       }
+      }
+     ],
+     "max_messages": 4,
+     "keep_last": 2,
+     "facts": {
+      "customer_name": "Priya",
+      "order_ids": [
+       "#1042"
+      ],
+      "commitments": [
+       "I will submit a refund request to the team for order #1042, and you\u2019ll hear back within 2 business days."
+      ]
+     },
+     "facts_cursor": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+     "turn": 1,
+     "mode": "live"
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 3,
+     "parents": {}
+    },
+    "next": [
+     "summarize"
+    ],
+    "tasks": [
+     {
+      "id": "53f56e9a-811d-da29-8f1a-450bfe40463d",
+      "name": "summarize",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 7.812,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "53f56e9a-811d-da29-8f1a-450bfe40463d",
+    "name": "summarize",
+    "input": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Hi, I'm Priya. My order #1042 arrived with a cracked case.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "5a6a907d-7b61-44ec-bcd5-fe6c00e6bfdc"
+      },
+      {
+       "content": "Sorry about that, Priya. I will submit a refund request for order #1042 and you will hear back within 2 business days.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "2ef9dec2-a0c7-4beb-9fd7-38e77d835d7a",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Thanks. Separately, the light on my Hub has been solid red since this morning.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "d73dff29-8ee8-4a3a-8212-baec4a6a7a67"
+      },
+      {
+       "content": "A solid red Hub light means no network. Power cycle the router, then the Hub, and wait two minutes.",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "ai",
+       "name": null,
+       "id": "b56ca3d5-705e-411c-8748-0ce97df50009",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": null
+      },
+      {
+       "content": "Did that and it is still red. By the way, which order was my refund request for?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "9a7c4a99-ef4f-4b30-8b75-7eb0d2bcd837"
+      },
+      {
+       "content": "The refund request was for order #1042. I can\u2019t verify that it was submitted earlier, so I\u2019ll submit it to the team now; you\u2019ll hear back within 2 business days. Since the Hub is still solid red after restarting, I can also escalate the connection issue to a human for troubleshooting.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 351,
+        "output_tokens": 456,
+        "total_tokens": 807,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 384
+        }
+       }
+      }
+     ],
+     "max_messages": 4,
+     "keep_last": 2,
+     "facts": {
+      "customer_name": "Priya",
+      "order_ids": [
+       "#1042"
+      ],
+      "commitments": [
+       "I will submit a refund request to the team for order #1042, and you\u2019ll hear back within 2 business days."
+      ]
+     },
+     "facts_cursor": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+     "turn": 1,
+     "mode": "live"
+    },
+    "triggers": [
+     "branch:to:summarize"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "conversation_memory",
+     "source": "record_run",
+     "graph_id": "conversation_memory",
+     "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064"
+    }
+   }
+  },
+  {
+   "t": 10.107,
+   "round": 0,
+   "mode": "custom",
+   "ns": [],
+   "data": {
+    "event": "summarized",
+    "folded": 4,
+    "kept": 2
+   }
+  },
+  {
+   "t": 10.107,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "summarize": {
+     "summary": "Priya\u2019s order #1042 arrived with a cracked case. The assistant promised to submit a refund request and said she would hear back within 2 business days; the request and outcome are unresolved.\n\nPriya also reported that her Hub\u2019s light has been solid red since this morning. The assistant said this indicates no network and advised power-cycling the router and Hub, then waiting two minutes. The issue is unresolved.",
+     "messages": [
+      {
+       "content": "",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "remove",
+       "name": null,
+       "id": "5a6a907d-7b61-44ec-bcd5-fe6c00e6bfdc"
+      },
+      {
+       "content": "",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "remove",
+       "name": null,
+       "id": "2ef9dec2-a0c7-4beb-9fd7-38e77d835d7a"
+      },
+      {
+       "content": "",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "remove",
+       "name": null,
+       "id": "d73dff29-8ee8-4a3a-8212-baec4a6a7a67"
+      },
+      {
+       "content": "",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "remove",
+       "name": null,
+       "id": "b56ca3d5-705e-411c-8748-0ce97df50009"
+      }
+     ],
+     "folded_messages": 4
+    }
+   }
+  },
+  {
+   "t": 10.108,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "53f56e9a-811d-da29-8f1a-450bfe40463d",
+    "name": "summarize",
+    "error": null,
+    "result": {
+     "summary": "Priya\u2019s order #1042 arrived with a cracked case. The assistant promised to submit a refund request and said she would hear back within 2 business days; the request and outcome are unresolved.\n\nPriya also reported that her Hub\u2019s light has been solid red since this morning. The assistant said this indicates no network and advised power-cycling the router and Hub, then waiting two minutes. The issue is unresolved.",
+     "messages": [
+      {
+       "content": "",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "remove",
+       "name": null,
+       "id": "5a6a907d-7b61-44ec-bcd5-fe6c00e6bfdc"
+      },
+      {
+       "content": "",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "remove",
+       "name": null,
+       "id": "2ef9dec2-a0c7-4beb-9fd7-38e77d835d7a"
+      },
+      {
+       "content": "",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "remove",
+       "name": null,
+       "id": "d73dff29-8ee8-4a3a-8212-baec4a6a7a67"
+      },
+      {
+       "content": "",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "remove",
+       "name": null,
+       "id": "b56ca3d5-705e-411c-8748-0ce97df50009"
+      }
+     ],
+     "folded_messages": 4
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 10.108,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 10.109,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-a488-6c90-8004-cda77d15757b"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "7f53c422-40be-4571-a6f4-1e4fdb3de49e",
+      "__request_start_time_ms__": 1794177223576,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-cb99-7096-ac2a-2498d2a26064",
+      "thread_id": "01a1bd4b-cb98-741c-b8f5-06901b5b7c24",
+      "graph_id": "conversation_memory",
+      "assistant_id": "a3c825e3-bd88-5094-b9a3-dc54e155d3e7",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-8ea1-6fb2-8003-fc3ef4e864ce"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Did that and it is still red. By the way, which order was my refund request for?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "9a7c4a99-ef4f-4b30-8b75-7eb0d2bcd837"
+      },
+      {
+       "content": "The refund request was for order #1042. I can\u2019t verify that it was submitted earlier, so I\u2019ll submit it to the team now; you\u2019ll hear back within 2 business days. Since the Hub is still solid red after restarting, I can also escalate the connection issue to a human for troubleshooting.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 351,
+        "output_tokens": 456,
+        "total_tokens": 807,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 384
+        }
+       }
+      }
+     ],
+     "max_messages": 4,
+     "keep_last": 2,
+     "summary": "Priya\u2019s order #1042 arrived with a cracked case. The assistant promised to submit a refund request and said she would hear back within 2 business days; the request and outcome are unresolved.\n\nPriya also reported that her Hub\u2019s light has been solid red since this morning. The assistant said this indicates no network and advised power-cycling the router and Hub, then waiting two minutes. The issue is unresolved.",
+     "facts": {
+      "customer_name": "Priya",
+      "order_ids": [
+       "#1042"
+      ],
+      "commitments": [
+       "I will submit a refund request to the team for order #1042, and you\u2019ll hear back within 2 business days."
+      ]
+     },
+     "facts_cursor": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+     "turn": 1,
+     "folded_messages": 4,
+     "mode": "live"
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 4,
+     "parents": {}
+    },
+    "next": [],
+    "tasks": []
+   }
+  }
+ ],
+ "nodes": [
+  {
+   "name": "load_case",
+   "ns": [],
+   "task": "7b1f3d86-d187-ca2c-cef8-775d5b3df4ea",
+   "end": 0.79,
+   "start": 0.789,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  },
+  {
+   "name": "respond",
+   "ns": [],
+   "task": "7873b40b-37c6-b25f-03a1-c4e4a198c86e",
+   "end": 6.085,
+   "start": 0.791,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  },
+  {
+   "name": "remember",
+   "ns": [],
+   "task": "016d84dd-79ce-0885-c312-b2b4c6c35caa",
+   "end": 7.811,
+   "start": 6.086,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  },
+  {
+   "name": "summarize",
+   "ns": [],
+   "task": "53f56e9a-811d-da29-8f1a-450bfe40463d",
+   "end": 10.108,
+   "start": 7.812,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  }
+ ],
+ "checkpoints": [
+  {
+   "t": 0.788,
+   "step": -1,
+   "source": "input",
+   "next": [
+    "__start__"
+   ]
+  },
+  {
+   "t": 0.789,
+   "step": 0,
+   "source": "loop",
+   "next": [
+    "load_case"
+   ]
+  },
+  {
+   "t": 0.791,
+   "step": 1,
+   "source": "loop",
+   "next": [
+    "respond"
+   ]
+  },
+  {
+   "t": 6.086,
+   "step": 2,
+   "source": "loop",
+   "next": [
+    "remember"
+   ]
+  },
+  {
+   "t": 7.812,
+   "step": 3,
+   "source": "loop",
+   "next": [
+    "summarize"
+   ]
+  },
+  {
+   "t": 10.109,
+   "step": 4,
+   "source": "loop",
+   "next": []
+  }
+ ],
+ "interrupts": [],
+ "resumes": [],
+ "errors": [],
+ "final_values": {
+  "messages": [
+   {
+    "content": "Did that and it is still red. By the way, which order was my refund request for?",
+    "additional_kwargs": {},
+    "response_metadata": {},
+    "type": "human",
+    "name": null,
+    "id": "9a7c4a99-ef4f-4b30-8b75-7eb0d2bcd837"
+   },
+   {
+    "content": "The refund request was for order #1042. I can\u2019t verify that it was submitted earlier, so I\u2019ll submit it to the team now; you\u2019ll hear back within 2 business days. Since the Hub is still solid red after restarting, I can also escalate the connection issue to a human for troubleshooting.",
+    "additional_kwargs": {},
+    "response_metadata": {
+     "finish_reason": "stop",
+     "model_name": "gpt-6-luna",
+     "service_tier": "default",
+     "model_provider": "openai"
+    },
+    "type": "ai",
+    "name": null,
+    "id": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+    "tool_calls": [],
+    "invalid_tool_calls": [],
+    "usage_metadata": {
+     "input_tokens": 351,
+     "output_tokens": 456,
+     "total_tokens": 807,
+     "input_token_details": {
+      "audio": 0,
+      "cache_creation": 0,
+      "cache_read": 0
+     },
+     "output_token_details": {
+      "audio": 0,
+      "reasoning": 384
+     }
+    }
+   }
+  ],
+  "summary": "Priya\u2019s order #1042 arrived with a cracked case. The assistant promised to submit a refund request and said she would hear back within 2 business days; the request and outcome are unresolved.\n\nPriya also reported that her Hub\u2019s light has been solid red since this morning. The assistant said this indicates no network and advised power-cycling the router and Hub, then waiting two minutes. The issue is unresolved.",
+  "facts": {
+   "customer_name": "Priya",
+   "order_ids": [
+    "#1042"
+   ],
+   "commitments": [
+    "I will submit a refund request to the team for order #1042, and you\u2019ll hear back within 2 business days."
+   ]
+  },
+  "turn": 1,
+  "folded_messages": 4,
+  "mode": "live"
+ },
+ "seconds": 10.11,
+ "final_state": {
+  "scenario": null,
+  "messages": [
+   {
+    "content": "Did that and it is still red. By the way, which order was my refund request for?",
+    "additional_kwargs": {},
+    "response_metadata": {},
+    "type": "human",
+    "name": null,
+    "id": "9a7c4a99-ef4f-4b30-8b75-7eb0d2bcd837"
+   },
+   {
+    "content": "The refund request was for order #1042. I can\u2019t verify that it was submitted earlier, so I\u2019ll submit it to the team now; you\u2019ll hear back within 2 business days. Since the Hub is still solid red after restarting, I can also escalate the connection issue to a human for troubleshooting.",
+    "additional_kwargs": {},
+    "response_metadata": {
+     "finish_reason": "stop",
+     "model_name": "gpt-6-luna",
+     "service_tier": "default",
+     "model_provider": "openai"
+    },
+    "type": "ai",
+    "name": null,
+    "id": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+    "tool_calls": [],
+    "invalid_tool_calls": [],
+    "usage_metadata": {
+     "input_tokens": 351,
+     "output_tokens": 456,
+     "total_tokens": 807,
+     "input_token_details": {
+      "audio": 0,
+      "cache_creation": 0,
+      "cache_read": 0
+     },
+     "output_token_details": {
+      "audio": 0,
+      "reasoning": 384
+     }
+    }
+   }
+  ],
+  "max_messages": 4,
+  "keep_last": 2,
+  "summary": "Priya\u2019s order #1042 arrived with a cracked case. The assistant promised to submit a refund request and said she would hear back within 2 business days; the request and outcome are unresolved.\n\nPriya also reported that her Hub\u2019s light has been solid red since this morning. The assistant said this indicates no network and advised power-cycling the router and Hub, then waiting two minutes. The issue is unresolved.",
+  "facts": {
+   "customer_name": "Priya",
+   "order_ids": [
+    "#1042"
+   ],
+   "commitments": [
+    "I will submit a refund request to the team for order #1042, and you\u2019ll hear back within 2 business days."
+   ]
+  },
+  "facts_cursor": "lc_run--01a1bd4b-ceb0-7492-9bf0-c22a7427faca",
+  "turn": 1,
+  "folded_messages": 4,
+  "mode": "live"
+ },
+ "next": []
+}

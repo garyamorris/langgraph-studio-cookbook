@@ -1,0 +1,1612 @@
+{
+ "graph": "memory_concierge",
+ "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+ "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+ "input": {
+  "scenario": "Customer 'ria' has 2 saved notes, asks 'Which camera should I buy?' -> recalled lists both; watch the reply use them"
+ },
+ "recorded_at": "2026-11-08T22:33:53+0000",
+ "events": [
+  {
+   "t": 0.634,
+   "round": 0,
+   "mode": "metadata",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 0.635,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-ab57-61c0-bfff-e626f162444c"
+     }
+    },
+    "parent_config": null,
+    "values": {
+     "messages": []
+    },
+    "metadata": {
+     "source": "input",
+     "step": -1,
+     "parents": {}
+    },
+    "next": [
+     "__start__"
+    ],
+    "tasks": [
+     {
+      "id": "753ddb49-2ea2-e874-4fd6-f819a16bd56f",
+      "name": "__start__",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 0.636,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-ab59-6ba0-8000-86068ad335ad"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-ab57-61c0-bfff-e626f162444c"
+     }
+    },
+    "values": {
+     "scenario": "Customer 'ria' has 2 saved notes, asks 'Which camera should I buy?' -> recalled lists both; watch the reply use them",
+     "messages": []
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 0,
+     "parents": {}
+    },
+    "next": [
+     "load_case"
+    ],
+    "tasks": [
+     {
+      "id": "baa6246b-ae40-6a58-fb6e-e5b993283d00",
+      "name": "load_case",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 0.636,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "baa6246b-ae40-6a58-fb6e-e5b993283d00",
+    "name": "load_case",
+    "input": {
+     "scenario": "Customer 'ria' has 2 saved notes, asks 'Which camera should I buy?' -> recalled lists both; watch the reply use them",
+     "messages": []
+    },
+    "triggers": [
+     "branch:to:load_case"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "memory_concierge",
+     "source": "record_run",
+     "graph_id": "memory_concierge",
+     "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef"
+    }
+   }
+  },
+  {
+   "t": 1.408,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "load_case": {
+     "messages": [
+      {
+       "role": "user",
+       "content": "Which camera should I buy?"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "t": 1.408,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "baa6246b-ae40-6a58-fb6e-e5b993283d00",
+    "name": "load_case",
+    "error": null,
+    "result": {
+     "messages": [
+      {
+       "role": "user",
+       "content": "Which camera should I buy?"
+      }
+     ],
+     "as_user": "ria",
+     "saved_notes": null,
+     "scenario": null
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 1.41,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 1.41,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-b2b9-6c2e-8001-8fa5683828da"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-ab59-6ba0-8000-86068ad335ad"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Which camera should I buy?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "96586ab1-93da-43ca-a18d-5d19eb895fd4"
+      }
+     ],
+     "as_user": "ria",
+     "saved_notes": null
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 1,
+     "parents": {}
+    },
+    "next": [
+     "recall"
+    ],
+    "tasks": [
+     {
+      "id": "5c372afe-4068-8548-40d5-bbc2f891ba88",
+      "name": "recall",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 1.41,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "5c372afe-4068-8548-40d5-bbc2f891ba88",
+    "name": "recall",
+    "input": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Which camera should I buy?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "96586ab1-93da-43ca-a18d-5d19eb895fd4"
+      }
+     ],
+     "as_user": "ria",
+     "saved_notes": null
+    },
+    "triggers": [
+     "branch:to:recall"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "memory_concierge",
+     "source": "record_run",
+     "graph_id": "memory_concierge",
+     "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef"
+    }
+   }
+  },
+  {
+   "t": 1.708,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "recall": {
+     "user_id": "ria",
+     "recalled": [
+      {
+       "key": "376cc8d3",
+       "text": "Lives in a three-storey house with wifi dead zones upstairs.",
+       "kind": "household",
+       "score": 0.098
+      },
+      {
+       "key": "d3dd820d",
+       "text": "Dislikes subscriptions and monthly fees.",
+       "kind": "preference",
+       "score": 0.052
+      }
+     ]
+    }
+   }
+  },
+  {
+   "t": 1.709,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "5c372afe-4068-8548-40d5-bbc2f891ba88",
+    "name": "recall",
+    "error": null,
+    "result": {
+     "user_id": "ria",
+     "recalled": [
+      {
+       "key": "376cc8d3",
+       "text": "Lives in a three-storey house with wifi dead zones upstairs.",
+       "kind": "household",
+       "score": 0.098
+      },
+      {
+       "key": "d3dd820d",
+       "text": "Dislikes subscriptions and monthly fees.",
+       "kind": "preference",
+       "score": 0.052
+      }
+     ]
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 1.71,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 1.71,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-b596-6d7a-8002-6c19320999cb"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-b2b9-6c2e-8001-8fa5683828da"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Which camera should I buy?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "96586ab1-93da-43ca-a18d-5d19eb895fd4"
+      }
+     ],
+     "as_user": "ria",
+     "saved_notes": null,
+     "user_id": "ria",
+     "recalled": [
+      {
+       "key": "376cc8d3",
+       "text": "Lives in a three-storey house with wifi dead zones upstairs.",
+       "kind": "household",
+       "score": 0.098
+      },
+      {
+       "key": "d3dd820d",
+       "text": "Dislikes subscriptions and monthly fees.",
+       "kind": "preference",
+       "score": 0.052
+      }
+     ]
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 2,
+     "parents": {}
+    },
+    "next": [
+     "respond"
+    ],
+    "tasks": [
+     {
+      "id": "86d2acba-50ee-4fc9-511c-1790972b125c",
+      "name": "respond",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 1.711,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "86d2acba-50ee-4fc9-511c-1790972b125c",
+    "name": "respond",
+    "input": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Which camera should I buy?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "96586ab1-93da-43ca-a18d-5d19eb895fd4"
+      }
+     ],
+     "as_user": "ria",
+     "saved_notes": null,
+     "user_id": "ria",
+     "recalled": [
+      {
+       "key": "376cc8d3",
+       "text": "Lives in a three-storey house with wifi dead zones upstairs.",
+       "kind": "household",
+       "score": 0.098
+      },
+      {
+       "key": "d3dd820d",
+       "text": "Dislikes subscriptions and monthly fees.",
+       "kind": "preference",
+       "score": 0.052
+      }
+     ]
+    },
+    "triggers": [
+     "branch:to:respond"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "memory_concierge",
+     "source": "record_run",
+     "graph_id": "memory_concierge",
+     "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef"
+    }
+   }
+  },
+  {
+   "t": 3.378,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.381,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.382,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.399,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.399,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.403,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.404,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.418,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.418,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.421,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.422,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.452,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.453,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.453,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.453,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.491,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.491,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.528,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.528,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.539,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.539,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.545,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.545,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.566,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.566,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.605,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.605,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.633,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.633,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.638,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.638,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.659,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.66,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.698,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.699,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.742,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.742,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.769,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.769,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.778,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.778,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.786,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.786,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.787,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.787,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.812,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.812,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.817,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.817,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.818,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.818,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.841,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.842,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.859,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.859,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.886,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.886,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.886,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.886,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.9,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.9,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.926,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.926,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "respond": {
+     "messages": [
+      {
+       "content": "I can help narrow it down. Is the camera for indoors or outdoors, and where will it go? Also, do you want local recording with no monthly fee, and is the spot in one of your upstairs Wi\u2011Fi dead zones? Those details will help me recommend a good fit.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-fa13-70ca-b133-75b501fb7298",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 253,
+        "output_tokens": 200,
+        "total_tokens": 453,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 133
+        }
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "t": 3.927,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "86d2acba-50ee-4fc9-511c-1790972b125c",
+    "name": "respond",
+    "error": null,
+    "result": {
+     "messages": [
+      {
+       "content": "I can help narrow it down. Is the camera for indoors or outdoors, and where will it go? Also, do you want local recording with no monthly fee, and is the spot in one of your upstairs Wi\u2011Fi dead zones? Those details will help me recommend a good fit.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-fa13-70ca-b133-75b501fb7298",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 253,
+        "output_tokens": 200,
+        "total_tokens": 453,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 133
+        }
+       }
+      }
+     ]
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 3.928,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.928,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-cabe-627a-8003-629eab15c4f8"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-b596-6d7a-8002-6c19320999cb"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Which camera should I buy?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "96586ab1-93da-43ca-a18d-5d19eb895fd4"
+      },
+      {
+       "content": "I can help narrow it down. Is the camera for indoors or outdoors, and where will it go? Also, do you want local recording with no monthly fee, and is the spot in one of your upstairs Wi\u2011Fi dead zones? Those details will help me recommend a good fit.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-fa13-70ca-b133-75b501fb7298",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 253,
+        "output_tokens": 200,
+        "total_tokens": 453,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 133
+        }
+       }
+      }
+     ],
+     "as_user": "ria",
+     "saved_notes": null,
+     "user_id": "ria",
+     "recalled": [
+      {
+       "key": "376cc8d3",
+       "text": "Lives in a three-storey house with wifi dead zones upstairs.",
+       "kind": "household",
+       "score": 0.098
+      },
+      {
+       "key": "d3dd820d",
+       "text": "Dislikes subscriptions and monthly fees.",
+       "kind": "preference",
+       "score": 0.052
+      }
+     ]
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 3,
+     "parents": {}
+    },
+    "next": [
+     "remember"
+    ],
+    "tasks": [
+     {
+      "id": "18a5f60e-ae65-a7b0-935b-f2852ec21fd4",
+      "name": "remember",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 3.928,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "18a5f60e-ae65-a7b0-935b-f2852ec21fd4",
+    "name": "remember",
+    "input": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Which camera should I buy?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "96586ab1-93da-43ca-a18d-5d19eb895fd4"
+      },
+      {
+       "content": "I can help narrow it down. Is the camera for indoors or outdoors, and where will it go? Also, do you want local recording with no monthly fee, and is the spot in one of your upstairs Wi\u2011Fi dead zones? Those details will help me recommend a good fit.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-fa13-70ca-b133-75b501fb7298",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 253,
+        "output_tokens": 200,
+        "total_tokens": 453,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 133
+        }
+       }
+      }
+     ],
+     "as_user": "ria",
+     "saved_notes": null,
+     "user_id": "ria",
+     "recalled": [
+      {
+       "key": "376cc8d3",
+       "text": "Lives in a three-storey house with wifi dead zones upstairs.",
+       "kind": "household",
+       "score": 0.098
+      },
+      {
+       "key": "d3dd820d",
+       "text": "Dislikes subscriptions and monthly fees.",
+       "kind": "preference",
+       "score": 0.052
+      }
+     ]
+    },
+    "triggers": [
+     "branch:to:remember"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "memory_concierge",
+     "source": "record_run",
+     "graph_id": "memory_concierge",
+     "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef"
+    }
+   }
+  },
+  {
+   "t": 5.352,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "remember": {
+     "memory_changes": [],
+     "mode": "live"
+    }
+   }
+  },
+  {
+   "t": 5.352,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "18a5f60e-ae65-a7b0-935b-f2852ec21fd4",
+    "name": "remember",
+    "error": null,
+    "result": {
+     "memory_changes": [],
+     "mode": "live"
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 5.353,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.353,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-d856-6004-8004-c185ac000db1"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "a49a2be5-9d3a-4ac9-9f87-240b808fb09b",
+      "__request_start_time_ms__": 1794177233763,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4b-f364-718b-a2ae-c73ce41cabef",
+      "thread_id": "01a1bd4b-f363-7560-833b-9a63e9d8e226",
+      "graph_id": "memory_concierge",
+      "assistant_id": "a137a048-4d86-5474-9db1-d11a505dc03b",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc47-cabe-627a-8003-629eab15c4f8"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "messages": [
+      {
+       "content": "Which camera should I buy?",
+       "additional_kwargs": {},
+       "response_metadata": {},
+       "type": "human",
+       "name": null,
+       "id": "96586ab1-93da-43ca-a18d-5d19eb895fd4"
+      },
+      {
+       "content": "I can help narrow it down. Is the camera for indoors or outdoors, and where will it go? Also, do you want local recording with no monthly fee, and is the spot in one of your upstairs Wi\u2011Fi dead zones? Those details will help me recommend a good fit.",
+       "additional_kwargs": {},
+       "response_metadata": {
+        "finish_reason": "stop",
+        "model_name": "gpt-6-luna",
+        "service_tier": "default",
+        "model_provider": "openai"
+       },
+       "type": "ai",
+       "name": null,
+       "id": "lc_run--01a1bd4b-fa13-70ca-b133-75b501fb7298",
+       "tool_calls": [],
+       "invalid_tool_calls": [],
+       "usage_metadata": {
+        "input_tokens": 253,
+        "output_tokens": 200,
+        "total_tokens": 453,
+        "input_token_details": {
+         "audio": 0,
+         "cache_creation": 0,
+         "cache_read": 0
+        },
+        "output_token_details": {
+         "audio": 0,
+         "reasoning": 133
+        }
+       }
+      }
+     ],
+     "as_user": "ria",
+     "saved_notes": null,
+     "user_id": "ria",
+     "recalled": [
+      {
+       "key": "376cc8d3",
+       "text": "Lives in a three-storey house with wifi dead zones upstairs.",
+       "kind": "household",
+       "score": 0.098
+      },
+      {
+       "key": "d3dd820d",
+       "text": "Dislikes subscriptions and monthly fees.",
+       "kind": "preference",
+       "score": 0.052
+      }
+     ],
+     "memory_changes": [],
+     "mode": "live"
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 4,
+     "parents": {}
+    },
+    "next": [],
+    "tasks": []
+   }
+  }
+ ],
+ "nodes": [
+  {
+   "name": "load_case",
+   "ns": [],
+   "task": "baa6246b-ae40-6a58-fb6e-e5b993283d00",
+   "end": 1.408,
+   "start": 0.636,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  },
+  {
+   "name": "recall",
+   "ns": [],
+   "task": "5c372afe-4068-8548-40d5-bbc2f891ba88",
+   "end": 1.709,
+   "start": 1.41,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  },
+  {
+   "name": "respond",
+   "ns": [],
+   "task": "86d2acba-50ee-4fc9-511c-1790972b125c",
+   "end": 3.927,
+   "start": 1.711,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  },
+  {
+   "name": "remember",
+   "ns": [],
+   "task": "18a5f60e-ae65-a7b0-935b-f2852ec21fd4",
+   "end": 5.352,
+   "start": 3.928,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  }
+ ],
+ "checkpoints": [
+  {
+   "t": 0.635,
+   "step": -1,
+   "source": "input",
+   "next": [
+    "__start__"
+   ]
+  },
+  {
+   "t": 0.636,
+   "step": 0,
+   "source": "loop",
+   "next": [
+    "load_case"
+   ]
+  },
+  {
+   "t": 1.41,
+   "step": 1,
+   "source": "loop",
+   "next": [
+    "recall"
+   ]
+  },
+  {
+   "t": 1.71,
+   "step": 2,
+   "source": "loop",
+   "next": [
+    "respond"
+   ]
+  },
+  {
+   "t": 3.928,
+   "step": 3,
+   "source": "loop",
+   "next": [
+    "remember"
+   ]
+  },
+  {
+   "t": 5.353,
+   "step": 4,
+   "source": "loop",
+   "next": []
+  }
+ ],
+ "interrupts": [],
+ "resumes": [],
+ "errors": [],
+ "final_values": {
+  "messages": [
+   {
+    "content": "Which camera should I buy?",
+    "additional_kwargs": {},
+    "response_metadata": {},
+    "type": "human",
+    "name": null,
+    "id": "96586ab1-93da-43ca-a18d-5d19eb895fd4"
+   },
+   {
+    "content": "I can help narrow it down. Is the camera for indoors or outdoors, and where will it go? Also, do you want local recording with no monthly fee, and is the spot in one of your upstairs Wi\u2011Fi dead zones? Those details will help me recommend a good fit.",
+    "additional_kwargs": {},
+    "response_metadata": {
+     "finish_reason": "stop",
+     "model_name": "gpt-6-luna",
+     "service_tier": "default",
+     "model_provider": "openai"
+    },
+    "type": "ai",
+    "name": null,
+    "id": "lc_run--01a1bd4b-fa13-70ca-b133-75b501fb7298",
+    "tool_calls": [],
+    "invalid_tool_calls": [],
+    "usage_metadata": {
+     "input_tokens": 253,
+     "output_tokens": 200,
+     "total_tokens": 453,
+     "input_token_details": {
+      "audio": 0,
+      "cache_creation": 0,
+      "cache_read": 0
+     },
+     "output_token_details": {
+      "audio": 0,
+      "reasoning": 133
+     }
+    }
+   }
+  ],
+  "user_id": "ria",
+  "recalled": [
+   {
+    "key": "376cc8d3",
+    "text": "Lives in a three-storey house with wifi dead zones upstairs.",
+    "kind": "household",
+    "score": 0.098
+   },
+   {
+    "key": "d3dd820d",
+    "text": "Dislikes subscriptions and monthly fees.",
+    "kind": "preference",
+    "score": 0.052
+   }
+  ],
+  "memory_changes": [],
+  "mode": "live"
+ },
+ "seconds": 5.35,
+ "final_state": {
+  "scenario": null,
+  "messages": [
+   {
+    "content": "Which camera should I buy?",
+    "additional_kwargs": {},
+    "response_metadata": {},
+    "type": "human",
+    "name": null,
+    "id": "96586ab1-93da-43ca-a18d-5d19eb895fd4"
+   },
+   {
+    "content": "I can help narrow it down. Is the camera for indoors or outdoors, and where will it go? Also, do you want local recording with no monthly fee, and is the spot in one of your upstairs Wi\u2011Fi dead zones? Those details will help me recommend a good fit.",
+    "additional_kwargs": {},
+    "response_metadata": {
+     "finish_reason": "stop",
+     "model_name": "gpt-6-luna",
+     "service_tier": "default",
+     "model_provider": "openai"
+    },
+    "type": "ai",
+    "name": null,
+    "id": "lc_run--01a1bd4b-fa13-70ca-b133-75b501fb7298",
+    "tool_calls": [],
+    "invalid_tool_calls": [],
+    "usage_metadata": {
+     "input_tokens": 253,
+     "output_tokens": 200,
+     "total_tokens": 453,
+     "input_token_details": {
+      "audio": 0,
+      "cache_creation": 0,
+      "cache_read": 0
+     },
+     "output_token_details": {
+      "audio": 0,
+      "reasoning": 133
+     }
+    }
+   }
+  ],
+  "as_user": "ria",
+  "saved_notes": null,
+  "user_id": "ria",
+  "recalled": [
+   {
+    "key": "376cc8d3",
+    "text": "Lives in a three-storey house with wifi dead zones upstairs.",
+    "kind": "household",
+    "score": 0.098
+   },
+   {
+    "key": "d3dd820d",
+    "text": "Dislikes subscriptions and monthly fees.",
+    "kind": "preference",
+    "score": 0.052
+   }
+  ],
+  "memory_changes": [],
+  "mode": "live"
+ },
+ "next": []
+}

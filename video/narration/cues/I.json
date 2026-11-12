@@ -1,0 +1,46 @@
+{
+ "scene": "I",
+ "duration": 25.2,
+ "cues": [
+  {
+   "start": 0.01,
+   "end": 2.29,
+   "text": "LangGraph Studio shows all of this."
+  },
+  {
+   "start": 2.64,
+   "end": 6.55,
+   "text": "Point it at the local server, and\nevery example appears as a graph."
+  },
+  {
+   "start": 7.25,
+   "end": 9.22,
+   "text": "Choose a ready-made\ncase from the dropdown,"
+  },
+  {
+   "start": 9.38,
+   "end": 13.25,
+   "text": "press Submit, and the graph\nfollows each step as it runs."
+  },
+  {
+   "start": 14.11,
+   "end": 16.97,
+   "text": "Then click any step to\ninspect exactly what it read"
+  },
+  {
+   "start": 17.01,
+   "end": 19.35,
+   "text": "and wrote, including\nwhat the model returned."
+  },
+  {
+   "start": 19.91,
+   "end": 22.68,
+   "text": "Or go back to any checkpoint,\nre-run from there,"
+  },
+  {
+   "start": 22.93,
+   "end": 25.2,
+   "text": "and fork the thread to\ntake a different turn."
+  }
+ ]
+}

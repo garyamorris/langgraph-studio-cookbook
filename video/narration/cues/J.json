@@ -1,0 +1,21 @@
+{
+ "scene": "J",
+ "duration": 14.444,
+ "cues": [
+  {
+   "start": 0.07,
+   "end": 4.21,
+   "text": "Twenty-three graphs, ready-made cases\nfor everything that needs data,"
+  },
+  {
+   "start": 4.52,
+   "end": 8.26,
+   "text": "and an offline mode, so the whole\ntest suite runs without a key."
+  },
+  {
+   "start": 8.86,
+   "end": 14.44,
+   "text": "Start the server with U V run langgraph\ndev, pick a case, and watch it run."
+  }
+ ]
+}

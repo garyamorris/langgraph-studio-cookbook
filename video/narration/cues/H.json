@@ -1,0 +1,41 @@
+{
+ "scene": "H",
+ "duration": 23.55,
+ "cues": [
+  {
+   "start": 0.01,
+   "end": 2.0,
+   "text": "Memory comes in two kinds."
+  },
+  {
+   "start": 2.24,
+   "end": 6.15,
+   "text": "Short term memory is the thread: the\ncheckpointer keeps the conversation,"
+  },
+  {
+   "start": 6.46,
+   "end": 10.88,
+   "text": "and when it grows too long, the graph\nfolds the old messages into a summary,"
+  },
+  {
+   "start": 11.18,
+   "end": 13.13,
+   "text": "while pinning facts like an order number."
+  },
+  {
+   "start": 13.81,
+   "end": 15.63,
+   "text": "Long term memory is the Store."
+  },
+  {
+   "start": 16.16,
+   "end": 20.41,
+   "text": "The memory concierge saves notes about\na customer, and a later conversation,"
+  },
+  {
+   "start": 20.57,
+   "end": 23.55,
+   "text": "on a different thread, recalls\nthem with semantic search."
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "scene": "D",
+ "duration": 23.325,
+ "cues": [
+  {
+   "start": 0.01,
+   "end": 1.91,
+   "text": "Some work should run in parallel,"
+  },
+  {
+   "start": 2.32,
+   "end": 4.85,
+   "text": "but you only know how much\nonce you have planned it."
+  },
+  {
+   "start": 5.31,
+   "end": 10.44,
+   "text": "In the report orchestrator, one node\nplans the sections, and the Send API"
+  },
+  {
+   "start": 10.48,
+   "end": 14.4,
+   "text": "launches a separate write section task\nfor each of them at the same time."
+  },
+  {
+   "start": 14.96,
+   "end": 18.18,
+   "text": "A reducer then merges the\ndrafts into one list,"
+  },
+  {
+   "start": 18.61,
+   "end": 20.8,
+   "text": "and the graph carries on\nto write the summary,"
+  },
+  {
+   "start": 21.1,
+   "end": 23.325,
+   "text": "and check every number against the data."
+  }
+ ]
+}

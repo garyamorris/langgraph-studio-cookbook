@@ -1,0 +1,46 @@
+{
+ "scene": "E",
+ "duration": 25.9,
+ "cues": [
+  {
+   "start": 0.02,
+   "end": 2.56,
+   "text": "Loops are simply edges\nthat point backwards."
+  },
+  {
+   "start": 2.81,
+   "end": 4.98,
+   "text": "Here a writer drafts a\nproduct announcement."
+  },
+  {
+   "start": 5.32,
+   "end": 9.65,
+   "text": "A rule checker written in code, and a\ncritic model, review it side by side,"
+  },
+  {
+   "start": 10.09,
+   "end": 13.66,
+   "text": "and a judge decides whether\nto pass, or go round again."
+  },
+  {
+   "start": 14.16,
+   "end": 16.37,
+   "text": "This brief is impossible on purpose:"
+  },
+  {
+   "start": 16.64,
+   "end": 19.92,
+   "text": "sixteen words of required\nfacts, in a ten word limit."
+  },
+  {
+   "start": 20.3,
+   "end": 22.76,
+   "text": "So the loop runs to its\ncap of three drafts,"
+  },
+  {
+   "start": 23.05,
+   "end": 25.9,
+   "text": "and stops, honestly labelled best effort."
+  }
+ ]
+}

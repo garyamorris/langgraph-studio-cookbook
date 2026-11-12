@@ -1,0 +1,31 @@
+{
+ "scene": "A",
+ "duration": 16.2,
+ "cues": [
+  {
+   "start": 0.01,
+   "end": 4.82,
+   "text": "LangGraph Deep Dive is a workbench\nof twenty-three LangGraph examples."
+  },
+  {
+   "start": 5.27,
+   "end": 7.26,
+   "text": "Each one solves a concrete problem,"
+  },
+  {
+   "start": 7.51,
+   "end": 10.37,
+   "text": "from routing support\ntickets to approving loans,"
+  },
+  {
+   "start": 10.68,
+   "end": 13.21,
+   "text": "and all of them load\ninto one local server."
+  },
+  {
+   "start": 13.97,
+   "end": 16.2,
+   "text": "This video shows how they actually run."
+  }
+ ]
+}

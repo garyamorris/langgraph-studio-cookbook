@@ -1,0 +1,41 @@
+{
+ "scene": "B",
+ "duration": 26.358,
+ "cues": [
+  {
+   "start": 0.01,
+   "end": 3.24,
+   "text": "Every example is built\nfrom the same four ideas."
+  },
+  {
+   "start": 3.47,
+   "end": 7.03,
+   "text": "State is a set of typed fields\nthat every step can read."
+  },
+  {
+   "start": 7.41,
+   "end": 11.92,
+   "text": "A node is a plain function that reads\nthat state and returns an update."
+  },
+  {
+   "start": 12.27,
+   "end": 14.26,
+   "text": "An edge says what runs next,"
+  },
+  {
+   "start": 14.48,
+   "end": 18.05,
+   "text": "and a conditional edge lets the\nprogram decide at run time."
+  },
+  {
+   "start": 18.48,
+   "end": 22.18,
+   "text": "Open any example in Studio,\npress Submit on a blank form,"
+  },
+  {
+   "start": 22.37,
+   "end": 26.358,
+   "text": "and a ready-made case runs, so you\nnever need to know the data first."
+  }
+ ]
+}

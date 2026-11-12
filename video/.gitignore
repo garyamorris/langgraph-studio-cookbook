@@ -1,0 +1,14 @@
+# Generated footage, scratch and binaries: recreate with the scripts in README.md
+viz_out/
+raw/
+out/
+fcdata/
+fc.out
+rec/rec
+rec/vtool
+*.sb-*
+narration/cache/
+__pycache__/
+rec/tls/
+narration/audio/
+narration/samples/

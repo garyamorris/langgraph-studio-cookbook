@@ -1,0 +1,1894 @@
+{
+ "graph": "ticket_router",
+ "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+ "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+ "input": {
+  "scenario": "T-2301 URGENT: plug smells of burning -> ESCALATE (safety lexicon)"
+ },
+ "recorded_at": "2026-11-08T22:32:28+0000",
+ "events": [
+  {
+   "t": 0.933,
+   "round": 0,
+   "mode": "metadata",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 0.934,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "20dfc3d4-21a8-4b19-a1e6-bb7d8448c52e",
+      "__request_start_time_ms__": 1794177148705,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3",
+      "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+      "graph_id": "ticket_router",
+      "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc44-8303-6370-bfff-8e93b0f95b54"
+     }
+    },
+    "parent_config": null,
+    "values": {},
+    "metadata": {
+     "source": "input",
+     "step": -1,
+     "parents": {}
+    },
+    "next": [
+     "__start__"
+    ],
+    "tasks": [
+     {
+      "id": "aa1181e2-2518-b958-7d36-a45b01942f59",
+      "name": "__start__",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 0.935,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "20dfc3d4-21a8-4b19-a1e6-bb7d8448c52e",
+      "__request_start_time_ms__": 1794177148705,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3",
+      "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+      "graph_id": "ticket_router",
+      "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc44-8304-6e46-8000-0ae53ab73b77"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "20dfc3d4-21a8-4b19-a1e6-bb7d8448c52e",
+      "__request_start_time_ms__": 1794177148705,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3",
+      "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+      "graph_id": "ticket_router",
+      "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc44-8303-6370-bfff-8e93b0f95b54"
+     }
+    },
+    "values": {
+     "scenario": "T-2301 URGENT: plug smells of burning -> ESCALATE (safety lexicon)"
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 0,
+     "parents": {}
+    },
+    "next": [
+     "load_ticket"
+    ],
+    "tasks": [
+     {
+      "id": "f85782ad-8899-5f29-4108-a380426d52e7",
+      "name": "load_ticket",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 0.935,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "f85782ad-8899-5f29-4108-a380426d52e7",
+    "name": "load_ticket",
+    "input": {
+     "scenario": "T-2301 URGENT: plug smells of burning -> ESCALATE (safety lexicon)"
+    },
+    "triggers": [
+     "branch:to:load_ticket"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "ticket_router",
+     "source": "record_run",
+     "graph_id": "ticket_router",
+     "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3"
+    }
+   }
+  },
+  {
+   "t": 0.936,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "load_ticket": null
+   }
+  },
+  {
+   "t": 0.936,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "f85782ad-8899-5f29-4108-a380426d52e7",
+    "name": "load_ticket",
+    "error": null,
+    "result": {
+     "ticket_id": "T-2301",
+     "subject": "URGENT: plug smells of burning",
+     "body": "One of the plugs in my Lumen Plug 4-pack got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!",
+     "scenario": null,
+     "ticket_fingerprint": "fe08fdfbbfe8"
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 0.937,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "20dfc3d4-21a8-4b19-a1e6-bb7d8448c52e",
+      "__request_start_time_ms__": 1794177148705,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3",
+      "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+      "graph_id": "ticket_router",
+      "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc44-830a-6562-8001-b54b488e4a1f"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "20dfc3d4-21a8-4b19-a1e6-bb7d8448c52e",
+      "__request_start_time_ms__": 1794177148705,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3",
+      "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+      "graph_id": "ticket_router",
+      "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc44-8304-6e46-8000-0ae53ab73b77"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "ticket_id": "T-2301",
+     "subject": "URGENT: plug smells of burning",
+     "body": "One of the plugs in my Lumen Plug 4-pack got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!",
+     "ticket_fingerprint": "fe08fdfbbfe8"
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 1,
+     "parents": {}
+    },
+    "next": [
+     "triage"
+    ],
+    "tasks": [
+     {
+      "id": "b1a9d7c5-4df2-f27f-d812-2b72ec1c667f",
+      "name": "triage",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 0.937,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "b1a9d7c5-4df2-f27f-d812-2b72ec1c667f",
+    "name": "triage",
+    "input": {
+     "scenario": null,
+     "ticket_id": "T-2301",
+     "subject": "URGENT: plug smells of burning",
+     "body": "One of the plugs in my Lumen Plug 4-pack got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!",
+     "ticket_fingerprint": "fe08fdfbbfe8"
+    },
+    "triggers": [
+     "branch:to:triage"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "ticket_router",
+     "source": "record_run",
+     "graph_id": "ticket_router",
+     "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3"
+    }
+   }
+  },
+  {
+   "t": 2.879,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.88,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.88,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.88,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.88,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.881,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.881,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.911,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.911,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.922,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.922,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.935,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.936,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.945,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.945,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.967,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.967,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.978,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.978,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.993,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.993,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.997,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.997,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.999,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 2.999,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.047,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.048,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.05,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.05,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.082,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.082,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.095,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.096,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.118,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.119,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.122,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.122,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.152,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.152,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.165,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.166,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.174,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.174,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.2,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.201,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.212,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.212,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.222,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.223,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.228,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.228,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.239,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.239,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.254,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.254,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.254,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.273,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.274,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.274,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "triage": {
+     "triage": {
+      "category": "technical",
+      "priority": "urgent",
+      "sentiment": "negative",
+      "safety_or_privacy_risk": true,
+      "summary": "A Lumen Plug became extremely hot and smelled of burning plastic, so the customer unplugged it due to a fire risk.",
+      "lexicon_hits": {
+       "fire_or_overheating": [
+        "smells of burning",
+        "plugs in my lumen plug 4-pack got extremely hot",
+        "burning plastic",
+        "fire"
+       ]
+      },
+      "escalated_by": [
+       "model_flag",
+       "urgent_priority",
+       "lexicon"
+      ]
+     },
+     "mode": "live"
+    }
+   }
+  },
+  {
+   "t": 3.274,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "b1a9d7c5-4df2-f27f-d812-2b72ec1c667f",
+    "name": "triage",
+    "error": null,
+    "result": {
+     "triage": {
+      "category": "technical",
+      "priority": "urgent",
+      "sentiment": "negative",
+      "safety_or_privacy_risk": true,
+      "summary": "A Lumen Plug became extremely hot and smelled of burning plastic, so the customer unplugged it due to a fire risk.",
+      "lexicon_hits": {
+       "fire_or_overheating": [
+        "smells of burning",
+        "plugs in my lumen plug 4-pack got extremely hot",
+        "burning plastic",
+        "fire"
+       ]
+      },
+      "escalated_by": [
+       "model_flag",
+       "urgent_priority",
+       "lexicon"
+      ]
+     },
+     "mode": "live"
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 3.275,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 3.275,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "20dfc3d4-21a8-4b19-a1e6-bb7d8448c52e",
+      "__request_start_time_ms__": 1794177148705,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3",
+      "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+      "graph_id": "ticket_router",
+      "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc44-9955-665a-8002-5eb750e93de3"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "20dfc3d4-21a8-4b19-a1e6-bb7d8448c52e",
+      "__request_start_time_ms__": 1794177148705,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3",
+      "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+      "graph_id": "ticket_router",
+      "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc44-830a-6562-8001-b54b488e4a1f"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "ticket_id": "T-2301",
+     "subject": "URGENT: plug smells of burning",
+     "body": "One of the plugs in my Lumen Plug 4-pack got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!",
+     "ticket_fingerprint": "fe08fdfbbfe8",
+     "triage": {
+      "category": "technical",
+      "priority": "urgent",
+      "sentiment": "negative",
+      "safety_or_privacy_risk": true,
+      "summary": "A Lumen Plug became extremely hot and smelled of burning plastic, so the customer unplugged it due to a fire risk.",
+      "lexicon_hits": {
+       "fire_or_overheating": [
+        "smells of burning",
+        "plugs in my lumen plug 4-pack got extremely hot",
+        "burning plastic",
+        "fire"
+       ]
+      },
+      "escalated_by": [
+       "model_flag",
+       "urgent_priority",
+       "lexicon"
+      ]
+     },
+     "mode": "live"
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 2,
+     "parents": {}
+    },
+    "next": [
+     "escalate"
+    ],
+    "tasks": [
+     {
+      "id": "55baa786-46e6-2504-d948-76331277b14b",
+      "name": "escalate",
+      "interrupts": [],
+      "state": null
+     }
+    ]
+   }
+  },
+  {
+   "t": 3.275,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "55baa786-46e6-2504-d948-76331277b14b",
+    "name": "escalate",
+    "input": {
+     "scenario": null,
+     "ticket_id": "T-2301",
+     "subject": "URGENT: plug smells of burning",
+     "body": "One of the plugs in my Lumen Plug 4-pack got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!",
+     "ticket_fingerprint": "fe08fdfbbfe8",
+     "triage": {
+      "category": "technical",
+      "priority": "urgent",
+      "sentiment": "negative",
+      "safety_or_privacy_risk": true,
+      "summary": "A Lumen Plug became extremely hot and smelled of burning plastic, so the customer unplugged it due to a fire risk.",
+      "lexicon_hits": {
+       "fire_or_overheating": [
+        "smells of burning",
+        "plugs in my lumen plug 4-pack got extremely hot",
+        "burning plastic",
+        "fire"
+       ]
+      },
+      "escalated_by": [
+       "model_flag",
+       "urgent_priority",
+       "lexicon"
+      ]
+     },
+     "mode": "live"
+    },
+    "triggers": [
+     "branch:to:escalate"
+    ],
+    "metadata": {
+     "created_by": "system",
+     "graph": "ticket_router",
+     "source": "record_run",
+     "graph_id": "ticket_router",
+     "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+     "run_attempt": 1,
+     "langgraph_version": "1.2.20",
+     "langgraph_api_version": "0.17.1",
+     "langgraph_plan": "enterprise",
+     "langgraph_host": "self-hosted",
+     "langgraph_api_url": "http://127.0.0.1:2125",
+     "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3"
+    }
+   }
+  },
+  {
+   "t": 5.148,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.148,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.155,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.155,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.2,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.2,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.201,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.201,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.219,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.219,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.251,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.251,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.264,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.264,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.265,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.306,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.307,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.34,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.34,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.34,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.359,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.359,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.372,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.372,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.373,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.398,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.398,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.419,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.419,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.421,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.421,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.454,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.454,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.473,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.473,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.474,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.474,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.475,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.475,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.481,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.481,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.492,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.492,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.514,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.514,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.518,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.518,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.538,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.538,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.541,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.541,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.552,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.552,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.554,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.555,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.596,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.597,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.609,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.609,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.619,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.619,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.641,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.642,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.656,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.656,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.665,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.665,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.688,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.688,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.7,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.7,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.71,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.711,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.722,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.722,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.731,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.732,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.746,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.746,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.757,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.757,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.767,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.767,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.78,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.78,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.792,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.792,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.801,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.802,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.81,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.81,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.813,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.814,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.838,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.838,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.841,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.841,
+   "round": 0,
+   "mode": "messages",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.842,
+   "round": 0,
+   "mode": "updates",
+   "ns": [],
+   "data": {
+    "escalate": {
+     "route": "escalate",
+     "reply": "Thank you for flagging this - we are treating it as urgent. A member of our team will contact you personally very shortly. If anyone is in danger, please contact local emergency services now.",
+     "sources": [
+      "safety-incidents",
+      "privacy-and-data"
+     ],
+     "triage": {
+      "category": "technical",
+      "priority": "urgent",
+      "sentiment": "negative",
+      "safety_or_privacy_risk": true,
+      "summary": "A Lumen Plug became extremely hot and smelled of burning plastic, so the customer unplugged it due to a fire risk.",
+      "lexicon_hits": {
+       "fire_or_overheating": [
+        "smells of burning",
+        "plugs in my lumen plug 4-pack got extremely hot",
+        "burning plastic",
+        "fire"
+       ]
+      },
+      "escalated_by": [
+       "model_flag",
+       "urgent_priority",
+       "lexicon"
+      ],
+      "internal_brief": "- **What happened:** Customer reports one Lumen Plug from a 4-pack became extremely hot and smelled of burning plastic; they say it is unplugged. Treat this as a priority safety incident.\n- **Customer must do now:** Keep the plug unplugged and stop using it. Obtain the order number and photos, if available.\n- **Page:** Product Safety **within 1 hour**. Offer a free replacement or full refund once the unit is returned.",
+      "brief_source": "model"
+     }
+    }
+   }
+  },
+  {
+   "t": 5.842,
+   "round": 0,
+   "mode": "tasks",
+   "ns": [],
+   "data": {
+    "id": "55baa786-46e6-2504-d948-76331277b14b",
+    "name": "escalate",
+    "error": null,
+    "result": {
+     "route": "escalate",
+     "reply": "Thank you for flagging this - we are treating it as urgent. A member of our team will contact you personally very shortly. If anyone is in danger, please contact local emergency services now.",
+     "sources": [
+      "safety-incidents",
+      "privacy-and-data"
+     ],
+     "triage": {
+      "category": "technical",
+      "priority": "urgent",
+      "sentiment": "negative",
+      "safety_or_privacy_risk": true,
+      "summary": "A Lumen Plug became extremely hot and smelled of burning plastic, so the customer unplugged it due to a fire risk.",
+      "lexicon_hits": {
+       "fire_or_overheating": [
+        "smells of burning",
+        "plugs in my lumen plug 4-pack got extremely hot",
+        "burning plastic",
+        "fire"
+       ]
+      },
+      "escalated_by": [
+       "model_flag",
+       "urgent_priority",
+       "lexicon"
+      ],
+      "internal_brief": "- **What happened:** Customer reports one Lumen Plug from a 4-pack became extremely hot and smelled of burning plastic; they say it is unplugged. Treat this as a priority safety incident.\n- **Customer must do now:** Keep the plug unplugged and stop using it. Obtain the order number and photos, if available.\n- **Page:** Product Safety **within 1 hour**. Offer a free replacement or full refund once the unit is returned.",
+      "brief_source": "model"
+     }
+    },
+    "interrupts": []
+   }
+  },
+  {
+   "t": 5.843,
+   "round": 0,
+   "mode": "values",
+   "ns": [],
+   "data": null
+  },
+  {
+   "t": 5.843,
+   "round": 0,
+   "mode": "checkpoints",
+   "ns": [],
+   "data": {
+    "config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "20dfc3d4-21a8-4b19-a1e6-bb7d8448c52e",
+      "__request_start_time_ms__": 1794177148705,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3",
+      "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+      "graph_id": "ticket_router",
+      "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc44-b1d2-6ffc-8003-337309624053"
+     }
+    },
+    "parent_config": {
+     "configurable": {
+      "checkpoint_ns": "",
+      "langgraph_auth_user": null,
+      "langgraph_auth_user_id": "",
+      "langgraph_auth_permissions": [],
+      "langgraph_request_id": "20dfc3d4-21a8-4b19-a1e6-bb7d8448c52e",
+      "__request_start_time_ms__": 1794177148705,
+      "__after_seconds__": 0,
+      "run_id": "01a1bd4a-a721-7567-a3ce-1537f1427ab3",
+      "thread_id": "01a1bd4a-a720-70a2-a96c-d74d28e9ea82",
+      "graph_id": "ticket_router",
+      "assistant_id": "1030ac54-2f09-5bb6-bce1-7511570d07f6",
+      "user_id": "",
+      "checkpoint_id": "1f1dbc44-9955-665a-8002-5eb750e93de3"
+     }
+    },
+    "values": {
+     "scenario": null,
+     "ticket_id": "T-2301",
+     "subject": "URGENT: plug smells of burning",
+     "body": "One of the plugs in my Lumen Plug 4-pack got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!",
+     "ticket_fingerprint": "fe08fdfbbfe8",
+     "route": "escalate",
+     "triage": {
+      "category": "technical",
+      "priority": "urgent",
+      "sentiment": "negative",
+      "safety_or_privacy_risk": true,
+      "summary": "A Lumen Plug became extremely hot and smelled of burning plastic, so the customer unplugged it due to a fire risk.",
+      "lexicon_hits": {
+       "fire_or_overheating": [
+        "smells of burning",
+        "plugs in my lumen plug 4-pack got extremely hot",
+        "burning plastic",
+        "fire"
+       ]
+      },
+      "escalated_by": [
+       "model_flag",
+       "urgent_priority",
+       "lexicon"
+      ],
+      "internal_brief": "- **What happened:** Customer reports one Lumen Plug from a 4-pack became extremely hot and smelled of burning plastic; they say it is unplugged. Treat this as a priority safety incident.\n- **Customer must do now:** Keep the plug unplugged and stop using it. Obtain the order number and photos, if available.\n- **Page:** Product Safety **within 1 hour**. Offer a free replacement or full refund once the unit is returned.",
+      "brief_source": "model"
+     },
+     "reply": "Thank you for flagging this - we are treating it as urgent. A member of our team will contact you personally very shortly. If anyone is in danger, please contact local emergency services now.",
+     "sources": [
+      "safety-incidents",
+      "privacy-and-data"
+     ],
+     "mode": "live"
+    },
+    "metadata": {
+     "source": "loop",
+     "step": 3,
+     "parents": {}
+    },
+    "next": [],
+    "tasks": []
+   }
+  }
+ ],
+ "nodes": [
+  {
+   "name": "load_ticket",
+   "ns": [],
+   "task": "f85782ad-8899-5f29-4108-a380426d52e7",
+   "end": 0.936,
+   "start": 0.935,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  },
+  {
+   "name": "triage",
+   "ns": [],
+   "task": "b1a9d7c5-4df2-f27f-d812-2b72ec1c667f",
+   "end": 3.274,
+   "start": 0.937,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  },
+  {
+   "name": "escalate",
+   "ns": [],
+   "task": "55baa786-46e6-2504-d948-76331277b14b",
+   "end": 5.842,
+   "start": 3.275,
+   "round": 0,
+   "error": null,
+   "interrupted": false
+  }
+ ],
+ "checkpoints": [
+  {
+   "t": 0.934,
+   "step": -1,
+   "source": "input",
+   "next": [
+    "__start__"
+   ]
+  },
+  {
+   "t": 0.935,
+   "step": 0,
+   "source": "loop",
+   "next": [
+    "load_ticket"
+   ]
+  },
+  {
+   "t": 0.937,
+   "step": 1,
+   "source": "loop",
+   "next": [
+    "triage"
+   ]
+  },
+  {
+   "t": 3.275,
+   "step": 2,
+   "source": "loop",
+   "next": [
+    "escalate"
+   ]
+  },
+  {
+   "t": 5.843,
+   "step": 3,
+   "source": "loop",
+   "next": []
+  }
+ ],
+ "interrupts": [],
+ "resumes": [],
+ "errors": [],
+ "final_values": {
+  "route": "escalate",
+  "triage": {
+   "category": "technical",
+   "priority": "urgent",
+   "sentiment": "negative",
+   "safety_or_privacy_risk": true,
+   "summary": "A Lumen Plug became extremely hot and smelled of burning plastic, so the customer unplugged it due to a fire risk.",
+   "lexicon_hits": {
+    "fire_or_overheating": [
+     "smells of burning",
+     "plugs in my lumen plug 4-pack got extremely hot",
+     "burning plastic",
+     "fire"
+    ]
+   },
+   "escalated_by": [
+    "model_flag",
+    "urgent_priority",
+    "lexicon"
+   ],
+   "internal_brief": "- **What happened:** Customer reports one Lumen Plug from a 4-pack became extremely hot and smelled of burning plastic; they say it is unplugged. Treat this as a priority safety incident.\n- **Customer must do now:** Keep the plug unplugged and stop using it. Obtain the order number and photos, if available.\n- **Page:** Product Safety **within 1 hour**. Offer a free replacement or full refund once the unit is returned.",
+   "brief_source": "model"
+  },
+  "reply": "Thank you for flagging this - we are treating it as urgent. A member of our team will contact you personally very shortly. If anyone is in danger, please contact local emergency services now.",
+  "sources": [
+   "safety-incidents",
+   "privacy-and-data"
+  ],
+  "mode": "live"
+ },
+ "seconds": 5.84,
+ "final_state": {
+  "scenario": null,
+  "ticket_id": "T-2301",
+  "subject": "URGENT: plug smells of burning",
+  "body": "One of the plugs in my Lumen Plug 4-pack got extremely hot and there's a burning plastic smell. I've unplugged it. This is a fire risk!!",
+  "ticket_fingerprint": "fe08fdfbbfe8",
+  "route": "escalate",
+  "triage": {
+   "category": "technical",
+   "priority": "urgent",
+   "sentiment": "negative",
+   "safety_or_privacy_risk": true,
+   "summary": "A Lumen Plug became extremely hot and smelled of burning plastic, so the customer unplugged it due to a fire risk.",
+   "lexicon_hits": {
+    "fire_or_overheating": [
+     "smells of burning",
+     "plugs in my lumen plug 4-pack got extremely hot",
+     "burning plastic",
+     "fire"
+    ]
+   },
+   "escalated_by": [
+    "model_flag",
+    "urgent_priority",
+    "lexicon"
+   ],
+   "internal_brief": "- **What happened:** Customer reports one Lumen Plug from a 4-pack became extremely hot and smelled of burning plastic; they say it is unplugged. Treat this as a priority safety incident.\n- **Customer must do now:** Keep the plug unplugged and stop using it. Obtain the order number and photos, if available.\n- **Page:** Product Safety **within 1 hour**. Offer a free replacement or full refund once the unit is returned.",
+   "brief_source": "model"
+  },
+  "reply": "Thank you for flagging this - we are treating it as urgent. A member of our team will contact you personally very shortly. If anyone is in danger, please contact local emergency services now.",
+  "sources": [
+   "safety-incidents",
+   "privacy-and-data"
+  ],
+  "mode": "live"
+ },
+ "next": []
+}

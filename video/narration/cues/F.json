@@ -1,0 +1,46 @@
+{
+ "scene": "F",
+ "duration": 25.9,
+ "cues": [
+  {
+   "start": 0.01,
+   "end": 1.8,
+   "text": "Some decisions need a person."
+  },
+  {
+   "start": 2.51,
+   "end": 5.72,
+   "text": "This loan screener asks\nthe OpenAI Decisions API"
+  },
+  {
+   "start": 5.76,
+   "end": 9.66,
+   "text": "for calibrated probabilities, then\napplies policy in plain code."
+  },
+  {
+   "start": 10.16,
+   "end": 13.39,
+   "text": "For a borderline file, the\nunderwriter node calls interrupt."
+  },
+  {
+   "start": 13.85,
+   "end": 16.82,
+   "text": "The whole state is saved in a\ncheckpoint under the thread I D,"
+  },
+  {
+   "start": 17.17,
+   "end": 19.18,
+   "text": "and nothing runs until someone answers."
+  },
+  {
+   "start": 19.7,
+   "end": 23.0,
+   "text": "A Command carrying a resume value\nwakes the same thread exactly"
+  },
+  {
+   "start": 23.04,
+   "end": 25.9,
+   "text": "where it stopped, and the\ndecision flows on to the letter."
+  }
+ ]
+}
